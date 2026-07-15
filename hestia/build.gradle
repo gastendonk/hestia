@@ -1,0 +1,35 @@
+plugins {
+    id 'application'
+    id 'java-library'
+    id 'eclipse'
+    id 'com.bmuschko.docker-java-application' version '9.4.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+application {
+//    mainClass = 'minerva.MinervaWebapp'
+}
+
+dependencies {
+    implementation 'com.github.SoltauFintel.amalia:amalia-web:3.0.0-a5'
+    implementation 'com.github.SoltauFintel.amalia:amalia-git:3.0.0-a5'
+    
+//    testImplementation 'junit:junit:4.13.2'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url 'https://www.javaxt.com/maven' }
+}
+
+apply from: 'gradle/docker.gradle'
