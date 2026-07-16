@@ -1,0 +1,31 @@
+memberlist:
+  join_members: []
+
+metrics_generator:
+  ring:
+    kvstore:
+      store: memberlist
+  registry:
+    collection_interval: 15s
+
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+
+compactor:
+  compaction:
+    block_retention: 96h
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /tmp/tempo/blocks
+    wal:
+      path: /tmp/tempo/wal

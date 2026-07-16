@@ -1,0 +1,12 @@
+groups:
+- name: infrastruktur_alarme
+  rules:
+  - alert: FestplatteFastVoll_lokal
+    annotations:
+      description: Der freie Speicherplatz ist unter 10% gefallen.
+      summary: Wenig Speicherplatz auf {{ $labels.instance }}
+    expr: (node_filesystem_free_bytes / node_filesystem_size_bytes) * 100 < 10
+    for: 5m
+    labels:
+      kat: K-2
+      severity: warning

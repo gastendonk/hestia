@@ -1,0 +1,33 @@
+global:
+  resolve_timeout: 5m
+
+# Die "Route" bestimmt, wohin Alarme geschickt werden
+route:
+  group_by: ["alertname", "instance"]
+  group_wait: 10s       # Wartet kurz, um mehrere Alarme zu buendeln
+#  group_interval: 5m   # Wie lange gewartet wird, bevor neue Alarme in derselben Gruppe gesendet werden
+#  repeat_interval: 12h # Wie oft ein aktiver Alarm wiederholt gesendet wird
+#  repeat_interval: 4h
+
+  group_interval: 30s   # Wie lange gewartet wird, bevor neue Alarme in derselben Gruppe gesendet werden
+  repeat_interval: 60s
+  receiver: "teams-kanal-spielwiese"
+  routes:
+    - receiver: "teams-kanal-spielwiese"
+      mute_time_intervals:
+        - nachts_und_wochenende
+
+receivers:
+  - name: "teams-kanal-spielwiese"
+    msteamsv2_configs:
+      - webhook_url: "https://default7d563dce50e3417a9433369c3f7187.20.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/12/workflows/87f9570a59e1477dae05d37e9613fe9a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BxZkrM3XzO5Lm4imbkfb1zvbOdC5QqcjRrBYBW-13vI"
+
+time_intervals:
+  - name: nachts_und_wochenende
+    time_intervals:
+      - times:
+          - start_time: '19:00'
+            end_time: '24:00'
+          - start_time: '00:00'
+            end_time: '08:00'
+      - weekdays: ['saturday', 'sunday']

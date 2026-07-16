@@ -1,0 +1,11 @@
+global:
+  scrape_interval:     15s  # Wie oft Prometheus die Ziele abfragt (Default)
+  evaluation_interval: 15s  # Wie oft Recording- oder Alert-Rules berechnet werden
+
+rule_files:
+  - "rules/*.yml"
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'

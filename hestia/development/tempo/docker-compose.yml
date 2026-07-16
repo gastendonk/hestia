@@ -1,0 +1,23 @@
+services:
+  tempo:
+    image: grafana/tempo:2.10.4
+    container_name: tempo
+    command: -config.file=/etc/tempo.yaml
+    user: root
+    environment:
+      TZ: Europe/Berlin
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - data:/tmp/tempo
+    ports:
+      - "3200:3200"
+    restart: always
+    networks:
+      - apmnet
+
+volumes:
+  data:
+
+networks:
+  apmnet:
+    external: true
