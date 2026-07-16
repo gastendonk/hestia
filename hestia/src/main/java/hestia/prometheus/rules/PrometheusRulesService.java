@@ -17,10 +17,14 @@ import hestia.base.HestiaBaseService;
 public class PrometheusRulesService {
 
     public List<AlertRulesFile> loadAlertRulesFiles(File folder) {
+        if (!folder.isDirectory()) {
+            Logger.warn("folder does not exist: " + folder.getAbsolutePath());
+        }
         var reader = new AlertRulesFileReader();
         return HestiaBaseService.getFiles(folder, ".yml").stream() //
                 .map(file -> {
                     try {
+                        System.out.println("file found: " + file.getAbsolutePath());
                         return reader.read(file);
                     } catch (IOException e) {
                         Logger.error(e, "Error loading alert rules file " + file.getAbsolutePath());

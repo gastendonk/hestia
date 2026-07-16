@@ -9,7 +9,7 @@ public class PrometheusServiceTest {
 
     @Test
     public void loadAlertRulesFiles() {
-        var rulesFolder = new File("development/setup1/prometheus/rules");
+        var rulesFolder = new File("development/setup1/rules");
 
         var alertRulesFiles = new PrometheusRulesService().loadAlertRulesFiles(rulesFolder);
 
