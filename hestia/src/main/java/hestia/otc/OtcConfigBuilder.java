@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import github.soltaufintel.amalia.base.StringService;
 
+/**
+ * Build content of OTel Collector config.yaml file
+ */
 public class OtcConfigBuilder {
     private final List<String> receivers = new ArrayList<>();
     private final List<String> exporters = new ArrayList<>();
@@ -16,7 +19,7 @@ public class OtcConfigBuilder {
     public OtcConfigBuilder(List<MonitoredTarget> monitoredTargets, OtcOpts o) {
         this.monitoredTargets = new ArrayList<>(monitoredTargets);
         this.o = o;
-        this.monitoredTargets.sort((a, b) -> a.sort().compareToIgnoreCase(b.sort()));
+        this.monitoredTargets.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         receivers.add("otlp");
     }
 

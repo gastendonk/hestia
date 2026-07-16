@@ -21,9 +21,4 @@ public class Site implements MonitoredTarget {
     public void setUrl(String url) {
         this.url = url;
     }
-
-    @Override
-    public String getTypeName() {
-        return "SITE";
-    }
 }

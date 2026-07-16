@@ -39,9 +39,4 @@ public class Server implements MonitoredTarget {
     public void setPath(String path) {
         this.path = path;
     }
-    
-    @Override
-    public String getTypeName() {
-        return "SERVER/" + type.name();
-    }
 }

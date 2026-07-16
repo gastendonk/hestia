@@ -47,9 +47,4 @@ public class Database implements MonitoredTarget {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @Override
-    public String getTypeName() {
-        return "DB/" + type.name();
-    }
 }
