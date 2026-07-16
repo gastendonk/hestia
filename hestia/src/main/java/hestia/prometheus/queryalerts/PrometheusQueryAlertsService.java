@@ -4,6 +4,9 @@ import java.util.List;
 
 import github.soltaufintel.amalia.rest.REST;
 
+/**
+ * Service for loading active alerts
+ */
 public class PrometheusQueryAlertsService {
     private static final String ENDPOINT3 = "/api/v1/query";
     private final String prometheusHost;

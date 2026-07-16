@@ -2,6 +2,9 @@ package hestia.prometheus;
 
 import github.soltaufintel.amalia.rest.REST;
 
+/**
+ * General service for managing Prometheus and the Prometheus Alertmanager
+ */
 public class PrometheusService {
     private final String prometheusHost;
     private final String alertmanagerHost;

@@ -11,6 +11,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+/**
+ * A silence is muting an active alert
+ */
 public class Silence {
     private String id;
     private Status status;
