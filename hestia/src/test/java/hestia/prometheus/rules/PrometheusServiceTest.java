@@ -1,4 +1,4 @@
-package hestia.prometheus;
+package hestia.prometheus.rules;
 
 import java.io.File;
 
