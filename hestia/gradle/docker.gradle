@@ -19,7 +19,14 @@ dockerBuildImage {
 dockerCreateDockerfile {
     outputs.upToDateWhen { false }
     doLast {
+        copy {
+            from 'otelcol-contrib/linux'
+            into 'build/docker'
+        }
         def dockerfile = destFile.get().asFile
-        dockerfile.text = dockerfile.text.replace('WORKDIR', 'RUN apk add bash nano\nENV TZ=Europe/Berlin\nWORKDIR')
+        dockerfile.text = dockerfile.text.replace('WORKDIR', 'RUN apk add bash nano\n' +
+            'ENV TZ=Europe/Berlin\n' +
+            'COPY otelcol-contrib /app/otel/\n' +
+            'WORKDIR').replace('8080', '4317 4318 8888 8080')
     }
 }

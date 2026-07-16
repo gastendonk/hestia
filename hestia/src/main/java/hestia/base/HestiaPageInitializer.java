@@ -9,5 +9,6 @@ public class HestiaPageInitializer extends PageInitializer {
     @Override
     public void initPage(Context ctx, Page page) {
         page.put("title", "Hestia");
+        page.put("sortableJS", false);
     }
 }

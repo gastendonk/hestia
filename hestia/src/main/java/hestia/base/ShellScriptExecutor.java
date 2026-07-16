@@ -60,6 +60,7 @@ public class ShellScriptExecutor {
         return os != null && os.toLowerCase().contains("win");
     }
 
+    public Process p;
     protected final void execute(ProcessBuilder pb, File workDir) {
         try {
             log = File.createTempFile(prefix + "-" + TempDirService.timestamp(), ".log");
@@ -70,7 +71,7 @@ public class ShellScriptExecutor {
             if (!wait) {
                 pb.inheritIO();
             }
-            Process p = pb.start();
+            p = pb.start();
             if (wait) {
                 boolean exit = p.waitFor(timeout, TimeUnit.MINUTES);
                 if (!exit) {
@@ -79,8 +80,8 @@ public class ShellScriptExecutor {
                 exitValue = p.exitValue();
             } else {
                 Logger.info("pid " + p.pid());
-                p.onExit().whenComplete((p1, a) -> {
-                    System.out.println("whenComplete");
+                p.onExit().whenComplete((process, a) -> {
+                    System.out.println("onExit -> whenComplete");
                 });
             }
         } catch (Throwable e) {
