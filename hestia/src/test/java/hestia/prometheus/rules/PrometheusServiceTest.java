@@ -5,9 +5,6 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
-import hestia.prometheus.rules.AlertRulesFile;
-import hestia.prometheus.rules.PrometheusRulesService;
-
 public class PrometheusServiceTest {
 
     @Test
