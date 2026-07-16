@@ -1,25 +1,4 @@
 services:
-  otc:
-    container_name: otc
-    image: otel/opentelemetry-collector-contrib:0.137.0
-    ports:
-      - "4317:4317"
-      - "4318:4318"
-      - "8888:8888"
-    command:
-      - "--config=/etc/otelcol/config.yaml"
-    volumes:
-      - ./config.yaml:/etc/otelcol/config.yaml:ro
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1m"
-        max-file: "2"
-    environment:
-      TZ: Europe/Berlin
-    networks:
-      - apmnet
-
   prometheus:
     image: prom/prometheus:v3.11.2-busybox
     container_name: prometheus
