@@ -5,7 +5,9 @@ source: https://github.com/open-telemetry/opentelemetry-collector-releases/relea
 filename: otelcol-contrib_0.137.0_windows_amd64.tar.gz
 
 ## Linux/Docker
-filename: otelcol-contrib_0.137.0_linux_amd64_musl.tar.gz
+filename: otelcol-contrib_0.137.0_linux_amd64.tar.gz
+
+size: 343.601.336 bytes
 
 ### Dockerfile
 
