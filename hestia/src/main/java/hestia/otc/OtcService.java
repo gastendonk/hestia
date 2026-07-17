@@ -1,37 +1,42 @@
 package hestia.otc;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import github.soltaufintel.amalia.base.FileService;
+import hestia.HestiaWebapp;
 import hestia.base.ShellScriptExecutor;
 
 /**
  * Service for managing OTel Collector (otc) and its config.yaml file
  */
 public class OtcService {
+    private static final Object LOCK = new Object();
 
-    /**
-     * @param program otelcol-contrib binary
-     * @param windows false: Linux
-     * @param configFile otc config.yaml
-     * @return "": success, otherwise error message
-     */
-    public String validate(File program, boolean windows, File configFile) {
-        var sc = new ShellScriptExecutor();
-        var cmd = (windows ? "@" : "") + program.getAbsolutePath() + " validate --config=" + configFile.getAbsolutePath();
-        String out = sc.executeAndGetLog(cmd, program.getParentFile());
-        return sc.getExitValue() == 0 ? "" : out;
+    public void deploy(Collection<String> environments) {
+        synchronized (LOCK) {
+            var folder = HestiaWebapp.config.getMonitoredTargetsFolder();
+            List<MonitoredTarget> list = new MonitoredTargetDAO().loadAll(folder, environments);
+            var yaml = new ConfigYamlBuilder(list, HestiaWebapp.config.getOtcOpts()).build();
+            validate(yaml);
+            FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);
+            HestiaWebapp.otcProcess.kill();
+            HestiaWebapp.otcProcess = new OtcProcess();
+        }
     }
     
-    /**
-     * Build config.yaml content and save file.
-     * @param allMonitoredTargets all monitored targets from all active environments
-     * @param opts -
-     * @param file config.yaml
-     */
-    public void saveConfigFile(List<MonitoredTarget> allMonitoredTargets, OtcOpts opts, File file) {
-        String content = new ConfigYamlBuilder(allMonitoredTargets, opts).build();
-        FileService.savePlainTextFile(file, content);
+    private void validate(String yaml) {
+        File configFile = HestiaWebapp.config.getConfigYamlForValidate();
+        FileService.saveJsonFile(configFile, yaml);
+        var sc = new ShellScriptExecutor();
+        var exe = HestiaWebapp.config.getOtelcolContrib();
+        var cmd = (ShellScriptExecutor.isWindows() ? "@" : "") + exe.getAbsolutePath() + " validate" //
+                + " --config=" + configFile.getAbsolutePath();
+        String out = sc.executeAndGetLog(cmd, exe.getParentFile());
+        configFile.delete();
+        if (sc.getExitValue() != 0) {
+            throw new RuntimeException("Validate error\n" + out);
+        }
     }
 }
