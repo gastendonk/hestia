@@ -1,2 +1,2 @@
 cls
-gradlew clean dockerBuildImage --console=plain -Pdockerreg=mwvb.de:5000/
+gradlew clean dockerBuildImage --console=plain -Pdockerreg=dockerregistry.intern.x-map.de/

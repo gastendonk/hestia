@@ -16,8 +16,7 @@ public class OtcService {
 
     public void deploy(Collection<String> environments) {
         synchronized (LOCK) {
-            var folder = HestiaWebapp.config.getMonitoredTargetsFolder();
-            List<MonitoredTarget> list = new MonitoredTargetDAO().loadAll(folder, environments);
+            List<MonitoredTarget> list = MonitoredTargetDAO.loadAll(environments);
             var yaml = new ConfigYamlBuilder(list, HestiaWebapp.config.getOtcOpts()).build();
             validate(yaml);
             FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);

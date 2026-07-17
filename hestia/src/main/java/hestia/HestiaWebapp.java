@@ -4,6 +4,8 @@ import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import hestia.base.HestiaConfig;
 import hestia.base.HestiaPageInitializer;
+import hestia.environment.AddEnvironmentPage;
+import hestia.environment.EditEnvironmentPage;
 import hestia.otc.OtcProcess;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
@@ -17,6 +19,8 @@ public class HestiaWebapp extends RouteDefinitions {
     public void routes() {
         get("/", IndexPage.class);
         get("/otc/kill", KillAction.class);
+        form("/environment/add", AddEnvironmentPage.class);
+        form("/environment/:id", EditEnvironmentPage.class);
     }
 
     public static void main(String[] args) {

@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
+encoding//src/main/resources/templates/AddEnvironmentPage.html=UTF-8
+encoding//src/main/resources/templates/EditEnvironmentPage.html=UTF-8
 encoding//src/main/resources/templates/IndexPage.html=UTF-8

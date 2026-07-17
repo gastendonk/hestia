@@ -16,7 +16,7 @@ import hestia.prometheus.alert.AlertRulesYamlBuilder;
 public class PrometheusService {
 
     public void deploy(Collection<String> environments) {
-        List<AlertGroup> groups = new AlertGroupDAO().loadAll(HestiaWebapp.config.getAlertsFolder(), environments);
+        List<AlertGroup> groups = AlertGroupDAO.loadAll(environments);
         var yaml = new AlertRulesYamlBuilder(groups).build();
         FileService.saveJsonFile(HestiaWebapp.config.getAlertRulesFile(), yaml);
         reloadPrometheus();

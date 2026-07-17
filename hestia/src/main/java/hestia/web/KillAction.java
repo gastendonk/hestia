@@ -2,11 +2,11 @@ package hestia.web;
 
 import org.pmw.tinylog.Logger;
 
-import github.soltaufintel.amalia.web.action.Action;
 import hestia.HestiaWebapp;
+import hestia.base.HAction;
 import hestia.otc.OtcProcess;
 
-public class KillAction extends Action {
+public class KillAction extends HAction {
 
     @Override
     protected void execute() {

@@ -1,0 +1,11 @@
+yes=yes
+no=no
+active=active
+New=New
+EditEnvironment=Edit environment
+Environment=Environment
+Environments=Environments
+NewEnvironment=Create new environment
+Save=Save
+Cancel=Cancel
+Name=Name

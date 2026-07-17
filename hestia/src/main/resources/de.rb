@@ -1,0 +1,11 @@
+yes=ja
+no=nein
+Environments=Umgebungen
+Environment=Umgebung
+EditEnvironment=Umgebung bearbeiten
+NewEnvironment=Neue Umgebung eingeben
+active=aktiv
+New=Neu
+Save=Speichern
+Cancel=Abbruch
+Name=Name

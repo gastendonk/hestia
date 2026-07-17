@@ -71,3 +71,14 @@ body {
     margin-right: 2em;
 }
 
+.page-header {
+    margin-top: 20px;
+}
+
+.tar {
+	text-align: right;
+}
+
+.tac {
+	text-align: center;
+}

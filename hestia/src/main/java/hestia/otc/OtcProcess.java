@@ -22,7 +22,7 @@ public class OtcProcess {
     public OtcProcess() {
         synchronized (LOCK) {
             if (!"1".equals(System.getenv("RUN"))) {
-                Logger.warn("otc process not started because env var RUN is not 1");
+                Logger.info("!!  otc process not started because env var RUN is not 1");
                 return;
             }
             String x = "/app/otel/otelcol-contrib";

@@ -9,13 +9,19 @@
         <p>
             OTC process pid: <b>{{pid}}</b>
             {{if alive}}<span class="badge" style="background-color: #0c0; margin-left: 2em;">otc is
-            alive</span>{{else}}<span class="badge" style="background-color: #f00; margin-left: 2em;">otc is not running{{/if}}</span>
+            alive</span>{{else}}<span class="badge" style="background-color: #c00; margin-left: 2em;">otc is not running{{/if}}</span>
         </p>
         <p>info 1: {{info1}}</p>
         <p>info 2: {{info2}}</p>
         
         <p>Health check status code: {{status}}</p>
         
+        <hr>
+        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
+        <p><a href="/environment/add" class="btn btn-primary">{{N.New}}</a></p>
+        {{if envs}}{{table}}{{/if}}
+        
+        <hr>
         <pre>{{config}}</pre>
         
         <hr>
@@ -25,6 +31,6 @@
         </p>
         
         <hr>
-        <p><small>{{datetime}}</small></p>
+        <p><small>{{datetime}} | {{VERSION}}</small></p>
     </div>
 </div>
