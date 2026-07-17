@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jgit.util.FileUtils;
 import org.pmw.tinylog.Logger;
 
-// TODO -> Amalia
 /**
  * Execute Windows batch file
  */

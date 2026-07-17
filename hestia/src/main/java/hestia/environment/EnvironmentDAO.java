@@ -1,6 +1,6 @@
 package hestia.environment;
 
-import hestia.base.JsonFileDAO;
+import github.soltaufintel.amalia.base.JsonFileDAO;
 
 public class EnvironmentDAO extends JsonFileDAO<Environment> {
 

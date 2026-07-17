@@ -97,7 +97,7 @@ public class OtcProcess {
             }
             try {
                 var r = new REST("http://localhost:13133/").get();
-                int status = r.getHttpResponse().getStatusLine().getStatusCode(); // TODO Amalia
+                int status = r.status();
                 Logger.info("health_check: [" + status + "] " + r.response());
                 return status;
             } catch (Exception e) {

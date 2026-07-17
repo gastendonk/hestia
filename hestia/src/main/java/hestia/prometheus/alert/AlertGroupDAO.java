@@ -1,6 +1,6 @@
 package hestia.prometheus.alert;
 
-import hestia.base.JsonFileDAO;
+import github.soltaufintel.amalia.base.JsonFileDAO;
 
 public class AlertGroupDAO extends JsonFileDAO<AlertGroup> {
 

@@ -18,6 +18,7 @@ public class HestiaConfig {
     private final File configYaml;
     private final File configYamlForValidate;
     private final OtcOpts otcOpts;
+    private final String language;
     
     public HestiaConfig() {
         otelcolContrib = new File(get("OTELCOL", "/app/otel/otelcol-contrib"));
@@ -36,6 +37,7 @@ public class HestiaConfig {
         otcOpts.tempo = get("TEMPO", null);
         otcOpts.loki = get("LOKI", null);
         otcOpts.debug = "1".equals(get("DEBUG", "1"));
+        language = get("LANGUAGE", "en");
     }
 
     public static String get(String key, String defaultValue) {
@@ -81,5 +83,9 @@ public class HestiaConfig {
 
     public OtcOpts getOtcOpts() {
         return otcOpts;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

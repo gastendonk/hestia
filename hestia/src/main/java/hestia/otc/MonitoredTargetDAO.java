@@ -1,6 +1,6 @@
 package hestia.otc;
 
-import hestia.base.JsonFileDAO;
+import github.soltaufintel.amalia.base.JsonFileDAO;
 
 public class MonitoredTargetDAO extends JsonFileDAO<MonitoredTarget> {
     
