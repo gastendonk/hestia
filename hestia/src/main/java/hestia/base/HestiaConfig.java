@@ -24,13 +24,15 @@ public class HestiaConfig {
         otelcolContrib = new File(get("OTELCOL", "/app/otel/otelcol-contrib"));
         prometheusHost = get("PROMETHEUS", "http://prometheus:9090");
         alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
+        // DATAFOLDER: persistent data
+        // /work: working directory, exchange files with other containers
         File base = new File(get("DATAFOLDER", "/data"));
         environmentsFolder = new File(base, "environments");
         monitoredTargetsFolder = new File(base, "monitoredtargets");
         alertsFolder = new File(base, "alerts");
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
-        configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/tmp/config.yaml"));
+        configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
         otcOpts = new OtcOpts();
         otcOpts.prometheusremotewrite = prometheusHost;
         otcOpts.otc = get("TARGET_OTC", null);
