@@ -1,18 +1,8 @@
 package hestia.otc;
 
 // HttpCheck
-public class Site implements MonitoredTarget {
-    private String name;
+public class Site extends AbstractMonitoredTarget {
     private String url;
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getUrl() {
         return url;

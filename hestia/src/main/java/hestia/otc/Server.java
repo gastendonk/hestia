@@ -1,27 +1,17 @@
 package hestia.otc;
 
 // node_exporter
-public class Server implements MonitoredTarget {
+public class Server extends AbstractMonitoredTarget {
     private ServerType type = ServerType.LINUX;
-    private String name;
     private String host;
     private String path;
-
+    
     public ServerType getType() {
         return type;
     }
 
     public void setType(ServerType type) {
         this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getHost() {

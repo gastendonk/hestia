@@ -1,8 +1,7 @@
 package hestia.otc;
 
-public class Database implements MonitoredTarget {
+public class Database extends AbstractMonitoredTarget {
     private DatabaseType type = DatabaseType.POSTGRES;
-    private String name;
     private String host;
     private String user;
     private String password;
@@ -13,15 +12,6 @@ public class Database implements MonitoredTarget {
 
     public void setType(DatabaseType type) {
         this.type = type;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getHost() {

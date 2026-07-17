@@ -9,4 +9,6 @@ public interface MonitoredTarget {
      * @return job name
      */
     String getName();
+    
+    boolean isActive();
 }
