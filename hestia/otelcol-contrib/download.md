@@ -7,6 +7,8 @@ filename: otelcol-contrib_0.137.0_windows_amd64.tar.gz
 ## Linux/Docker
 filename: otelcol-contrib_0.137.0_linux_amd64.tar.gz
 
+copy to hestia/otelcol-contrib/linux
+
 size: 343.601.336 bytes
 
 ### Dockerfile

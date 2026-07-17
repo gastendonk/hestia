@@ -3,7 +3,7 @@ package hestia;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import hestia.base.HestiaPageInitializer;
-import hestia.otc.process.OtcProcess;
+import hestia.otc.OtcProcess;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
 

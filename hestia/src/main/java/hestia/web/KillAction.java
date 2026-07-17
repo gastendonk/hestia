@@ -4,7 +4,7 @@ import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.web.action.Action;
 import hestia.HestiaWebapp;
-import hestia.otc.process.OtcProcess;
+import hestia.otc.OtcProcess;
 
 public class KillAction extends Action {
 
