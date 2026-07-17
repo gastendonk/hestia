@@ -14,6 +14,8 @@ import hestia.base.HPage;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
 import hestia.otc.OtcProcess;
+import hestia.prometheus.alert.AlertGroup;
+import hestia.prometheus.alert.AlertGroupDAO;
 
 public class IndexPage extends HPage {
 
@@ -36,11 +38,22 @@ public class IndexPage extends HPage {
             var m = list.add();
             m.put("id", esc(env.getId()));
             m.put("name", esc(env.getName()));
-            m.put("active", n(env.isActive() ? "yes" : "no"));
+            m.putInt("nr", env.isActive() ? nr(env) : 0);
+            m.put("active", env.isActive());
         }
         Cols cols = Cols.of( //
-                Col.si(n("Environment"), "name", "/environment/{{i.id}}"), //
-                Col.si(n("active"), "active").center());
+                new Col(n("Environment"), "<a href=\"/environment/{{i.id}}\"{{if not i.active}}"
+                        + " class=\"not-active\"{{/if}}>{{i.name}}</a>").sortable("name"), //
+                new Col("", "<a href=\"/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("Alerts") + " ({{i.nr}})</a>"));
         put("table", new TableComponent("wauto", cols, model, "envs").sort(0));
+    }
+
+    private int nr(Environment env) {
+        int ret = 0;
+        var groups = AlertGroupDAO.load(env.getId());
+        for (AlertGroup g : groups) {
+            ret += g.getRules().stream().filter(i -> i.isActive()).count();
+        }
+        return ret;
     }
 }

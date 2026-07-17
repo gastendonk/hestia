@@ -82,3 +82,7 @@ body {
 .tac {
 	text-align: center;
 }
+
+small {
+	color: grey;
+}

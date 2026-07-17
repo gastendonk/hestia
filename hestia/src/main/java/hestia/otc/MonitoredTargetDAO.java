@@ -11,16 +11,16 @@ import hestia.HestiaWebapp;
 
 public class MonitoredTargetDAO {
 
-    public static List<MonitoredTarget> load(String environment) {
-        MonitoredTargets e = FileService.loadJsonFile(file(environment), MonitoredTargets.class);
+    public static List<MonitoredTarget> load(String id) {
+        MonitoredTargets e = FileService.loadJsonFile(file(id), MonitoredTargets.class);
         return e == null || e.getList() == null ? new ArrayList<>() : e.getList();
     }
 
-    public static void save(List<MonitoredTarget> list, String environment) {
+    public static void save(String id, List<MonitoredTarget> list) {
         list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         MonitoredTargets e = new MonitoredTargets();
         e.setList(list);
-        FileService.saveJsonFile(file(environment), e);
+        FileService.saveJsonFile(file(id), e);
     }
 
     public static class MonitoredTargets {
@@ -35,11 +35,11 @@ public class MonitoredTargetDAO {
         }
     }
 
-    private static File file(String environment) {
-        return new File(HestiaWebapp.config.getMonitoredTargetsFolder(), environment + ".json");
+    private static File file(String envId) {
+        return new File(HestiaWebapp.config.getMonitoredTargetsFolder(), envId + ".json");
     }
 
-    public static List<MonitoredTarget> loadAll(Collection<String> environments) {
-        return environments.stream().map(e -> load(e)).flatMap(List::stream).collect(Collectors.toList());
+    public static List<MonitoredTarget> loadAll(Collection<String> environmentIdList) {
+        return environmentIdList.stream().map(e -> load(e)).flatMap(List::stream).collect(Collectors.toList());
     }
 }

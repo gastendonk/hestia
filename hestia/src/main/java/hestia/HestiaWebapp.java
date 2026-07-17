@@ -7,6 +7,13 @@ import hestia.base.HestiaPageInitializer;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.EditEnvironmentPage;
 import hestia.otc.OtcProcess;
+import hestia.prometheus.alert.AddAlertGroupPage;
+import hestia.prometheus.alert.AddAlertRulePage;
+import hestia.prometheus.alert.AlertsPage;
+import hestia.prometheus.alert.DeleteAlertGroupAction;
+import hestia.prometheus.alert.DeleteAlertRuleAction;
+import hestia.prometheus.alert.EditAlertGroupPage;
+import hestia.prometheus.alert.EditAlertRulePage;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
 
@@ -21,6 +28,22 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/otc/kill", KillAction.class);
         form("/environment/add", AddEnvironmentPage.class);
         form("/environment/:id", EditEnvironmentPage.class);
+
+        // TODO monitored targets (server, DB, sites)
+//      get("/mt/:env", MonitoredTargetsPage.class);
+//      form("/mt/:env/add", AddMonitoredTargetPage.class);
+//      form("/mt/:env/:id/edit", EditMonitoredTargetPage.class);
+//      get("/mt/:env/:id/delete", DeleteMonitoredTargetAction.class);
+        
+        // TODO otc/Prom. Einstellungen
+
+        get("/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
+        form("/alert-group/:env/add", AddAlertGroupPage.class);
+        form("/alert-group/:env/:id/edit", EditAlertGroupPage.class);
+        get("/alert-group/:env/:id/delete", DeleteAlertGroupAction.class);
+        form("/alert-rule/:env/:g/add", AddAlertRulePage.class);
+        form("/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
+        get("/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
     }
 
     public static void main(String[] args) {

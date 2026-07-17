@@ -11,7 +11,7 @@ public class EditEnvironmentPage extends HPage {
         var env = EnvironmentDAO.load(id);
         
         if (isPOST()) {
-            String name = ctx.formParam("name").toLowerCase();
+            String name = ctx.formParam("name").toLowerCase().replace(" ", "");
             if (name.isBlank()) {
                 throw new RuntimeException("Please enter name");
             }

@@ -4,10 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlertGroup {
+    private String id;
     private String name;
     private String interval;
     private int limit;
     private final List<AlertRule> rules = new ArrayList<>();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
