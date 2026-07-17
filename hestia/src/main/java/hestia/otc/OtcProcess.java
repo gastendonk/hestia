@@ -88,10 +88,13 @@ public class OtcProcess {
     }
 
     /**
-     * @return success: 200, otherwise error
+     * @return success: 200, otherwise error (-1: exception, -2: no process)
      */
     public int checkHealth() {
         synchronized (LOCK) {
+            if (p == null) {
+                return -2;
+            }
             try {
                 var r = new REST("http://localhost:13133/").get();
                 int status = r.getHttpResponse().getStatusLine().getStatusCode(); // TODO Amalia
@@ -105,6 +108,10 @@ public class OtcProcess {
     }
 
     public void kill() {
+        if (p == null) {
+            Logger.error("no process, can't kill");
+            return;
+        }
         synchronized (LOCK) {
             Logger.info("destroy...");
             try {

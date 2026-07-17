@@ -10,13 +10,13 @@ public class Tester {
 //        configFile = "development\\bin\\config.yaml";
         configFile = "development/setup1/config.yaml";
 
-    public static void main(String[] args) throws InterruptedException {
-        new OtcService().start(new File(exe), true, new File(configFile));
-        System.out.println("start ist durch");
-        while(true) {
-            Thread.sleep(1000);
-        }
-    }
+//    public static void main(String[] args) throws InterruptedException {
+//        new OtcService().start(new File(exe), true, new File(configFile));
+//        System.out.println("start ist durch");
+//        while(true) {
+//            Thread.sleep(1000);
+//        }
+//    }
     
     public static void main2(String[] args) {
         String out = new OtcService().validate(new File(exe), true, new File(configFile));
