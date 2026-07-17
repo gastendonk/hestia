@@ -31,7 +31,7 @@ public class OtcService {
      * @param file config.yaml
      */
     public void saveConfigFile(List<MonitoredTarget> allMonitoredTargets, OtcOpts opts, File file) {
-        String content = new OtcConfigBuilder(allMonitoredTargets, opts).build();
+        String content = new ConfigYamlBuilder(allMonitoredTargets, opts).build();
         FileService.savePlainTextFile(file, content);
     }
 }

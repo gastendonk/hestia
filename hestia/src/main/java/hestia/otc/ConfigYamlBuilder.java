@@ -9,14 +9,14 @@ import github.soltaufintel.amalia.base.StringService;
 /**
  * Build content of OTel Collector config.yaml file
  */
-public class OtcConfigBuilder {
+public class ConfigYamlBuilder {
     private final List<String> receivers = new ArrayList<>();
     private final List<String> exporters = new ArrayList<>();
     private final List<MonitoredTarget> monitoredTargets;
     private final OtcOpts o;
     private String tracesExporters = "";
     
-    public OtcConfigBuilder(List<MonitoredTarget> monitoredTargets, OtcOpts o) {
+    public ConfigYamlBuilder(List<MonitoredTarget> monitoredTargets, OtcOpts o) {
         this.monitoredTargets = new ArrayList<>(monitoredTargets);
         this.o = o;
         this.monitoredTargets.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));

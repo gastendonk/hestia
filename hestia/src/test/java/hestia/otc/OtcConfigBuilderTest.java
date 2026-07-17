@@ -15,7 +15,7 @@ public class OtcConfigBuilderTest {
         o.tempo = "tempo:4317";
         o.loki = "http://loki:3100/otlp";
 
-        String out = new OtcConfigBuilder(mt(), o).build();
+        String out = new ConfigYamlBuilder(mt(), o).build();
 
         String expectation = """
                 receivers:
@@ -140,7 +140,7 @@ public class OtcConfigBuilderTest {
         OtcOpts o = new OtcOpts();
         o.otc = "http://cloud";
 
-        String out = new OtcConfigBuilder(List.of(), o).build();
+        String out = new ConfigYamlBuilder(List.of(), o).build();
 
         String expectation = """
                 receivers:
