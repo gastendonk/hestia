@@ -1,7 +1,6 @@
 package hestia.prometheus.alert;
 
 import github.soltaufintel.amalia.base.StringService;
-import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class EditAlertGroupPage extends HPage {
@@ -11,14 +10,10 @@ public class EditAlertGroupPage extends HPage {
         String env = ctx.pathParam("env");
         String id = ctx.pathParam("id");
 
-        var p = HestiaWebapp.persistenceFactory.alertGroup();
-        var g = p.loadOne(env, null, id);
+        var g = AlertGroupDAO.load(env, id);
         
         if (isPOST()) {
             save(env, g);
-            p.save(env, g, false);
-
-            ctx.redirect("/alert/" + env);
         } else {
             header(n("EditGroup"));
             put("env", esc(env));
@@ -46,5 +41,8 @@ public class EditAlertGroupPage extends HPage {
         } catch (NumberFormatException e) {
             throw new RuntimeException("Limit must be a number");
         }
+        AlertGroupDAO.save(env, g);
+
+        ctx.redirect("/alert/" + env);
     }
 }

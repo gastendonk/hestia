@@ -13,7 +13,6 @@ import hestia.otc.EditMTPage;
 import hestia.otc.EditOtcOptsPage;
 import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
-import hestia.persist.PersistenceFactory;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AddAlertRulePage;
 import hestia.prometheus.alert.AlertsPage;
@@ -28,7 +27,6 @@ public class HestiaWebapp extends RouteDefinitions {
     public static final String VERSION = "0.1.0";
     public static HestiaConfig config;
     public static OtcProcess otcProcess;
-    public static PersistenceFactory persistenceFactory;
     
     @Override
     public void routes() {
@@ -59,7 +57,6 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withTemplatesFolders(HestiaWebapp.class, "/templates")
                 .withPageInitializer(new HestiaPageInitializer())
                 .withInitializer(c -> config = new HestiaConfig())
-                .withInitializer(c -> persistenceFactory = new PersistenceFactory())
                 .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();

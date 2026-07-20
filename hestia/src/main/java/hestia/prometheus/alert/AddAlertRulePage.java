@@ -1,7 +1,6 @@
 package hestia.prometheus.alert;
 
 import github.soltaufintel.amalia.base.IdGenerator;
-import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class AddAlertRulePage extends HPage {
@@ -25,7 +24,7 @@ public class AddAlertRulePage extends HPage {
             rule.setExpr(ctx.formParam("expr"));
             rule.setDurationFor(ctx.formParam("durationFor"));
             rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
-            HestiaWebapp.persistenceFactory.alertRule().save(env, groupId, rule, true);
+            AlertGroupDAO.insert(env, groupId, rule);
             
             ctx.redirect("/alert/" + env);
         } else {

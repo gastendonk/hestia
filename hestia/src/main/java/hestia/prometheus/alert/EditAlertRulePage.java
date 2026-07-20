@@ -1,6 +1,5 @@
 package hestia.prometheus.alert;
 
-import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class EditAlertRulePage extends HPage {
@@ -11,8 +10,7 @@ public class EditAlertRulePage extends HPage {
         String groupId = ctx.pathParam("g");
         String id = ctx.pathParam("id");
 
-        var p = HestiaWebapp.persistenceFactory.alertRule();
-        var rule = p.loadOne(env, groupId, id);
+        var rule = AlertGroupDAO.load(env, groupId, id);
         
         if (isPOST()) {
             String alert = ctx.formParam("alert").replace(" ", "");
@@ -27,7 +25,7 @@ public class EditAlertRulePage extends HPage {
             rule.setDurationFor(ctx.formParam("durationFor"));
             rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
             rule.setActive("on".equals(ctx.formParam("active")));
-            p.save(env, groupId, rule, false);
+            AlertGroupDAO.update(env, groupId, rule);
             
             ctx.redirect("/alert/" + env);
         } else {
