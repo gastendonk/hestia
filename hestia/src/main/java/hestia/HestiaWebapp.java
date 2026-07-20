@@ -7,6 +7,10 @@ import hestia.base.HestiaConfig;
 import hestia.base.HestiaPageInitializer;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.EditEnvironmentPage;
+import hestia.exchange.PullAction;
+import hestia.exchange.PushAction;
+import hestia.exchange.ReceiveAction;
+import hestia.exchange.ServeAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
 import hestia.otc.EditMTPage;
@@ -20,6 +24,7 @@ import hestia.prometheus.alert.EditAlertGroupPage;
 import hestia.prometheus.alert.rule.AddAlertRulePage;
 import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
 import hestia.prometheus.alert.rule.EditAlertRulePage;
+import hestia.web.DeployAction;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
 
@@ -34,6 +39,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/otc/kill", KillAction.class);
         form("/environment/add", AddEnvironmentPage.class);
         form("/environment/:id", EditEnvironmentPage.class);
+        get("/deploy", DeployAction.class);
 
         form("/mt/:id/add", AddMTPage.class);
         form("/mt/:id/:id2/edit", EditMTPage.class);
@@ -50,6 +56,11 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         
         form("/tablesort/:id/:col", TableSortAction.class);
+        
+        get("/x/push", PushAction.class);
+        post("/x/receive/:key", ReceiveAction.class);
+        get("/x/pull", PullAction.class);
+        get("/x/serve/:key", ServeAction.class);
     }
 
     public static void main(String[] args) {
