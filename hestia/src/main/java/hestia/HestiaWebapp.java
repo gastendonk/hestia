@@ -2,10 +2,16 @@ package hestia;
 
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
+import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.HestiaConfig;
 import hestia.base.HestiaPageInitializer;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.EditEnvironmentPage;
+import hestia.otc.AddMTPage;
+import hestia.otc.DeleteMTAction;
+import hestia.otc.EditMTPage;
+import hestia.otc.EditOtcOptsPage;
+import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AddAlertRulePage;
@@ -29,13 +35,11 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/environment/add", AddEnvironmentPage.class);
         form("/environment/:id", EditEnvironmentPage.class);
 
-        // TODO monitored targets (server, DB, sites)
-//      get("/mt/:env", MonitoredTargetsPage.class);
-//      form("/mt/:env/add", AddMonitoredTargetPage.class);
-//      form("/mt/:env/:id/edit", EditMonitoredTargetPage.class);
-//      get("/mt/:env/:id/delete", DeleteMonitoredTargetAction.class);
-        
-        // TODO otc/Prom. Einstellungen
+        form("/mt/:id/add", AddMTPage.class);
+        form("/mt/:id/:id2/edit", EditMTPage.class);
+        get("/mt/:id/:id2/delete", DeleteMTAction.class);
+        get("/mt/:id", MonitoredTargetsPage.class);
+        form("/options", EditOtcOptsPage.class);
 
         get("/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
         form("/alert-group/:env/add", AddAlertGroupPage.class);
@@ -44,6 +48,8 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/alert-rule/:env/:g/add", AddAlertRulePage.class);
         form("/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
+        
+        form("/tablesort/:id/:col", TableSortAction.class);
     }
 
     public static void main(String[] args) {

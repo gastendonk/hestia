@@ -5,13 +5,53 @@ package hestia.otc;
  */
 public class OtcOpts {
     /** host of metrics database (Prometheus) */
-    public String prometheusremotewrite;
+    private String prometheusremotewrite;
     /** host of traces database (Tempo) */
-    public String tempo;
+    private String tempo;
     /** host of logs database (Loki) */
-    public String loki;
+    private String loki;
     /** host of other OTel Collector to send all data to */
-    public String otc;
+    private String otc;
     /** true: log debug messages */
-    public boolean debug = true;
+    private boolean debug = true;
+
+    public String getPrometheusremotewrite() {
+        return prometheusremotewrite;
+    }
+
+    public void setPrometheusremotewrite(String prometheusremotewrite) {
+        this.prometheusremotewrite = prometheusremotewrite;
+    }
+
+    public String getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(String tempo) {
+        this.tempo = tempo;
+    }
+
+    public String getLoki() {
+        return loki;
+    }
+
+    public void setLoki(String loki) {
+        this.loki = loki;
+    }
+
+    public String getOtc() {
+        return otc;
+    }
+
+    public void setOtc(String otc) {
+        this.otc = otc;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
 }

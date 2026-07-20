@@ -3,7 +3,6 @@ package hestia.base;
 import java.io.File;
 
 import github.soltaufintel.amalia.base.StringService;
-import hestia.otc.OtcOpts;
 
 public class HestiaConfig {
     private final File otelcolContrib;
@@ -17,7 +16,6 @@ public class HestiaConfig {
     /** OTel Collector config file */
     private final File configYaml;
     private final File configYamlForValidate;
-    private final OtcOpts otcOpts;
     private final String language;
     
     public HestiaConfig() {
@@ -33,12 +31,6 @@ public class HestiaConfig {
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
-        otcOpts = new OtcOpts();
-        otcOpts.prometheusremotewrite = prometheusHost;
-        otcOpts.otc = get("TARGET_OTC", null);
-        otcOpts.tempo = get("TEMPO", null);
-        otcOpts.loki = get("LOKI", null);
-        otcOpts.debug = "1".equals(get("DEBUG", "1"));
         language = get("LANGUAGE", "en");
     }
 
@@ -81,10 +73,6 @@ public class HestiaConfig {
 
     public File getConfigYamlForValidate() {
         return configYamlForValidate;
-    }
-
-    public OtcOpts getOtcOpts() {
-        return otcOpts;
     }
 
     public String getLanguage() {

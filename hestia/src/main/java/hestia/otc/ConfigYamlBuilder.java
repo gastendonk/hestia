@@ -159,24 +159,24 @@ public class ConfigYamlBuilder {
 
     private String exporters() {
         String ret = "exporters:\n";
-        if (!StringService.isNullOrEmpty(o.prometheusremotewrite)) { // write metrics to Prometheus
-            ret += "  prometheusremotewrite:\n    endpoint: \"" + o.prometheusremotewrite + "\"\n";
+        if (!StringService.isNullOrEmpty(o.getPrometheusremotewrite())) { // write metrics to Prometheus
+            ret += "  prometheusremotewrite:\n    endpoint: \"" + o.getPrometheusremotewrite() + "\"\n";
             exporters.add("prometheusremotewrite");
         }
-        if (o.debug) {
+        if (o.isDebug()) {
             exporters.add("debug");
         }
         if (exporters.isEmpty()) {
             throw new RuntimeException("exporters must not be empty");
         }
-        if (!StringService.isNullOrEmpty(o.tempo)) { // write traces to Tempo
-            ret += "  otlp/tempo:\n    endpoint: \"" + o.tempo + "\"\n    tls: { insecure: true }\n";
+        if (!StringService.isNullOrEmpty(o.getTempo())) { // write traces to Tempo
+            ret += "  otlp/tempo:\n    endpoint: \"" + o.getTempo() + "\"\n    tls: { insecure: true }\n";
             tracesExporters = "otlp/tempo, ";
         }
-        if (!StringService.isNullOrEmpty(o.loki)) { // write logs to Loki
-            ret += "  otlphttp/loki:\n" + "    endpoint: \"" + o.loki + "\"\n";
+        if (!StringService.isNullOrEmpty(o.getLoki())) { // write logs to Loki
+            ret += "  otlphttp/loki:\n" + "    endpoint: \"" + o.getLoki() + "\"\n";
         }
-        if (!StringService.isNullOrEmpty(o.otc)) {
+        if (!StringService.isNullOrEmpty(o.getOtc())) {
             ret += """
                     $indent
                       otlphttp/otc:
@@ -193,10 +193,10 @@ public class ConfigYamlBuilder {
                           max_elapsed_time: 5m
                                         """ //
                     .replace("$indent\n", "") // trick
-                    .replace("$e", o.otc);
+                    .replace("$e", o.getOtc());
             exporters.add("otlphttp/otc");
         }
-        if (o.debug) {
+        if (o.isDebug()) {
             ret += "  debug:\n    verbosity: detailed\n";
         }
         return ret + "\n";
@@ -231,11 +231,11 @@ public class ConfigYamlBuilder {
                 .replace("{{m_receivers}}",
                         receivers.stream().map(i -> "\n        - " + i).collect(Collectors.joining())) //
                 .replace("{{m_exporters}}", exporters.stream().collect(Collectors.joining(", ")));
-        if (!StringService.isNullOrEmpty(o.tempo)) {
+        if (!StringService.isNullOrEmpty(o.getTempo())) {
             ret += "    traces:\n      receivers:  [otlp]\n      processors: [batch]\n      exporters:  ["
                     + tracesExporters + "debug]\n";
         }
-        if (!StringService.isNullOrEmpty(o.loki)) {
+        if (!StringService.isNullOrEmpty(o.getLoki())) {
             ret += "    logs:\n      receivers:  [otlp]\n      processors: [batch]\n      exporters:  [otlphttp/loki]\n";
         }
         return ret;

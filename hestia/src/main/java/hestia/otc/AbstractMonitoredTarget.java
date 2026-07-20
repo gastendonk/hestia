@@ -3,8 +3,9 @@ package hestia.otc;
 public abstract class AbstractMonitoredTarget implements MonitoredTarget {
     private String id;
     private String name;
-    private boolean active;
+    private boolean active = true;
 
+    @Override
     public String getId() {
         return id;
     }

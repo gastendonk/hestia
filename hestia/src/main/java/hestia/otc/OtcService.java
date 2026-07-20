@@ -17,7 +17,7 @@ public class OtcService {
     public void deploy(Collection<String> environments) {
         synchronized (LOCK) {
             List<MonitoredTarget> list = MonitoredTargetDAO.loadAll(environments);
-            var yaml = new ConfigYamlBuilder(list, HestiaWebapp.config.getOtcOpts()).build();
+            var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
             validate(yaml);
             FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);
             HestiaWebapp.otcProcess.kill();

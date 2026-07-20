@@ -5,6 +5,8 @@ package hestia.otc;
  */
 public interface MonitoredTarget {
 
+    String getId();
+    
     /**
      * @return job name
      */

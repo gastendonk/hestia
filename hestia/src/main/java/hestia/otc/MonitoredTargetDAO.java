@@ -6,13 +6,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
+import hestia.base.RuntimeTypeAdapterFactory;
 
 public class MonitoredTargetDAO {
 
     public static List<MonitoredTarget> load(String id) {
-        MonitoredTargets e = FileService.loadJsonFile(file(id), MonitoredTargets.class);
+        String json = FileService.loadPlainTextFile(file(id));
+        MonitoredTargets e = gson().fromJson(json, MonitoredTargets.class);
         return e == null || e.getList() == null ? new ArrayList<>() : e.getList();
     }
 
@@ -20,9 +25,9 @@ public class MonitoredTargetDAO {
         list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         MonitoredTargets e = new MonitoredTargets();
         e.setList(list);
-        FileService.saveJsonFile(file(id), e);
+        FileService.savePlainTextFile(file(id), gson().toJson(e));
     }
-
+    
     public static class MonitoredTargets {
         private List<MonitoredTarget> list;
 
@@ -33,6 +38,19 @@ public class MonitoredTargetDAO {
         public void setList(List<MonitoredTarget> list) {
             this.list = list;
         }
+    }
+
+    private static Gson gson() {
+        // Wir definieren ein Feld "targetType" im JSON, um die Klassen zu unterscheiden
+        RuntimeTypeAdapterFactory<MonitoredTarget> adapterFactory = 
+            RuntimeTypeAdapterFactory.of(MonitoredTarget.class, "targetType")
+                .registerSubtype(Database.class, "database")
+                .registerSubtype(Server.class, "server")
+                .registerSubtype(Site.class, "site");
+        return new GsonBuilder()
+                .registerTypeAdapterFactory(adapterFactory)
+                .setPrettyPrinting() // Optional: Für schöner lesbares JSON
+                .create();
     }
 
     private static File file(String envId) {

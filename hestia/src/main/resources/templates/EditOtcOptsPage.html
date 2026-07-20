@@ -1,0 +1,53 @@
+{{master: master}}
+
+<div class="row"> 
+    <div class="col-lg-12">
+        <h1 class="page-header">{{header}}</h1>
+
+        <form class="form-horizontal" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <label for="prometheusremotewrite" class="col-lg-2 control-label">Prometheus {{N.database}}</label>
+                    <div class="col-lg-3">
+                        <input autofocus type="text" class="form-control" id="prometheusremotewrite" name="prometheusremotewrite" value="{{prometheusremotewrite}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tempo" class="col-lg-2 control-label">Tempo {{N.database}}</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" id="tempo" name="tempo" value="{{tempo}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="loki" class="col-lg-2 control-label">Loki {{N.database}}</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" id="loki" name="loki" value="{{loki}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="otc" class="col-lg-2 control-label">{{N.OtcLabel}}</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" id="otc" name="otc" value="{{otc}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-3 col-lg-offset-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="debug" name="debug"{{if debug}} checked{{/if}}>
+                                debug
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-5">
+                        <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
+                        <a href="/" class="btn btn-default">{{N.Cancel}}</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

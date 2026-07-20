@@ -18,7 +18,10 @@
         
         <hr>
         <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
-        <p><a href="/environment/add" class="btn btn-primary">{{N.New}}</a></p>
+        <p>
+            <a href="/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
+            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
+        </p>
         {{if envs}}{{table}}{{/if}}
         
         <hr>

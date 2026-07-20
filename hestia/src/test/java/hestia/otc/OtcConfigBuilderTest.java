@@ -11,9 +11,9 @@ public class OtcConfigBuilderTest {
     @Test
     public void build() {
         OtcOpts o = new OtcOpts();
-        o.prometheusremotewrite = "http://prometheus:9090";
-        o.tempo = "tempo:4317";
-        o.loki = "http://loki:3100/otlp";
+        o.setPrometheusremotewrite("http://prometheus:9090");
+        o.setTempo("tempo:4317");
+        o.setLoki("http://loki:3100/otlp");
 
         String out = new ConfigYamlBuilder(mt(), o).build();
 
@@ -138,7 +138,7 @@ public class OtcConfigBuilderTest {
     @Test
     public void otc() {
         OtcOpts o = new OtcOpts();
-        o.otc = "http://cloud";
+        o.setOtc("http://cloud");
 
         String out = new ConfigYamlBuilder(List.of(), o).build();
 

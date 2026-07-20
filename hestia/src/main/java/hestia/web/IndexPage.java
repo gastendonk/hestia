@@ -13,6 +13,7 @@ import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
+import hestia.otc.MonitoredTargetDAO;
 import hestia.otc.OtcProcess;
 import hestia.prometheus.alert.AlertGroup;
 import hestia.prometheus.alert.AlertGroupDAO;
@@ -38,19 +39,26 @@ public class IndexPage extends HPage {
             var m = list.add();
             m.put("id", esc(env.getId()));
             m.put("name", esc(env.getName()));
-            m.putInt("nr", env.isActive() ? nr(env) : 0);
+            m.putInt("nr1", env.isActive() ? nr1(env) : 0);
+            m.putInt("nr2", env.isActive() ? nr2(env) : 0);
             m.put("active", env.isActive());
         }
         Cols cols = Cols.of( //
                 new Col(n("Environment"), "{{if not i.active}}<span class=\"not-active\">{{/if}}{{i.name}}"
                         + "{{if not i.active}}</span>{{/if}}").sortable("name"), //
                 new Col("", "<a href=\"/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"Bearbeiten\"><i"
-                        + " class=\"fa fa-pencil\"></i></a> <a href=\"/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">"
-                        + n("Alerts") + " ({{i.nr}})</a>"));
+                        + " class=\"fa fa-pencil\"></i></a>"
+                        + " <a href=\"/mt/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
+                        + " <a href=\"/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("Alerts") + " ({{i.nr2}})</a>"
+                        ));
         put("table", new TableComponent("wauto", cols, model, "envs").sort(0));
     }
 
-    private int nr(Environment env) {
+    private int nr1(Environment env) {
+        return (int) MonitoredTargetDAO.load(env.getId()).stream().filter(i -> i.isActive()).count();
+    }
+
+    private int nr2(Environment env) {
         int ret = 0;
         var groups = AlertGroupDAO.load(env.getId());
         for (AlertGroup g : groups) {
