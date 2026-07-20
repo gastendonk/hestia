@@ -31,6 +31,7 @@ public class EditAlertRulePage extends HPage {
         } else {
             header(n("EditRule"));
             put("env", esc(env));
+            put("groupId", esc(groupId));
             put("alertHint", "camelCase oder snake_case, keine Leerzeichen");
             put("id", esc(rule.getId()));
             put("alert", esc(rule.getAlert()));

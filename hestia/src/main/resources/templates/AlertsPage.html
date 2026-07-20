@@ -21,8 +21,6 @@
 	                    <a href="/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
 	                       {{if not r.active}} style="text-decoration: line-through;"{{/if}}>{{r.alert}}</a>
 	                    <i>{{r.summary}}</i>
-	                    <a href="/alert-rule/{{env}}/{{g.id}}/{{r.id}}/delete" class="btn btn-danger btn-xs ml1" title="{{N.Delete}}"
-	                       onclick="return confirm('{{N.Delete}}?')" style="margin-bottom: 2px;"><i class="fa fa-trash-o"></i></a>
 	                </li>
 	            {{else}}
 	                <li>{{N.none}}</li>
