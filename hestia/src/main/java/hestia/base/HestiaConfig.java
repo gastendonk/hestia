@@ -3,6 +3,8 @@ package hestia.base;
 import java.io.File;
 
 import github.soltaufintel.amalia.base.StringService;
+import github.soltaufintel.amalia.git.Repository;
+import github.soltaufintel.amalia.git.RepositoryDefinition;
 
 public class HestiaConfig {
     private final File otelcolContrib;
@@ -17,6 +19,9 @@ public class HestiaConfig {
     private final File configYaml;
     private final File configYamlForValidate;
     private final String language;
+    private final Repository repo;
+    private final String repoAuthor;
+    private final String repoMail;
     
     public HestiaConfig() {
         otelcolContrib = new File(get("OTELCOL", "/app/otel/otelcol-contrib"));
@@ -32,6 +37,35 @@ public class HestiaConfig {
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
         language = get("LANGUAGE", "en");
+        if (StringService.isNullOrEmpty(get("REPO", null))) {
+            repoAuthor = null;
+            repoMail = null;
+            repo = null;
+        } else {
+            repoAuthor = get("REPOUSER", null);
+            repoMail = get("REPOMAIL", null);
+            repo = new Repository(new RepositoryDefinition() {
+                @Override
+                public String getUser() {
+                    return repoAuthor;
+                }
+                
+                @Override
+                public String getPassword() {
+                    return get("REPOPASS", null);
+                }
+                
+                @Override
+                public String getUrl() {
+                    return get("REPO", null);
+                }
+                
+                @Override
+                public File getLocalFolder() {
+                    return new File(get("REPOFOLDER", null));
+                }
+            });
+        }
     }
 
     public static String get(String key, String defaultValue) {
@@ -81,5 +115,15 @@ public class HestiaConfig {
     
     public boolean isCustomer() {
         return true;
+    }
+    
+    public Repository getRepo() {
+        return repo;
+    }
+    
+    public void commit(String commitMessage) {
+        if (repo != null) {
+            repo.commit(commitMessage, repoAuthor, repoMail);
+        }
     }
 }

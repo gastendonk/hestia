@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import github.soltaufintel.amalia.base.FileService;
@@ -21,7 +20,7 @@ public class AlertGroupDAO {
         }
     }
 
-    public static void save(String envId, List<AlertGroup> list) {
+    private static void save(String envId, List<AlertGroup> list, String commitMessage) {
         synchronized (LOCK) {
             list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
             for (AlertGroup g : list) {
@@ -30,6 +29,8 @@ public class AlertGroupDAO {
             AlertGroups e = new AlertGroups();
             e.setList(list);
             FileService.saveJsonFile(file(envId), e);
+            
+            HestiaWebapp.config.commit(commitMessage);
         }
     }
 
@@ -41,13 +42,7 @@ public class AlertGroupDAO {
     
     public static AlertGroup load(String envId, String groupId) {
         synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            for (AlertGroup g : groups) {
-                if (g.getId().equals(groupId)) {
-                    return g;
-                }
-            }
-            throw new NoSuchElementException();
+            return load(envId).stream().filter(i -> i.getId().equals(groupId)).findFirst().orElseThrow();
         }
     }
     
@@ -56,41 +51,41 @@ public class AlertGroupDAO {
             List<AlertGroup> groups = load(envId);
             groups.removeIf(i -> i.getId().equals(group.getId()));
             groups.add(group);
-            save(envId, groups);
+            save(envId, groups, "save alert group");
         }
     }
     
-    public static AlertRule load(String envId, String groupId, String ruleId) {
+    public static void delete(String envId, String groupId) {
         synchronized (LOCK) {
             List<AlertGroup> groups = load(envId);
-            for (AlertGroup g : groups) {
-                if (g.getId().equals(groupId)) {
-                    for (AlertRule r : g.getRules()) {
-                        if (ruleId.equals(r.getId())) {
-                            return r;
-                        }
-                    }
-                    break;
-                }
+            if (groups.removeIf(i -> i.getId().equals(groupId))) {
+                save(envId, groups, "delete alert group");
             }
-            throw new RuntimeException("Alert rule does not exist");
+        }
+    }
+
+    public static AlertRule loadRule(String envId, String groupId, String ruleId) {
+        synchronized (LOCK) {
+            return load(envId).stream().filter(i -> i.getId().equals(groupId))
+                    .flatMap(g -> g.getRules().stream()).filter(i -> i.getId().equals(ruleId))
+                    .findFirst().orElseThrow();
         }
     }
     
-    public static void insert(String envId, String groupId, AlertRule rule) {
+    public static void insertRule(String envId, String groupId, AlertRule rule) {
         synchronized (LOCK) {
             List<AlertGroup> groups = load(envId);
             for (AlertGroup g : groups) {
                 if (g.getId().equals(groupId)) {
                     g.getRules().add(rule);
-                    save(envId, groups);
+                    save(envId, groups, "add alert rule");
                     return;
                 }
             }
         }
     }
 
-    public static void update(String envId, String groupId, AlertRule rule) {
+    public static void updateRule(String envId, String groupId, AlertRule rule) {
         synchronized (LOCK) {
             List<AlertGroup> groups = load(envId);
             for (AlertGroup g : groups) {
@@ -99,7 +94,7 @@ public class AlertGroupDAO {
                     for (int i = 0; i < rules.size(); i++) {
                         if (rules.get(i).getId().equals(rule.getId())) {
                             rules.set(i, rule);
-                            save(envId, groups);
+                            save(envId, groups, "update alert rule");
                             return;
                         }
                     }
@@ -109,22 +104,13 @@ public class AlertGroupDAO {
         }
     }
 
-    public static void delete(String envId, String groupId) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            if (groups.removeIf(i -> i.getId().equals(groupId))) {
-                save(envId, groups);
-            }
-        }
-    }
-
-    public static void delete(String envId, String groupId, String id) {
+    public static void deleteRule(String envId, String groupId, String id) {
         synchronized (LOCK) {
             List<AlertGroup> groups = load(envId);
             for (AlertGroup g : groups) {
                 if (g.getId().equals(groupId)) {
                     if (g.getRules().removeIf(i -> i.getId().equals(id))) {
-                        save(envId, groups);
+                        save(envId, groups, "delete alert rule");
                     }
                     return;
                 }

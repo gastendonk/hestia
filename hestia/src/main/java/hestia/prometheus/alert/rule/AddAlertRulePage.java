@@ -29,7 +29,7 @@ public class AddAlertRulePage extends HPage {
             rule.setExpr(ctx.formParam("expr"));
             rule.setDurationFor(ctx.formParam("durationFor"));
             rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
-            AlertGroupDAO.insert(env, groupId, rule);
+            AlertGroupDAO.insertRule(env, groupId, rule);
             
             ctx.redirect("/alert/" + env);
         } else {

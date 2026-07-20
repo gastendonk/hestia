@@ -12,7 +12,7 @@ public class EditAlertRulePage extends HPage {
         String groupId = ctx.pathParam("g");
         String id = ctx.pathParam("id");
 
-        var rule = AlertGroupDAO.load(env, groupId, id);
+        var rule = AlertGroupDAO.loadRule(env, groupId, id);
         
         if (isPOST()) {
             save(env, groupId, rule);
@@ -52,7 +52,7 @@ public class EditAlertRulePage extends HPage {
         rule.setDurationFor(ctx.formParam("durationFor"));
         rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
         rule.setActive("on".equals(ctx.formParam("active")));
-        AlertGroupDAO.update(env, groupId, rule);
+        AlertGroupDAO.updateRule(env, groupId, rule);
         
         ctx.redirect("/alert/" + env);
     }

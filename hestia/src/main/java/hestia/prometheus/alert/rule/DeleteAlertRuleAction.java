@@ -15,7 +15,7 @@ public class DeleteAlertRuleAction extends HAction {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
-        AlertGroupDAO.delete(env, g, id);
+        AlertGroupDAO.deleteRule(env, g, id);
         
         ctx.redirect("/alert/" + env);
     }
