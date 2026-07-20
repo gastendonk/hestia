@@ -4,6 +4,7 @@ import java.util.List;
 
 import hestia.base.HPage;
 import hestia.environment.EnvironmentDAO;
+import hestia.prometheus.alert.rule.AlertRule;
 
 public class AlertsPage extends HPage {
 

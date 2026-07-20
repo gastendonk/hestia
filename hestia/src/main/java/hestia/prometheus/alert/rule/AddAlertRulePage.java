@@ -1,7 +1,8 @@
-package hestia.prometheus.alert;
+package hestia.prometheus.alert.rule;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.base.HPage;
+import hestia.prometheus.alert.AlertGroupDAO;
 
 public class AddAlertRulePage extends HPage {
 

@@ -3,6 +3,8 @@ package hestia.prometheus.alert;
 import java.util.ArrayList;
 import java.util.List;
 
+import hestia.prometheus.alert.rule.AlertRule;
+
 public class AlertGroup {
     private String id;
     private String name;

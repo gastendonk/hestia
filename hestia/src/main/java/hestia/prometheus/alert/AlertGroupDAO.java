@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
+import hestia.prometheus.alert.rule.AlertRule;
 
 public class AlertGroupDAO {
     private static final Object LOCK = new Object();

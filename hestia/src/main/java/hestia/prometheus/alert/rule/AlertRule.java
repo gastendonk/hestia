@@ -1,4 +1,4 @@
-package hestia.prometheus.alert;
+package hestia.prometheus.alert.rule;
 
 public class AlertRule {
     private String id;

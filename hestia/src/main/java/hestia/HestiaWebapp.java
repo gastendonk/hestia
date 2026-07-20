@@ -14,12 +14,12 @@ import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
-import hestia.prometheus.alert.AddAlertRulePage;
 import hestia.prometheus.alert.AlertsPage;
 import hestia.prometheus.alert.DeleteAlertGroupAction;
-import hestia.prometheus.alert.DeleteAlertRuleAction;
 import hestia.prometheus.alert.EditAlertGroupPage;
-import hestia.prometheus.alert.EditAlertRulePage;
+import hestia.prometheus.alert.rule.AddAlertRulePage;
+import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
+import hestia.prometheus.alert.rule.EditAlertRulePage;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
 

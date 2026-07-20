@@ -3,6 +3,7 @@ package hestia.prometheus.alert;
 import java.util.List;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.prometheus.alert.rule.AlertRule;
 
 /**
  * Creates alert-rules.yml file content out of AlertGroup objects

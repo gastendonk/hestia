@@ -1,6 +1,7 @@
-package hestia.prometheus.alert;
+package hestia.prometheus.alert.rule;
 
 import hestia.base.HPage;
+import hestia.prometheus.alert.AlertGroupDAO;
 
 public class EditAlertRulePage extends HPage {
 
