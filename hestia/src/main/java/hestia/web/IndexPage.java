@@ -42,9 +42,11 @@ public class IndexPage extends HPage {
             m.put("active", env.isActive());
         }
         Cols cols = Cols.of( //
-                new Col(n("Environment"), "<a href=\"/environment/{{i.id}}\"{{if not i.active}}"
-                        + " class=\"not-active\"{{/if}}>{{i.name}}</a>").sortable("name"), //
-                new Col("", "<a href=\"/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("Alerts") + " ({{i.nr}})</a>"));
+                new Col(n("Environment"), "{{if not i.active}}<span class=\"not-active\">{{/if}}{{i.name}}"
+                        + "{{if not i.active}}</span>{{/if}}").sortable("name"), //
+                new Col("", "<a href=\"/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"Bearbeiten\"><i"
+                        + " class=\"fa fa-pencil\"></i></a> <a href=\"/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">"
+                        + n("Alerts") + " ({{i.nr}})</a>"));
         put("table", new TableComponent("wauto", cols, model, "envs").sort(0));
     }
 
