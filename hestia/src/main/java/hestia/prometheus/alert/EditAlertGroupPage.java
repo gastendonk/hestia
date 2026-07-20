@@ -1,6 +1,7 @@
 package hestia.prometheus.alert;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class EditAlertGroupPage extends HPage {
@@ -24,6 +25,9 @@ public class EditAlertGroupPage extends HPage {
     }
 
     private void save(String env, AlertGroup g) {
+        if (HestiaWebapp.config.isCustomer()) {
+            throw new RuntimeException();
+        }
         String name = ctx.queryParam("name").trim();
         if (name.isBlank()) {
             throw new RuntimeException("Please enter name");

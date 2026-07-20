@@ -1,6 +1,7 @@
 package hestia.prometheus.alert.rule;
 
 import github.soltaufintel.amalia.base.IdGenerator;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.prometheus.alert.AlertGroupDAO;
 
@@ -11,6 +12,9 @@ public class AddAlertRulePage extends HPage {
         String env = ctx.pathParam("env");
         String groupId = ctx.pathParam("g");
 
+        if (HestiaWebapp.config.isCustomer()) {
+            throw new RuntimeException();
+        }
         if (isPOST()) {
             String alert = ctx.formParam("alert").replace(" ", "");
             if (alert.isBlank()) {

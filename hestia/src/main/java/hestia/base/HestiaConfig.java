@@ -78,4 +78,8 @@ public class HestiaConfig {
     public String getLanguage() {
         return language;
     }
+    
+    public boolean isCustomer() {
+        return true;
+    }
 }

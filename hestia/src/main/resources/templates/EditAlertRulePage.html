@@ -9,43 +9,43 @@
                 <div class="form-group">
                     <label for="alert" class="col-lg-1 control-label">ID</label>
                     <div class="col-lg-3">
-                        <input autofocus type="text" class="form-control" id="alert" name="alert" value="{{alert}}">
+                        <input autofocus type="text" class="form-control" id="alert" name="alert" value="{{alert}}"{{if customer}} disabled{{/if}}>
                         <small>{{alertHint}}</small>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="summary" class="col-lg-1 control-label">{{N.Summary}}</label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" id="summary" name="summary" value="{{summary}}">
+                        <input type="text" class="form-control" id="summary" name="summary" value="{{summary}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description" class="col-lg-1 control-label">{{N.Description}}</label>
                     <div class="col-lg-3">
-                        <textarea class="form-control" rows="4" id="description" name="description">{{description}}</textarea>
+                        <textarea class="form-control" rows="4" id="description" name="description"{{if customer}} disabled{{/if}}>{{description}}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="expr" class="col-lg-1 control-label">Expression</label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" id="expr" name="expr" value="{{expr}}">
+                        <input type="text" class="form-control" id="expr" name="expr" value="{{expr}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="durationFor" class="col-lg-1 control-label">for</label>
                     <div class="col-lg-1">
-                        <input type="text" class="form-control" id="durationFor" name="durationFor" value="{{durationFor}}">
+                        <input type="text" class="form-control" id="durationFor" name="durationFor" value="{{durationFor}}"{{if customer}} disabled{{/if}}>
                     </div>
                     <label for="keepFiringFor" class="col-lg-1 control-label">keep firing for</label>
                     <div class="col-lg-1">
-                        <input type="text" class="form-control" id="keepFiringFor" name="keepFiringFor" value="{{keepFiringFor}}">
+                        <input type="text" class="form-control" id="keepFiringFor" name="keepFiringFor" value="{{keepFiringFor}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-lg-3 col-lg-offset-1">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" id="active" name="active"{{if active}} checked{{/if}}>
+                                <input type="checkbox" id="active" name="active"{{if active}} checked{{/if}}{{if customer}} disabled{{/if}}>
                                 {{N.active}}
                             </label>
                         </div>
@@ -54,13 +54,17 @@
                 
                 <div class="form-group">
                     <div class="col-lg-offset-1 col-lg-5">
+                        {{if not customer}}
                         <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
-                        <a href="/alert/{{env}}" class="btn btn-default">{{N.Cancel}}</a>
+                        {{/if}}
+                        <a href="/alert/{{env}}" class="btn btn-default">{{if customer}} {{N.Close}} {{else}} {{N.Cancel}} {{/if}}</a>
                     </div>
                 </div>
             </fieldset>
         </form>
-        <p class="mt4"><a href="/alert-rule/{{env}}/{{groupId}}/{{id}}/delete" class="btn btn-danger"
-            onclick="return confirm('{{N.Delete}}?')"><i class="fa fa-trash-o"></i> {{N.Delete}}</a>
+        {{if not customer}}
+            <p class="mt4"><a href="/alert-rule/{{env}}/{{groupId}}/{{id}}/delete" class="btn btn-danger"
+                onclick="return confirm('{{N.Delete}}?')"><i class="fa fa-trash-o"></i> {{N.Delete}}</a>
+        {{/if}}
     </div>
 </div>
