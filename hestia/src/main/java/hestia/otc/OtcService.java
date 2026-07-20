@@ -7,6 +7,8 @@ import java.util.List;
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
 import hestia.base.ShellScriptExecutor;
+import hestia.otc.model.MonitoredTarget;
+import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.opts.OtcOptsDAO;
 
 /**

@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.model;
 
 public enum DatabaseType {
 

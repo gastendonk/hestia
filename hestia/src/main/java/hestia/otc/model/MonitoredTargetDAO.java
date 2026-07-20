@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.model;
 
 import java.io.File;
 import java.util.ArrayList;

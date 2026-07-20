@@ -1,6 +1,7 @@
 package hestia.otc;
 
 import hestia.base.HAction;
+import hestia.otc.model.MonitoredTargetDAO;
 
 public class DeleteMTAction extends HAction {
 

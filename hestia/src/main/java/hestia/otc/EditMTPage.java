@@ -2,6 +2,11 @@ package hestia.otc;
 
 import github.soltaufintel.amalia.base.StringService;
 import hestia.base.HPage;
+import hestia.otc.model.Database;
+import hestia.otc.model.MonitoredTarget;
+import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.Server;
+import hestia.otc.model.Site;
 
 public class EditMTPage extends HPage {
 

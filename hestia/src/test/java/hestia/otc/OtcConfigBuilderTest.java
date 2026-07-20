@@ -6,6 +6,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import hestia.otc.model.Database;
+import hestia.otc.model.DatabaseType;
+import hestia.otc.model.MonitoredTarget;
+import hestia.otc.model.Server;
+import hestia.otc.model.Site;
 import hestia.otc.opts.OtcOpts;
 
 public class OtcConfigBuilderTest {

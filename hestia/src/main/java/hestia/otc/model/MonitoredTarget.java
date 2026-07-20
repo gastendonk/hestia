@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.model;
 
 /**
  * A monitored target can be a site, a server or a database.

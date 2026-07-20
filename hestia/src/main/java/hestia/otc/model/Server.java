@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.model;
 
 // node_exporter
 public class Server extends AbstractMonitoredTarget {

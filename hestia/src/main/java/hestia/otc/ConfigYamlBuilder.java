@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.otc.model.Database;
+import hestia.otc.model.DatabaseType;
+import hestia.otc.model.MonitoredTarget;
+import hestia.otc.model.Server;
+import hestia.otc.model.Site;
 import hestia.otc.opts.OtcOpts;
 
 /**

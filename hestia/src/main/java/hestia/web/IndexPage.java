@@ -13,8 +13,8 @@ import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
-import hestia.otc.MonitoredTargetDAO;
 import hestia.otc.OtcProcess;
+import hestia.otc.model.MonitoredTargetDAO;
 import hestia.prometheus.alert.AlertGroup;
 import hestia.prometheus.alert.AlertGroupDAO;
 
