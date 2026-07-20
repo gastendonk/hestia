@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.opts;
 
 /**
  * Some options for the OTel Collector config.yaml file

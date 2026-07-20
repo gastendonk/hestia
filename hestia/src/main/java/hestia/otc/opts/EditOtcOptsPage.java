@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.opts;
 
 import hestia.base.HPage;
 

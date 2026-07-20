@@ -6,6 +6,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import hestia.otc.opts.OtcOpts;
+
 public class OtcConfigBuilderTest {
 
     @Test

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.otc.opts.OtcOpts;
 
 /**
  * Build content of OTel Collector config.yaml file

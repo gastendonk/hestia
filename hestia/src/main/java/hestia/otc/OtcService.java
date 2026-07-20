@@ -7,6 +7,7 @@ import java.util.List;
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
 import hestia.base.ShellScriptExecutor;
+import hestia.otc.opts.OtcOptsDAO;
 
 /**
  * Service for managing OTel Collector (otc) and its config.yaml file
