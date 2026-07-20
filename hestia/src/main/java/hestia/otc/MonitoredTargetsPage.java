@@ -5,6 +5,7 @@ import java.util.List;
 import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class MonitoredTargetsPage extends HPage {
@@ -13,7 +14,7 @@ public class MonitoredTargetsPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id");
         
-        List<MonitoredTarget> mtlist = MonitoredTargetDAO.load(id);
+        List<MonitoredTarget> mtlist = HestiaWebapp.persistenceFactory.monitoredTarget().load(id);
         
         header(n("MonitoredTargets"));
         put("id", esc(id));

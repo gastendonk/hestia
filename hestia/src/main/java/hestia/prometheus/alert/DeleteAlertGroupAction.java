@@ -1,16 +1,17 @@
 package hestia.prometheus.alert;
 
+import hestia.HestiaWebapp;
 import hestia.base.HAction;
 
 public class DeleteAlertGroupAction extends HAction {
 
     @Override
     protected void execute() {
-        String env = ctx.pathParam("env");
-        String id = ctx.pathParam("id");
+        String envId = ctx.pathParam("env");
+        String groupId = ctx.pathParam("id");
 
-        AlertGroupDAO.delete(env, id);
+        HestiaWebapp.persistenceFactory.alertGroup().delete(envId, groupId);
 
-        ctx.redirect("/alert/" + env);
+        ctx.redirect("/alert/" + envId);
     }
 }

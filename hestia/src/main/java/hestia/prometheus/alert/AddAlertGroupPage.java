@@ -1,6 +1,7 @@
 package hestia.prometheus.alert;
 
 import github.soltaufintel.amalia.base.IdGenerator;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class AddAlertGroupPage extends HPage {
@@ -18,7 +19,7 @@ public class AddAlertGroupPage extends HPage {
             AlertGroup g = new AlertGroup();
             g.setId(IdGenerator.createId25());
             g.setName(name);
-            AlertGroupDAO.save(env, g);
+            HestiaWebapp.persistenceFactory.alertGroup().save(env, g, true);
 
             ctx.redirect("/alert/" + env);
         } else {

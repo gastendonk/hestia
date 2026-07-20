@@ -3,6 +3,13 @@
 <div class="row"> 
     <div class="col-lg-12">
         <h1 class="page-header">Status</h1>
+        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
+        <p>
+            <a href="/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
+            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
+        </p>
+        {{if envs}}{{table}}{{/if}}
+        <hr>
 
         <p>webapp run mode: "{{info}}"</p>
         
@@ -17,12 +24,6 @@
         <p>Health check status code: {{status}}</p>
         
         <hr>
-        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
-        <p>
-            <a href="/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
-            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
-        </p>
-        {{if envs}}{{table}}{{/if}}
         
         <hr>
         <pre>{{config}}</pre>

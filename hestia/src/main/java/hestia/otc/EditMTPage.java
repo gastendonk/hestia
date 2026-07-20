@@ -1,6 +1,7 @@
 package hestia.otc;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class EditMTPage extends HPage {
@@ -11,12 +12,13 @@ public class EditMTPage extends HPage {
         String id2 = ctx.pathParam("id2"); // MonitoredTarget
         String m = ctx.queryParam("m");
 
-        var list = MonitoredTargetDAO.load(id);
-        MonitoredTarget mt = list.stream().filter(i -> i.getId().equals(id2)).findFirst().orElseThrow();
+        var p = HestiaWebapp.persistenceFactory.monitoredTarget();
+        var mt = p.loadOne(id, null, id2);
         
         if (isPOST()) {
-            save(id, m, mt);
-            MonitoredTargetDAO.save(id, list);
+            setFields(id, m, mt);
+            p.save(id, mt, false);
+            
             ctx.redirect("/mt/" + id);
         } else {
             display(id, m, mt);
@@ -42,11 +44,7 @@ public class EditMTPage extends HPage {
             put("f4label", "");
             put("f2", esc(s.getUrl()));
         } else if (mt instanceof Database s) {
-            if ("oracle".equals(m)) {
-                header(n("EditMTOracleDB"));
-            } else {
-                header(n("EditMTPostgresDB"));
-            }
+            header(n("oracle".equals(m) ? "EditMTOracleDB" : "EditMTPostgresDB"));
             put("f2label", n("Host"));
             put("f3label", n("User"));
             put("f4label", n("Password"));
@@ -58,19 +56,21 @@ public class EditMTPage extends HPage {
         }
     }
 
-    private void save(String id, String m, MonitoredTarget mt) {
-        if (StringService.isNullOrEmpty(ctx.formParam("f1"))) {
+    private void setFields(String id, String m, MonitoredTarget mt) {
+        String name = ctx.formParam("f1");
+        if (StringService.isNullOrEmpty(name)) {
             throw new RuntimeException("Please enter name");
         }
+        
         if (mt instanceof Server s) {
-            s.setName(ctx.formParam("f1"));
+            s.setName(name);
             s.setHost(ctx.formParam("f2"));
             s.setPath(ctx.formParam("f3"));
         } else if (mt instanceof Site s) {
-            s.setName(ctx.formParam("f1"));
+            s.setName(name);
             s.setUrl(ctx.formParam("f2"));
         } else if (mt instanceof Database s) {
-            s.setName(ctx.formParam("f1"));
+            s.setName(name);
             s.setHost(ctx.formParam("f2"));
             s.setUser(ctx.formParam("f3"));
             s.setPassword(ctx.formParam("f4"));
