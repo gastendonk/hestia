@@ -21,11 +21,12 @@ public class MonitoredTargetDAO {
         return e == null || e.getList() == null ? new ArrayList<>() : e.getList();
     }
 
-    public static void save(String id, List<MonitoredTarget> list) {
+    public static void save(String id, List<MonitoredTarget> list, String commitMessage) {
         list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         MonitoredTargets e = new MonitoredTargets();
         e.setList(list);
         FileService.savePlainTextFile(file(id), gson().toJson(e));
+        HestiaWebapp.config.commit(commitMessage);
     }
     
     public static class MonitoredTargets {

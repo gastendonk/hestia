@@ -16,7 +16,7 @@ public class DeleteMTAction extends HAction {
         }
         var list = MonitoredTargetDAO.load(id);
         if (list.removeIf(i -> i.getId().equals(id2))) {
-            MonitoredTargetDAO.save(id, list);
+            MonitoredTargetDAO.save(id, list, "delete monitored target");
         }
      
         ctx.redirect("/mt/" + id);

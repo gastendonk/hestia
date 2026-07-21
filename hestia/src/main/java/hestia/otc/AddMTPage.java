@@ -86,7 +86,7 @@ public class AddMTPage extends HPage {
             s.setPassword(ctx.formParam("f4"));
             list.add(s);
         }
-        MonitoredTargetDAO.save(id, list);
+        MonitoredTargetDAO.save(id, list, "add monitored target");
         ctx.redirect("/mt/" + id);
     }
 }

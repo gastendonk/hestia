@@ -25,7 +25,7 @@ public class EditMTPage extends HPage {
                 throw new RuntimeException();
             }
             save(id, m, mt);
-            MonitoredTargetDAO.save(id, list);
+            MonitoredTargetDAO.save(id, list, "update monitored target");
             ctx.redirect("/mt/" + id);
         } else {
             display(id, m, mt);
