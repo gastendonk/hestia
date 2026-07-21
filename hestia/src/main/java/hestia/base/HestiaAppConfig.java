@@ -3,7 +3,7 @@ package hestia.base;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.web.config.AppConfig;
 
-public class HestiaAppConfig extends AppConfig {
+public class HestiaAppConfig extends AppConfig { // TODO rename
 
     @Override
     protected String load(String dn) {

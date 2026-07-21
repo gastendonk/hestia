@@ -12,6 +12,7 @@ public class HestiaConfig {
     private final File otelcolContrib;
     private final String prometheusHost;
     private final String alertmanagerHost;
+    private final File baseFolder; // DATAFOLDER: persistent data
     private final File environmentsFolder;
     private final File monitoredTargetsFolder;
     private final File alertsFolder;
@@ -33,13 +34,12 @@ public class HestiaConfig {
         alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
         language = get("LANGUAGE", "en");
         customer = !"0".equals(get("CUSTOMER", "1"));
-        File base; // DATAFOLDER: persistent data
         if (StringService.isNullOrEmpty(get("REPO"))) {
             repoAuthor = null;
             repoMail = null;
             repodefinition = null;
             repo = null;
-            base = new File(get("DATAFOLDER", "/data"));
+            baseFolder = new File(get("DATAFOLDER", "/data"));
         } else {
             repoAuthor = get("REPOUSER");
             repoMail = get("REPOMAIL");
@@ -49,12 +49,12 @@ public class HestiaConfig {
             Logger.info("Git repository folder: " + repodefinition.getLocalFolder().getAbsolutePath()
                     + ", " + repodefinition.getLocalFolder().isDirectory());   
             repo.pull();
-            base = repodefinition.getLocalFolder();
+            baseFolder = repodefinition.getLocalFolder();
         }
         // /work: working directory, exchange files with other containers
-        environmentsFolder = new File(base, "environments");
-        monitoredTargetsFolder = new File(base, "monitoredtargets");
-        alertsFolder = new File(base, "alerts");
+        environmentsFolder = new File(baseFolder, "environments");
+        monitoredTargetsFolder = new File(baseFolder, "monitoredtargets");
+        alertsFolder = new File(baseFolder, "alerts");
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
@@ -78,6 +78,10 @@ public class HestiaConfig {
 
     public String getAlertmanagerHost() {
         return alertmanagerHost;
+    }
+
+    public File getBaseFolder() {
+        return baseFolder;
     }
 
     public File getEnvironmentsFolder() {

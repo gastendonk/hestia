@@ -7,8 +7,8 @@ public class ReceiveAction extends HAction {
 
     @Override
     protected void execute() {
-        String key = ctx.pathParam("key");
+        String tag = ctx.pathParam("tag");
         
-        new ExchangeService().receive(key, ctx.body());
+        new ExchangeService().receive(tag, ctx.body());
     }
 }

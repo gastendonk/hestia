@@ -54,7 +54,7 @@ public class MonitoredTargetDAO {
                 .create();
     }
 
-    private static File file(String envId) {
+    public static File file(String envId) {
         return new File(HestiaWebapp.config.getMonitoredTargetsFolder(), envId + ".json");
     }
 

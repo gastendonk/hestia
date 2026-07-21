@@ -63,7 +63,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/tablesort/:id/:col", TableSortAction.class);
         
         get("/x/push", PushAction.class);
-        post("/x/receive/:key", ReceiveAction.class);
+        post("/x/receive/:tag", ReceiveAction.class);
         get("/x/pull", PullAction.class);
         get("/x/serve/:key", ServeAction.class);
     }

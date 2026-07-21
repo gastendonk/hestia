@@ -133,7 +133,7 @@ public class AlertGroupDAO {
         }
     }
 
-    private static File file(String envId) {
+    public static File file(String envId) {
         return new File(HestiaWebapp.config.getAlertsFolder(), envId + ".json");
     }
 }

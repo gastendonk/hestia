@@ -33,7 +33,7 @@ public class EnvironmentDAO {
         }
     }
 
-    private static File file() {
+    public static File file() {
         return new File(HestiaWebapp.config.getEnvironmentsFolder(), "environments.json");
     }
 
