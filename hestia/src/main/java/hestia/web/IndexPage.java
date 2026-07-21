@@ -33,6 +33,7 @@ public class IndexPage extends HPage {
         put("info1", esc(otc.info1));
         put("info2", esc(otc.info2));
         put("config", esc(FileService.loadPlainTextFile(new File("/work/config.yaml"))));
+        put("hasRepo", HestiaWebapp.config.getRepo() != null && !HestiaWebapp.config.isCustomer());
 
         var list = list("envs");
         for (Environment env : envs) {

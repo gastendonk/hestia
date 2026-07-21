@@ -20,6 +20,7 @@ public class HestiaConfig {
     private final File configYamlForValidate;
     private final String language;
     private final boolean customer;
+    private final RepositoryDefinition repodefinition;
     private final Repository repo;
     private final String repoAuthor;
     private final String repoMail;
@@ -42,11 +43,12 @@ public class HestiaConfig {
         if (StringService.isNullOrEmpty(get("REPO", null))) {
             repoAuthor = null;
             repoMail = null;
+            repodefinition = null;
             repo = null;
         } else {
             repoAuthor = get("REPOUSER", null);
             repoMail = get("REPOMAIL", null);
-            repo = new Repository(new RepositoryDefinition() {
+            repodefinition = new RepositoryDefinition() {
                 @Override
                 public String getUser() {
                     return repoAuthor;
@@ -66,7 +68,8 @@ public class HestiaConfig {
                 public File getLocalFolder() {
                     return new File(get("REPOFOLDER", null));
                 }
-            });
+            };
+            repo = new Repository(repodefinition);
         }
     }
 
@@ -119,6 +122,10 @@ public class HestiaConfig {
         return customer;
     }
     
+    public RepositoryDefinition getRepoDefinition() {
+        return repodefinition;
+    }
+
     public Repository getRepo() {
         return repo;
     }
@@ -126,6 +133,12 @@ public class HestiaConfig {
     public void commit(String commitMessage) {
         if (repo != null) {
             repo.commit(commitMessage, repoAuthor, repoMail);
+        }
+    }
+    
+    public void push() {
+        if (repodefinition != null && repo != null) {
+            repo.push(repodefinition.getUser(), repodefinition.getPassword());
         }
     }
 }

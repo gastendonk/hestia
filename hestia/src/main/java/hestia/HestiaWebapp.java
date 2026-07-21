@@ -11,6 +11,7 @@ import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
 import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
+import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
 import hestia.otc.EditMTPage;
@@ -40,6 +41,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/environment/add", AddEnvironmentPage.class);
         form("/environment/:id", EditEnvironmentPage.class);
         get("/deploy", DeployAction.class);
+        get("/push", GitPushAction.class);
 
         form("/mt/:id/add", AddMTPage.class);
         form("/mt/:id/:id2/edit", EditMTPage.class);
