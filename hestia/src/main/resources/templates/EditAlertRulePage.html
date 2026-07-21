@@ -57,13 +57,13 @@
                         {{if not customer}}
                         <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
                         {{/if}}
-                        <a href="/alert/{{env}}" class="btn btn-default">{{if customer}} {{N.Close}} {{else}} {{N.Cancel}} {{/if}}</a>
+                        <a href="/{{branch}}/alert/{{env}}" class="btn btn-default">{{if customer}} {{N.Close}} {{else}} {{N.Cancel}} {{/if}}</a>
                     </div>
                 </div>
             </fieldset>
         </form>
         {{if not customer}}
-            <p class="mt4"><a href="/alert-rule/{{env}}/{{groupId}}/{{id}}/delete" class="btn btn-danger"
+            <p class="mt4"><a href="/{{branch}}/alert-rule/{{env}}/{{groupId}}/{{id}}/delete" class="btn btn-danger"
                 onclick="return confirm('{{N.Delete}}?')"><i class="fa fa-trash-o"></i> {{N.Delete}}</a>
         {{/if}}
     </div>

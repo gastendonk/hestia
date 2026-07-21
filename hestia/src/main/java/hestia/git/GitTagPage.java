@@ -34,7 +34,7 @@ public class GitTagPage extends HPage {
 
             // TODO
 
-            ctx.redirect("/");
+            ctx.redirect("/" + ctx.pathParam("branch"));
         } else {
             // alle Git Repo tags laden und neuesten k... tag ermitteln und readonly vorschlagen
             

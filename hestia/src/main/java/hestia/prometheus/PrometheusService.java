@@ -6,8 +6,8 @@ import java.util.List;
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.prometheus.alert.AlertGroup;
-import hestia.prometheus.alert.AlertGroupDAO;
 import hestia.prometheus.alert.AlertRulesYamlBuilder;
 
 /**
@@ -15,8 +15,9 @@ import hestia.prometheus.alert.AlertRulesYamlBuilder;
  */
 public class PrometheusService {
 
-    public void deploy(Collection<String> environments) {
-        List<AlertGroup> groups = AlertGroupDAO.loadAll(environments);
+    public void deploy(Collection<String> environments, IBranch branch) {
+        var dao = HestiaWebapp.config.alertGroupDAO(branch);
+        List<AlertGroup> groups = dao.loadAll(environments);
         var yaml = new AlertRulesYamlBuilder(groups).build();
         FileService.saveJsonFile(HestiaWebapp.config.getAlertRulesFile(), yaml);
         reloadPrometheus();

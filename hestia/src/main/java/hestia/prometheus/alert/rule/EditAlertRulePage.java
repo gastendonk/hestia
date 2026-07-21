@@ -2,7 +2,6 @@ package hestia.prometheus.alert.rule;
 
 import hestia.HestiaWebapp;
 import hestia.base.HPage;
-import hestia.prometheus.alert.AlertGroupDAO;
 
 public class EditAlertRulePage extends HPage {
 
@@ -12,10 +11,11 @@ public class EditAlertRulePage extends HPage {
         String groupId = ctx.pathParam("g");
         String id = ctx.pathParam("id");
 
-        var rule = AlertGroupDAO.loadRule(env, groupId, id);
+        var dao = alertRuleDAO();
+        var rule = dao.loadOne(env, groupId, id);
         
         if (isPOST()) {
-            save(env, groupId, rule);
+            save(env, groupId, rule, dao);
         } else {
             display(env, groupId, rule);
         }
@@ -36,7 +36,7 @@ public class EditAlertRulePage extends HPage {
         put("active", rule.isActive());
     }
 
-    private void save(String env, String groupId, AlertRule rule) {
+    private void save(String env, String groupId, AlertRule rule, AlertRuleDAO dao) {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
@@ -52,8 +52,8 @@ public class EditAlertRulePage extends HPage {
         rule.setDurationFor(ctx.formParam("durationFor"));
         rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
         rule.setActive("on".equals(ctx.formParam("active")));
-        AlertGroupDAO.updateRule(env, groupId, rule);
+        dao.update(env, groupId, rule);
         
-        ctx.redirect("/alert/" + env);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
     }
 }

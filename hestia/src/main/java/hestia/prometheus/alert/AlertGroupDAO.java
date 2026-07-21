@@ -1,139 +1,39 @@
 package hestia.prometheus.alert;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import hestia.base.AbstractJsonListDAO;
+import hestia.base.IRepository;
 
-import github.soltaufintel.amalia.base.FileService;
-import hestia.HestiaWebapp;
-import hestia.prometheus.alert.rule.AlertRule;
-
-public class AlertGroupDAO {
-    private static final Object LOCK = new Object();
-    
-    public static List<AlertGroup> load(String envId) {
-        synchronized (LOCK) {
-            AlertGroups e = FileService.loadJsonFile(file(envId), AlertGroups.class);
-            return e == null || e.getList() == null ? new ArrayList<>() : e.getList();
-        }
-    }
-
-    private static void save(String envId, List<AlertGroup> list, String commitMessage) {
-        synchronized (LOCK) {
-            list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
-            for (AlertGroup g : list) {
-                g.getRules().sort((a, b) -> a.getAlert().compareToIgnoreCase(b.getAlert()));
-            }
-            AlertGroups e = new AlertGroups();
-            e.setList(list);
-            FileService.saveJsonFile(file(envId), e);
-            
-            HestiaWebapp.config.commit(commitMessage);
-        }
-    }
-
-    public static List<AlertGroup> loadAll(Collection<String> environmentIdList) {
-        synchronized (LOCK) {
-            return environmentIdList.stream().map(id -> load(id)).flatMap(List::stream).collect(Collectors.toList());
-        }
-    }
-    
-    public static AlertGroup load(String envId, String groupId) {
-        synchronized (LOCK) {
-            return load(envId).stream().filter(i -> i.getId().equals(groupId)).findFirst().orElseThrow();
-        }
-    }
-    
-    public static void save(String envId, AlertGroup group) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            groups.removeIf(i -> i.getId().equals(group.getId()));
-            groups.add(group);
-            save(envId, groups, "save alert group");
-        }
-    }
-    
-    public static void delete(String envId, String groupId) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            if (groups.removeIf(i -> i.getId().equals(groupId))) {
-                save(envId, groups, "delete alert group");
-            }
-        }
-    }
-
-    public static AlertRule loadRule(String envId, String groupId, String ruleId) {
-        synchronized (LOCK) {
-            return load(envId).stream().filter(i -> i.getId().equals(groupId))
-                    .flatMap(g -> g.getRules().stream()).filter(i -> i.getId().equals(ruleId))
-                    .findFirst().orElseThrow();
-        }
-    }
-    
-    public static void insertRule(String envId, String groupId, AlertRule rule) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            for (AlertGroup g : groups) {
-                if (g.getId().equals(groupId)) {
-                    g.getRules().add(rule);
-                    save(envId, groups, "add alert rule");
-                    return;
-                }
-            }
-        }
-    }
-
-    public static void updateRule(String envId, String groupId, AlertRule rule) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            for (AlertGroup g : groups) {
-                if (g.getId().equals(groupId)) {
-                    List<AlertRule> rules = g.getRules();
-                    for (int i = 0; i < rules.size(); i++) {
-                        if (rules.get(i).getId().equals(rule.getId())) {
-                            rules.set(i, rule);
-                            save(envId, groups, "update alert rule");
-                            return;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    public static void deleteRule(String envId, String groupId, String id) {
-        synchronized (LOCK) {
-            List<AlertGroup> groups = load(envId);
-            for (AlertGroup g : groups) {
-                if (g.getId().equals(groupId)) {
-                    if (g.getRules().removeIf(i -> i.getId().equals(id))) {
-                        save(envId, groups, "delete alert rule");
-                    }
-                    return;
-                }
-            }
-        }
-    }
+/**
+ * Stores alert groups grouped by environment.
+ */
+public class AlertGroupDAO extends AbstractJsonListDAO<AlertGroup> {
 
     /**
-     * A AlertGroups file contains all alert groups for 1 environment.
+     * Creates an alert group DAO.
+     *
+     * @param gitRepository the Git repository access
      */
-    public static class AlertGroups {
-        private List<AlertGroup> list;
-
-        public List<AlertGroup> getList() {
-            return list;
-        }
-
-        public void setList(List<AlertGroup> list) {
-            this.list = list;
-        }
+    public AlertGroupDAO(IRepository gitRepository) {
+        super(gitRepository, AlertGroup.class);
     }
 
-    public static File file(String envId) {
-        return new File(HestiaWebapp.config.getAlertsFolder(), envId + ".json");
+    @Override
+    public String getPath(String environmentId) {
+        return "alerts/" + environmentId + ".json";
+    }
+
+    @Override
+    protected String getInsertCommitMessage(String environmentId, AlertGroup object) {
+        return "add alert group";
+    }
+
+    @Override
+    protected String getUpdateCommitMessage(String environmentId, AlertGroup object) {
+        return "update alert group";
+    }
+
+    @Override
+    protected String getDeleteCommitMessage(String environmentId, String id) {
+        return "delete alert group";
     }
 }

@@ -1,6 +1,7 @@
 package hestia.base;
 
 import github.soltaufintel.amalia.spark.Context;
+import github.soltaufintel.amalia.web.action.Escaper;
 import github.soltaufintel.amalia.web.action.Page;
 import github.soltaufintel.amalia.web.action.PageInitializer;
 import hestia.HestiaWebapp;
@@ -14,5 +15,6 @@ public class HestiaPageInitializer extends PageInitializer {
         page.put("sortableJS", false);
         page.put("N", "en".equals(HestiaWebapp.config.getLanguage()) ? NLS.dataMap_en : NLS.dataMap_de);
         page.put("customer", HestiaWebapp.config.isCustomer());
+        page.put("branch", Escaper.esc(ctx.pathParam("branch")));
     }
 }

@@ -1,63 +1,103 @@
 package hestia.environment;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
-import hestia.HestiaWebapp;
+import hestia.base.AbstractJsonListDAO;
+import hestia.base.IRepository;
 
-public class EnvironmentDAO {
+/**
+ * Stores all environments in a single JSON file.
+ */
+public class EnvironmentDAO extends AbstractJsonListDAO<Environment> {
+    private static final String UNUSED_ENVIRONMENT_ID = "";
 
-    public static List<Environment> load() {
-        Environments e = FileService.loadJsonFile(file(), Environments.class);
-        return e == null || e.getList() == null ? new ArrayList<>() : e.getList();
+    /**
+     * Creates an environment DAO.
+     *
+     * @param gitRepository the Git repository access
+     */
+    public EnvironmentDAO(IRepository gitRepository) {
+        super(gitRepository, Environment.class);
     }
 
-    public static void save(List<Environment> list) {
-        list.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
-        Environments e = new Environments();
-        e.setList(list);
-        FileService.saveJsonFile(file(), e);
+    /**
+     * Loads all environments.
+     *
+     * @return all stored environments
+     */
+    public List<Environment> load() {
+        return super.load(UNUSED_ENVIRONMENT_ID);
     }
 
-    public static class Environments {
-        private List<Environment> list;
-
-        public List<Environment> getList() {
-            return list;
-        }
-
-        public void setList(List<Environment> list) {
-            this.list = list;
-        }
+    /**
+     * Loads one environment by its identifier.
+     *
+     * @param id the environment identifier
+     * @return the matching environment
+     */
+    public Environment loadOne(String id) {
+        return super.loadOne(UNUSED_ENVIRONMENT_ID, id);
     }
 
-    public static File file() {
-        return new File(HestiaWebapp.config.getEnvironmentsFolder(), "environments.json");
+    /**
+     * Inserts an environment and creates a local Git commit.
+     *
+     * @param environment the environment to insert
+     */
+    public void insert(Environment environment) {
+        super.insert(UNUSED_ENVIRONMENT_ID, environment);
     }
-
-    public static Environment load(String id) {
-        return load().stream().filter(i -> i.getId().equals(id)).findFirst().orElseThrow();
-    }
-
-    public static void save(Environment env, boolean setCustomerKey) {
-        var list = load();
-        list.removeIf(i -> i.getId().equals(env.getId()));
-        if (setCustomerKey) {
-            for (Environment i : list) {
-                if (i.getCustomer().equals(env.getCustomer())) {
-                    env.setCustomerKey(env.getCustomerKey());
-                    break;
-                }
+    
+    @Override
+    protected void insertExtras(Environment env, List<Environment> list) {
+        for (Environment i : list) {
+            if (i.getCustomer().equals(env.getCustomer())) {
+                env.setCustomerKey(env.getCustomerKey());
+                break;
             }
-            if (StringService.isNullOrEmpty(env.getCustomerKey())) {
-                env.setCustomerKey(IdGenerator.createId25());
-            }
         }
-        list.add(env);
-        save(list);
+        if (StringService.isNullOrEmpty(env.getCustomerKey())) {
+            env.setCustomerKey(IdGenerator.createId25());
+        }
+    }
+
+    /**
+     * Updates an environment and creates a local Git commit.
+     *
+     * @param environment the replacement environment
+     */
+    public void update(Environment environment) {
+        super.update(UNUSED_ENVIRONMENT_ID, environment);
+    }
+
+    /**
+     * Deletes an environment and creates a local Git commit.
+     *
+     * @param id the environment identifier
+     */
+    public void delete(String id) {
+        super.delete(UNUSED_ENVIRONMENT_ID, id);
+    }
+
+    @Override
+    public String getPath(String unused) {
+        return "environments/environments.json";
+    }
+
+    @Override
+    protected String getInsertCommitMessage(String environmentId, Environment object) {
+        return "Add environment";
+    }
+
+    @Override
+    protected String getUpdateCommitMessage(String environmentId, Environment object) {
+        return "Update environment";
+    }
+
+    @Override
+    protected String getDeleteCommitMessage(String environmentId, String id) {
+        return "Delete environment";
     }
 }

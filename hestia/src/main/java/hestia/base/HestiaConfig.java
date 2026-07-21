@@ -9,6 +9,11 @@ import org.pmw.tinylog.Logger;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.git.Repository;
 import github.soltaufintel.amalia.git.RepositoryDefinition;
+import hestia.environment.EnvironmentDAO;
+import hestia.git.GitRepository;
+import hestia.otc.model.MonitoredTargetDAO;
+import hestia.prometheus.alert.AlertGroupDAO;
+import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public class HestiaConfig {
     static IConfig configAccess = new HestiaAppConfig();
@@ -158,6 +163,33 @@ public class HestiaConfig {
     public void push() {
         if (repodefinition != null && repo != null) {
             repo.push(repodefinition.getUser(), repodefinition.getPassword());
+        }
+    }
+    
+    public EnvironmentDAO environmentDAO(IBranch branch) {
+        return new EnvironmentDAO(repo(branch));
+    }
+
+    public MonitoredTargetDAO mtDAO(IBranch branch) {
+        return new MonitoredTargetDAO(repo(branch));
+    }
+
+    public AlertGroupDAO alertGroupDAO(IBranch branch) {
+        return new AlertGroupDAO(repo(branch));
+    }
+
+    public AlertRuleDAO alertRuleDAO(IBranch branch) {
+        return new AlertRuleDAO(alertGroupDAO(branch));
+    }
+
+    private IRepository repo(IBranch b) {
+        var url = get("REPO");
+        if (StringService.isNullOrEmpty(url)) {
+            var folder = new File(get("DATAFOLDER"));
+            return new FileRepository(folder);
+        } else {
+            var folder = new File(get("REPOFOLDER"));
+            return new GitRepository(url, get("REPOUSER"), get("REPOMAIL"), get("REPOPASSWORD"), folder, b.getBranch());
         }
     }
 }

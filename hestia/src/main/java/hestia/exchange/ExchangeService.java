@@ -12,10 +12,8 @@ import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.environment.Environment;
-import hestia.environment.EnvironmentDAO;
-import hestia.otc.model.MonitoredTargetDAO;
-import hestia.prometheus.alert.AlertGroupDAO;
 
 public class ExchangeService {
 
@@ -32,12 +30,13 @@ public class ExchangeService {
     /**
      * Serve data for customer
      * @param key secret customer key
+     * @param branch ?
      * @return JSON
      */
-    public String serve(String key) {
+    public String serve(String key, IBranch branch) {
         Logger.info("[exchange] serve " + key);
         // TODO vom key zum tag
-        var data = getData();
+        var data = getData(branch);
         var json = new Gson().toJson(data);
         return json;
     }
@@ -65,13 +64,14 @@ public class ExchangeService {
     }
     
     // TODO tag
-    public ExchangeData getData() {
+    public ExchangeData getData(IBranch branch) {
         var data = new ExchangeData();
         data.setFiles(new HashMap<>());
-        data.put(EnvironmentDAO.file());
-        for (Environment env : EnvironmentDAO.load()) {
-            data.put(MonitoredTargetDAO.file(env.getId()));
-            data.put(AlertGroupDAO.file(env.getId()));
+        var dao = HestiaWebapp.config.environmentDAO(branch);
+        data.put(dao.getFile(""));
+        for (Environment env : dao.load()) {
+            data.put(HestiaWebapp.config.mtDAO(branch).getFile(env.getId()));
+            data.put(HestiaWebapp.config.alertGroupDAO(branch).getFile(env.getId()));
         }
         return data;
     }

@@ -1,6 +1,8 @@
 package hestia.prometheus.alert.rule;
 
-public class AlertRule {
+import hestia.base.Identifiable;
+
+public class AlertRule implements Identifiable {
     private String id;
     private String alert; // camelCase ID entered by user
     private String expr;
@@ -10,6 +12,7 @@ public class AlertRule {
     private String description;
     private boolean active = true;
 
+    @Override
     public String getId() {
         return id;
     }

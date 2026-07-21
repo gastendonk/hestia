@@ -40,34 +40,37 @@ public class HestiaWebapp extends RouteDefinitions {
     @Override
     public void routes() {
         get("/", IndexPage.class);
-        get("/otc/kill", KillAction.class);
-        form("/environment/add", AddEnvironmentPage.class);
-        form("/environment/:id", EditEnvironmentPage.class);
-        get("/deploy", DeployAction.class);
-        get("/push", GitPushAction.class);
-        get("/pull", GitPullAction.class);
+        form("/:branch/environment/add", AddEnvironmentPage.class);
+        form("/:branch/environment/:id", EditEnvironmentPage.class);
+        get("/:branch/deploy", DeployAction.class);
+        get("/:branch/push", GitPushAction.class);
+        get("/:branch/pull", GitPullAction.class);
         form("/branch", GitBranchPage.class);
 
-        form("/mt/:id/add", AddMTPage.class);
-        form("/mt/:id/:id2/edit", EditMTPage.class);
-        get("/mt/:id/:id2/delete", DeleteMTAction.class);
-        get("/mt/:id", MonitoredTargetsPage.class);
+        form("/:branch/mt/:id/add", AddMTPage.class);
+        form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
+        get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
+        get("/:branch/mt/:id", MonitoredTargetsPage.class);
+        
         form("/options", EditOtcOptsPage.class);
 
-        get("/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
-        form("/alert-group/:env/add", AddAlertGroupPage.class);
-        form("/alert-group/:env/:id/edit", EditAlertGroupPage.class);
-        get("/alert-group/:env/:id/delete", DeleteAlertGroupAction.class);
-        form("/alert-rule/:env/:g/add", AddAlertRulePage.class);
-        form("/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
-        get("/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
+        get("/:branch/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
+        form("/:branch/alert-group/:env/add", AddAlertGroupPage.class);
+        form("/:branch/alert-group/:env/:id/edit", EditAlertGroupPage.class);
+        get("/:branch/alert-group/:env/:id/delete", DeleteAlertGroupAction.class);
+        form("/:branch/alert-rule/:env/:g/add", AddAlertRulePage.class);
+        form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
+        get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         
+        get("/otc/kill", KillAction.class);
         form("/tablesort/:id/:col", TableSortAction.class);
         
         get("/x/push/:tag", PushAction.class);
         post("/x/receive/:tag", ReceiveAction.class);
         get("/x/pull", PullAction.class);
-        get("/x/serve/:key", ServeAction.class);
+        get("/x/serve/:branch/:key", ServeAction.class);
+
+        get("/:branch", IndexPage.class); // ganz unten
     }
 
     public static void main(String[] args) {

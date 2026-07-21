@@ -17,22 +17,17 @@ public class EditMTPage extends HPage {
         String id2 = ctx.pathParam("id2"); // MonitoredTarget
         String m = ctx.queryParam("m");
 
-        var list = MonitoredTargetDAO.load(id);
-        MonitoredTarget mt = list.stream().filter(i -> i.getId().equals(id2)).findFirst().orElseThrow();
+        var dao = mtDAO();
+        MonitoredTarget mt = dao.loadOne(id, id2);
         
         if (isPOST()) {
-            if (HestiaWebapp.config.isCustomer()) {
-                throw new RuntimeException();
-            }
-            save(id, m, mt);
-            MonitoredTargetDAO.save(id, list, "update monitored target");
-            ctx.redirect("/mt/" + id);
+            save(id, mt, dao);
         } else {
-            display(id, m, mt);
+            display(id, mt, m);
         }
     }
 
-    private void display(String id, String m, MonitoredTarget mt) {
+    private void display(String id, MonitoredTarget mt, String m) {
         put("id", esc(id));
         put("id2", esc(mt.getId()));
         put("m", esc(m));
@@ -68,10 +63,14 @@ public class EditMTPage extends HPage {
         header(n(h));
     }
 
-    private void save(String id, String m, MonitoredTarget mt) {
+    private void save(String envId, MonitoredTarget mt, MonitoredTargetDAO dao) {
+        if (HestiaWebapp.config.isCustomer()) {
+            throw new RuntimeException();
+        }
         if (StringService.isNullOrEmpty(ctx.formParam("f1"))) {
             throw new RuntimeException("Please enter name");
         }
+        
         if (mt instanceof Server s) {
             s.setName(ctx.formParam("f1"));
             s.setHost(ctx.formParam("f2"));
@@ -87,5 +86,8 @@ public class EditMTPage extends HPage {
         } else {
             throw new RuntimeException("Unsupported MonitoredTarget type");
         }
+        dao.update(envId, mt);
+        
+        ctx.redirect("/" + ctx.pathParam("branch") + "/mt/" + envId);
     }
 }

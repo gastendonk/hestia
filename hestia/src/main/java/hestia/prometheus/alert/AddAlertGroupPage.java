@@ -22,9 +22,9 @@ public class AddAlertGroupPage extends HPage {
             AlertGroup g = new AlertGroup();
             g.setId(IdGenerator.createId25());
             g.setName(name);
-            AlertGroupDAO.save(env, g);
+            alertGroupDAO().insert(env, g);
 
-            ctx.redirect("/alert/" + env);
+            ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
         } else {
             header(n("NewGroup"));
             put("env", esc(env));

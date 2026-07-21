@@ -1,12 +1,12 @@
 package hestia.otc.model;
 
+import hestia.base.Identifiable;
+
 /**
  * A monitored target can be a site, a server or a database.
  */
-public interface MonitoredTarget {
+public interface MonitoredTarget extends Identifiable {
 
-    String getId();
-    
     /**
      * @return job name
      */

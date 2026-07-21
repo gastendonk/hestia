@@ -7,20 +7,20 @@
         {{each g in groups}}
             <h2>{{g.name}}
                 {{if not customer}}
-                    <a href="/alert-group/{{env}}/{{g.id}}/edit" class="btn btn-xs btn-default ml1" title="{{N.Edit}}"><i
+                    <a href="/{{branch}}/alert-group/{{env}}/{{g.id}}/edit" class="btn btn-xs btn-default ml1" title="{{N.Edit}}"><i
                         class="fa fa-pencil"></i></a>
-                    <a href="/alert-group/{{env}}/{{g.id}}/delete" class="btn btn-xs btn-danger" title="{{N.Delete}}"
+                    <a href="/{{branch}}/alert-group/{{env}}/{{g.id}}/delete" class="btn btn-xs btn-danger" title="{{N.Delete}}"
                         onclick="return confirm('{{N.Delete}}?')"><i class="fa fa-trash-o"></i></a>
                     {{if g.first}}
-                        <a href="/alert-group/{{env}}/add" class="btn btn-xs btn-default">{{N.NewGroup}}</a>
+                        <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-xs btn-default">{{N.NewGroup}}</a>
                     {{/if}}
-                    <a href="/alert-rule/{{env}}/{{g.id}}/add" class="btn btn-sm btn-primary">{{N.AddRule}}</a>
+                    <a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/add" class="btn btn-sm btn-primary">{{N.AddRule}}</a>
                 {{/if}}
             </h2>
             <ul>
 	            {{each r in g.rules}}
 	                <li>
-	                    <a href="/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
+	                    <a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
 	                       {{if not r.active}} style="text-decoration: line-through;"{{/if}}>{{r.alert}}</a>
 	                    <i>{{r.summary}}</i>
 	                </li>
@@ -29,7 +29,7 @@
 	            {{/each}}
             </ul>
         {{else if not customer}}
-            <a href="/alert-group/{{env}}/add" class="btn btn-primary">{{N.NewGroup}}</a>
+            <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-primary">{{N.NewGroup}}</a>
         {{/each}}
     </div>
 </div>

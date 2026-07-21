@@ -6,7 +6,7 @@ import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
-import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.ServerType;
 import hestia.otc.model.Site;
@@ -54,10 +54,10 @@ public class AddMTPage extends HPage {
     }
 
     private void save(String id, String m) {
-        var list = MonitoredTargetDAO.load(id);
         if (StringService.isNullOrEmpty(ctx.formParam("f1"))) {
             throw new RuntimeException("Please enter name");
         }
+        MonitoredTarget mt;
         if ("linux".equals(m)) {
             Server s = new Server();
             s.setType(ServerType.LINUX);
@@ -65,13 +65,13 @@ public class AddMTPage extends HPage {
             s.setName(ctx.formParam("f1"));
             s.setHost(ctx.formParam("f2"));
             s.setPath(ctx.formParam("f3"));
-            list.add(s);
+            mt = s;
         } else if ("site".equals(m)) {
             Site s = new Site();
             s.setId(IdGenerator.createId25());
             s.setName(ctx.formParam("f1"));
             s.setUrl(ctx.formParam("f2"));
-            list.add(s);
+            mt = s;
         } else { // DB
             Database s = new Database();
             if ("oracle".equals(m)) {
@@ -84,9 +84,9 @@ public class AddMTPage extends HPage {
             s.setHost(ctx.formParam("f2"));
             s.setUser(ctx.formParam("f3"));
             s.setPassword(ctx.formParam("f4"));
-            list.add(s);
+            mt = s;
         }
-        MonitoredTargetDAO.save(id, list, "add monitored target");
-        ctx.redirect("/mt/" + id);
+        mtDAO().insert(id, mt);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/mt/" + id);
     }
 }

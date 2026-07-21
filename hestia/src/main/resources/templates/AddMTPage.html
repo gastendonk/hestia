@@ -4,7 +4,7 @@
     <div class="col-lg-12">
         <h1 class="page-header">{{header}}</h1>
 
-        <form class="form-horizontal" method="post" action="/mt/{{id}}/add?m={{m}}">
+        <form class="form-horizontal" method="post" action="/{{branch}}/mt/{{id}}/add?m={{m}}">
             <fieldset>
                 <div class="form-group">
                     <label for="f1" class="col-lg-1 control-label">{{N.Name}}</label>
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <div class="col-lg-offset-1 col-lg-5">
                         <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
-                        <a href="/mt/{{id}}" class="btn btn-default">{{N.Cancel}}</a>
+                        <a href="/{{branch}}/mt/{{id}}" class="btn btn-default">{{N.Cancel}}</a>
                     </div>
                 </div>
             </fieldset>

@@ -1,9 +1,11 @@
 package hestia.environment;
 
+import hestia.base.Identifiable;
+
 /**
  * Environment saves environment name and also customer data.
  */
-public class Environment {
+public class Environment implements Identifiable {
     private String id;
     private String name;
     private String customer;
@@ -11,6 +13,7 @@ public class Environment {
     private String customerKey;
     private boolean active = true;
 
+    @Override
     public String getId() {
         return id;
     }

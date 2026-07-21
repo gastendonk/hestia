@@ -2,7 +2,6 @@ package hestia.otc;
 
 import hestia.HestiaWebapp;
 import hestia.base.HAction;
-import hestia.otc.model.MonitoredTargetDAO;
 
 public class DeleteMTAction extends HAction {
 
@@ -14,11 +13,8 @@ public class DeleteMTAction extends HAction {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
-        var list = MonitoredTargetDAO.load(id);
-        if (list.removeIf(i -> i.getId().equals(id2))) {
-            MonitoredTargetDAO.save(id, list, "delete monitored target");
-        }
+        mtDAO().delete(id, id2);
      
-        ctx.redirect("/mt/" + id);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/mt/" + id);
     }
 }

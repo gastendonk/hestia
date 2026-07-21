@@ -3,15 +3,17 @@ package hestia.prometheus.alert;
 import java.util.ArrayList;
 import java.util.List;
 
+import hestia.base.Identifiable;
 import hestia.prometheus.alert.rule.AlertRule;
 
-public class AlertGroup {
+public class AlertGroup implements Identifiable {
     private String id;
     private String name;
     private String interval;
     private int limit;
     private final List<AlertRule> rules = new ArrayList<>();
 
+    @Override
     public String getId() {
         return id;
     }

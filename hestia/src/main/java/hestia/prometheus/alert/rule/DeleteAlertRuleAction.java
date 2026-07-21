@@ -2,7 +2,6 @@ package hestia.prometheus.alert.rule;
 
 import hestia.HestiaWebapp;
 import hestia.base.HAction;
-import hestia.prometheus.alert.AlertGroupDAO;
 
 public class DeleteAlertRuleAction extends HAction {
 
@@ -15,8 +14,8 @@ public class DeleteAlertRuleAction extends HAction {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
-        AlertGroupDAO.deleteRule(env, g, id);
+        alertRuleDAO().delete(env, g, id);
         
-        ctx.redirect("/alert/" + env);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
     }
 }

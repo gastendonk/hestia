@@ -13,6 +13,6 @@ public class GitPullAction extends HAction {
 
         HestiaWebapp.config.pull();
 
-        ctx.redirect("/");
+        ctx.redirect("/" + ctx.pathParam("branch"));
     }
 }

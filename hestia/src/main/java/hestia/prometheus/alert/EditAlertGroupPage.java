@@ -11,10 +11,11 @@ public class EditAlertGroupPage extends HPage {
         String env = ctx.pathParam("env");
         String id = ctx.pathParam("id");
 
-        var g = AlertGroupDAO.load(env, id);
+        var dao = alertGroupDAO();
+        var g = dao.loadOne(env, id);
         
         if (isPOST()) {
-            save(env, g);
+            save(env, g, dao);
         } else {
             header(n("EditGroup"));
             put("env", esc(env));
@@ -24,7 +25,7 @@ public class EditAlertGroupPage extends HPage {
         }
     }
 
-    private void save(String env, AlertGroup g) {
+    private void save(String env, AlertGroup g, AlertGroupDAO dao) {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
@@ -45,8 +46,8 @@ public class EditAlertGroupPage extends HPage {
         } catch (NumberFormatException e) {
             throw new RuntimeException("Limit must be a number");
         }
-        AlertGroupDAO.save(env, g);
+        dao.update(env, g);
 
-        ctx.redirect("/alert/" + env);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
     }
 }

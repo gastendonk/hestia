@@ -23,7 +23,7 @@ public class GitBranchPage extends HPage {
             repo.pull();
             Logger.info("switched to branch " + branch);
             
-            ctx.redirect("/");
+            ctx.redirect("/" + branch);
         } else {
             header(n("SelectBranch"));
             combobox("branchs", repo.getBranchNames(), repo.getBranch(), false);

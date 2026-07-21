@@ -9,7 +9,8 @@ public class EditEnvironmentPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id");
         
-        var env = EnvironmentDAO.load(id);
+        var dao = environmentDAO();
+        var env = dao.loadOne(id);
         
         if (isPOST()) {
             String name = ctx.formParam("name").toLowerCase().replace(" ", "");
@@ -21,9 +22,9 @@ public class EditEnvironmentPage extends HPage {
             env.setCustomer(ctx.formParam("customer"));
             env.setCustomerKey(ctx.formParam("customerKey"));
             env.setActive("on".equals(ctx.formParam("active")));
-            EnvironmentDAO.save(env, false);
+            dao.update(env);
             
-            ctx.redirect("/");
+            ctx.redirect("/" + ctx.pathParam("branch"));
         } else {
             header(n("EditEnvironment"));
             put("name", esc(env.getName()));

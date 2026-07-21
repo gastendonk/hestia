@@ -6,6 +6,7 @@ import java.util.List;
 
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
@@ -17,9 +18,10 @@ import hestia.otc.opts.OtcOptsDAO;
 public class OtcService {
     private static final Object LOCK = new Object();
 
-    public void deploy(Collection<String> environments) {
+    public void deploy(Collection<String> environments, IBranch branch) {
         synchronized (LOCK) {
-            List<MonitoredTarget> list = MonitoredTargetDAO.loadAll(environments);
+            MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
+            List<MonitoredTarget> list = dao.loadAll(environments);
             var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
             validate(yaml);
             FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);
@@ -27,7 +29,7 @@ public class OtcService {
             HestiaWebapp.otcProcess = new OtcProcess();
         }
     }
-    
+
     private void validate(String yaml) {
         File configFile = HestiaWebapp.config.getConfigYamlForValidate();
         FileService.saveJsonFile(configFile, yaml);

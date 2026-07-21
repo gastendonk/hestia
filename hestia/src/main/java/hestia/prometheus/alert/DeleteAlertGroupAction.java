@@ -13,8 +13,8 @@ public class DeleteAlertGroupAction extends HAction {
         if (HestiaWebapp.config.isCustomer()) {
             throw new RuntimeException();
         }
-        AlertGroupDAO.delete(env, id);
+        alertGroupDAO().delete(env, id);
 
-        ctx.redirect("/alert/" + env);
+        ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
     }
 }

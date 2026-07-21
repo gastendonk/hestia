@@ -9,7 +9,6 @@ import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.MonitoredTarget;
-import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.Server;
 import hestia.otc.model.Site;
 
@@ -19,7 +18,7 @@ public class MonitoredTargetsPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id");
         
-        List<MonitoredTarget> mtlist = MonitoredTargetDAO.load(id);
+        List<MonitoredTarget> mtlist = mtDAO().load(id);
         
         header(n("MonitoredTargets"));
         put("id", esc(id));
@@ -42,13 +41,13 @@ public class MonitoredTargetsPage extends HPage {
         list.sort((a, b) -> (a.get("type").toString() + a.get("name").toString())
                 .compareToIgnoreCase(b.get("type").toString() + b.get("name").toString()));
         Cols cols = Cols.of(
-                new Col(n("Name"), "<a href=\"/mt/{{id}}/{{i.id}}/edit\"{{if not i.active}}"
+                new Col(n("Name"), "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/edit\"{{if not i.active}}"
                         + " style=\"text-decoration: line-through;\"{{/if}}>{{i.name}}</a>").sortable("name"),
                 Col.si(n("Type"), "type")
                 );
         if (!HestiaWebapp.config.isCustomer()) {
-            cols.add(new Col("", "<a href=\"/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\""
-                            + " onclick=\"return confirm('{{N.Delete}}?');\"><i class=\"fa fa-trash-o\"></i></a>"));
+            cols.add(new Col("", "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\""
+                    + " title=\"{{N.Delete}}\" onclick=\"return confirm('{{N.Delete}}?');\"><i class=\"fa fa-trash-o\"></i></a>"));
         }
         put("table", new TableComponent("wauto", cols, model, "list"));
     }

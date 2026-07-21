@@ -9,7 +9,7 @@ public class ServeAction extends HAction {
     protected void execute() {
         String key = ctx.pathParam("key");
     
-        r = new ExchangeService().serve(key);
+        r = new ExchangeService().serve(key, () -> ctx.pathParam("branch"));
     }
     
     @Override

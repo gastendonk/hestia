@@ -3,7 +3,6 @@ package hestia.prometheus.alert;
 import java.util.List;
 
 import hestia.base.HPage;
-import hestia.environment.EnvironmentDAO;
 import hestia.prometheus.alert.rule.AlertRule;
 
 public class AlertsPage extends HPage {
@@ -12,8 +11,8 @@ public class AlertsPage extends HPage {
     protected void execute() {
         String env = ctx.pathParam("env");
 
-        var environment = EnvironmentDAO.load(env);
-        List<AlertGroup> groups = AlertGroupDAO.load(env);
+        var environment = environmentDAO().loadOne(env);
+        List<AlertGroup> groups = alertGroupDAO().load(env);
         
         header(n("alertsFor") + " " + environment.getName());
         put("env", esc(env));
