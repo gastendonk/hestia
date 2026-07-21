@@ -4,13 +4,18 @@
     <div class="col-lg-12">
         <h1 class="page-header">Status</h1>
 
+        <p>
+            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
+            {{if hasRepo}}
+                <a href="/push" class="btn btn-success br"><i class="fa fa-arrow-up"></i> Push</a>
+                <a href="/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
+            {{/if}}
+        </p>
+        
+        <hr>
         <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
         <p>
             <a href="/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
-            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
-            {{if hasRepo}}
-                <a href="/push" class="btn btn-success br"><i class="fa fa-save"></i> Push</a>
-            {{/if}}
         </p>
         {{if envs}}{{table}}{{/if}}
 

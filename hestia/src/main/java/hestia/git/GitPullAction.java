@@ -3,7 +3,7 @@ package hestia.git;
 import hestia.HestiaWebapp;
 import hestia.base.HAction;
 
-public class GitPushAction extends HAction {
+public class GitPullAction extends HAction {
 
     @Override
     protected void execute() {
@@ -11,7 +11,7 @@ public class GitPushAction extends HAction {
             throw new RuntimeException();
         }
 
-        HestiaWebapp.config.push();
+        HestiaWebapp.config.pull();
 
         ctx.redirect("/");
     }

@@ -59,7 +59,7 @@ public class HestiaConfig {
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
     }
-
+    
     private static String get(String key, String defaultValue) {
         return HestiaAppConfig.getenv(key, defaultValue);
     }
@@ -123,6 +123,12 @@ public class HestiaConfig {
     public void commit(String commitMessage) {
         if (repo != null) {
             repo.commit(commitMessage, repoAuthor, repoMail);
+        }
+    }
+
+    public void pull() {
+        if (repodefinition != null && repo != null) {
+            repo.pull();
         }
     }
     
