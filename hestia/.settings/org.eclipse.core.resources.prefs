@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/main/resources/de.rb=Cp1252
+encoding//src/main/resources/en.rb=Cp1252
 encoding//src/main/resources/templates/AddAlertGroupPage.html=UTF-8
 encoding//src/main/resources/templates/AddAlertRulePage.html=UTF-8
 encoding//src/main/resources/templates/AddEnvironmentPage.html=UTF-8

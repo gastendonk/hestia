@@ -9,20 +9,20 @@
                 <div class="form-group">
                     <label for="f1" class="col-lg-1 control-label">{{N.Name}}</label>
                     <div class="col-lg-3">
-                        <input autofocus type="text" class="form-control" id="f1" name="f1" value="{{f1}}">
+                        <input autofocus type="text" class="form-control" id="f1" name="f1" value="{{f1}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="f2" class="col-lg-1 control-label">{{f2label}}</label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" id="f2" name="f2" value="{{f2}}">
+                        <input type="text" class="form-control" id="f2" name="f2" value="{{f2}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 {{if f3label}}
                     <div class="form-group">
                         <label for="f3" class="col-lg-1 control-label">{{f3label}}</label>
                         <div class="col-lg-3">
-                            <input type="text" class="form-control" id="f3" name="f3" value="{{f3}}">
+                            <input type="text" class="form-control" id="f3" name="f3" value="{{f3}}"{{if customer}} disabled{{/if}}>
                         </div>
                     </div>
                 {{/if}}
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <label for="f4" class="col-lg-1 control-label">{{f4label}}</label>
                         <div class="col-lg-3">
-                            <input type="password" class="form-control" id="f4" name="f4" value="{{f4}}">
+                            <input type="password" class="form-control" id="f4" name="f4" value="{{f4}}"{{if customer}} disabled{{/if}}>
                         </div>
                     </div>
                 {{/if}}
