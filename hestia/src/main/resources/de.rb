@@ -45,3 +45,5 @@ OtcLabel=Ziel OTC Instanz
 database=Datenbank
 Options=Einstellungen
 Close=Schlieﬂen
+DownloadConfig=Einstellungen laden
+UploadConfig=Konfiguration hochladen

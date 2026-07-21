@@ -5,10 +5,15 @@
         <h1 class="page-header">Status</h1>
 
         <p>
+            <a href="/deploy" class="btn btn-default br">Deploy</a>
             <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
             {{if hasRepo}}
                 <a href="/push" class="btn btn-success br"><i class="fa fa-arrow-up"></i> Push</a>
                 <a href="/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
+                <a href="/x/push" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.UploadConfig}}</a>
+            {{/if}}
+            {{if customer}}
+                <a href="/x/pull" class="btn btn-default br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
             {{/if}}
         </p>
         

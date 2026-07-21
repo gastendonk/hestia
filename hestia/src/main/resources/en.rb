@@ -45,3 +45,5 @@ OtcLabel=target OTC instance
 database=database
 Options=Options
 Close=Close
+DownloadConfig=Download configuration
+UploadConfig=Upload configuration
