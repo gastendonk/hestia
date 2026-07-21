@@ -1,6 +1,7 @@
 package hestia.otc;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.MonitoredTarget;
@@ -20,6 +21,9 @@ public class EditMTPage extends HPage {
         MonitoredTarget mt = list.stream().filter(i -> i.getId().equals(id2)).findFirst().orElseThrow();
         
         if (isPOST()) {
+            if (HestiaWebapp.config.isCustomer()) {
+                throw new RuntimeException();
+            }
             save(id, m, mt);
             MonitoredTargetDAO.save(id, list);
             ctx.redirect("/mt/" + id);
@@ -33,25 +37,22 @@ public class EditMTPage extends HPage {
         put("id2", esc(mt.getId()));
         put("m", esc(m));
         put("f1", esc(mt.getName()));
+        String h;
         if (mt instanceof Server s) {
-            header(n("EditMTLinuxServer"));
+            h = "MTLinuxServer";
             put("f2label", n("Host"));
             put("f3label", n("PathOptional"));
             put("f4label", "");
             put("f2", esc(s.getHost()));
             put("f3", esc(s.getPath()));
         } else if (mt instanceof Site s) {
-            header(n("EditMTSite"));
+            h = "MTSite";
             put("f2label", "URL");
             put("f3label", "");
             put("f4label", "");
             put("f2", esc(s.getUrl()));
         } else if (mt instanceof Database s) {
-            if ("oracle".equals(m)) {
-                header(n("EditMTOracleDB"));
-            } else {
-                header(n("EditMTPostgresDB"));
-            }
+            h = "oracle".equals(m) ? "MTOracleDB" : "MTPostgresDB";
             put("f2label", n("Host"));
             put("f3label", n("User"));
             put("f4label", n("Password"));
@@ -61,6 +62,10 @@ public class EditMTPage extends HPage {
         } else {
             throw new RuntimeException("Unsupported MonitoredTarget type");
         }
+        if (!HestiaWebapp.config.isCustomer()) {
+            h = "Edit" + h;
+        }
+        header(n(h));
     }
 
     private void save(String id, String m, MonitoredTarget mt) {

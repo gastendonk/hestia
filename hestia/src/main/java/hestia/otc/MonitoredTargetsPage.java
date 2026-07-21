@@ -5,6 +5,7 @@ import java.util.List;
 import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.MonitoredTarget;
@@ -43,10 +44,12 @@ public class MonitoredTargetsPage extends HPage {
         Cols cols = Cols.of(
                 new Col(n("Name"), "<a href=\"/mt/{{id}}/{{i.id}}/edit\"{{if not i.active}}"
                         + " style=\"text-decoration: line-through;\"{{/if}}>{{i.name}}</a>").sortable("name"),
-                Col.si(n("Type"), "type"),
-                new Col("", "<a href=\"/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\""
-                        + " onclick=\"return confirm('{{N.Delete}}?');\"><i class=\"fa fa-trash-o\"></i></a>")
+                Col.si(n("Type"), "type")
                 );
+        if (!HestiaWebapp.config.isCustomer()) {
+            cols.add(new Col("", "<a href=\"/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\""
+                            + " onclick=\"return confirm('{{N.Delete}}?');\"><i class=\"fa fa-trash-o\"></i></a>"));
+        }
         put("table", new TableComponent("wauto", cols, model, "list"));
     }
 }

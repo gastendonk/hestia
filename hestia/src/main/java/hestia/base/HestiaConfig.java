@@ -19,6 +19,7 @@ public class HestiaConfig {
     private final File configYaml;
     private final File configYamlForValidate;
     private final String language;
+    private final boolean customer;
     private final Repository repo;
     private final String repoAuthor;
     private final String repoMail;
@@ -37,6 +38,7 @@ public class HestiaConfig {
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
         language = get("LANGUAGE", "en");
+        customer = !"0".equals(get("CUSTOMER", "1"));
         if (StringService.isNullOrEmpty(get("REPO", null))) {
             repoAuthor = null;
             repoMail = null;
@@ -114,7 +116,7 @@ public class HestiaConfig {
     }
     
     public boolean isCustomer() {
-        return true;
+        return customer;
     }
     
     public Repository getRepo() {

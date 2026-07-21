@@ -4,12 +4,14 @@
     <div class="col-lg-12">
         <h1 class="page-header">{{header}}</h1>
         
-        <p>
-            <a href="/mt/{{id}}/add?m=linux" class="btn btn-primary br">{{N.AddMTLinuxServer}}</a>
-            <a href="/mt/{{id}}/add?m=oracle" class="btn btn-primary br">{{N.AddMTOracleDB}}</a>
-            <a href="/mt/{{id}}/add?m=postgres" class="btn btn-primary br">{{N.AddMTPostgresDB}}</a>
-            <a href="/mt/{{id}}/add?m=site" class="btn btn-primary br">{{N.AddMTSite}}</a>
-        </p>
+        {{if not customer}}
+	        <p>
+	            <a href="/mt/{{id}}/add?m=linux" class="btn btn-primary br">{{N.AddMTLinuxServer}}</a>
+	            <a href="/mt/{{id}}/add?m=oracle" class="btn btn-primary br">{{N.AddMTOracleDB}}</a>
+	            <a href="/mt/{{id}}/add?m=postgres" class="btn btn-primary br">{{N.AddMTPostgresDB}}</a>
+	            <a href="/mt/{{id}}/add?m=site" class="btn btn-primary br">{{N.AddMTSite}}</a>
+	        </p>
+        {{/if}}
         
         {{if list}}{{table}}{{/if}}
     </div>

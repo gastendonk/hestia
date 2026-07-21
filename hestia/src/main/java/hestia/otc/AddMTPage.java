@@ -2,6 +2,7 @@ package hestia.otc;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
@@ -17,6 +18,9 @@ public class AddMTPage extends HPage {
         String id = ctx.pathParam("id");
         String m = ctx.queryParam("m");
 
+        if (HestiaWebapp.config.isCustomer()) {
+            throw new RuntimeException();
+        }
         if (isPOST()) {
             save(id, m);
         } else {

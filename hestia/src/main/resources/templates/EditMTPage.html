@@ -37,8 +37,10 @@
 
                 <div class="form-group">
                     <div class="col-lg-offset-1 col-lg-5">
-                        <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
-                        <a href="/mt/{{id}}" class="btn btn-default">{{N.Cancel}}</a>
+                        {{if not customer}}
+                            <button type="submit" class="btn btn-primary br">{{N.Save}}</button>
+                        {{/if}}
+                        <a href="/mt/{{id}}" class="btn btn-default">{{if customer}}{{N.Close}} {{else}} {{N.Cancel}} {{/if}}</a>
                     </div>
                 </div>
             </fieldset>

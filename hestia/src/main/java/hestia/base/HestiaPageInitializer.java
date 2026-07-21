@@ -13,6 +13,6 @@ public class HestiaPageInitializer extends PageInitializer {
         page.put("VERSION", HestiaWebapp.VERSION);
         page.put("sortableJS", false);
         page.put("N", "en".equals(HestiaWebapp.config.getLanguage()) ? NLS.dataMap_en : NLS.dataMap_de);
-        page.put("customer", true);
+        page.put("customer", HestiaWebapp.config.isCustomer());
     }
 }
