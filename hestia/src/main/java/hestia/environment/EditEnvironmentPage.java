@@ -1,5 +1,6 @@
 package hestia.environment;
 
+import hestia.HestiaWebapp;
 import hestia.base.HPage;
 
 public class EditEnvironmentPage extends HPage {
@@ -17,13 +18,17 @@ public class EditEnvironmentPage extends HPage {
             }
             
             env.setName(name);
+            env.setCustomer(ctx.formParam("customer"));
+            env.setCustomerKey(ctx.formParam("customerKey"));
             env.setActive("on".equals(ctx.formParam("active")));
-            EnvironmentDAO.save(env);
+            EnvironmentDAO.save(env, false);
             
             ctx.redirect("/");
         } else {
             header(n("EditEnvironment"));
             put("name", esc(env.getName()));
+            combobox("customers", HestiaWebapp.config.getCustomers(), env.getCustomer(), false);
+            put("customerKey", esc(env.getCustomerKey()));
             put("active", env.isActive());
         }
     }

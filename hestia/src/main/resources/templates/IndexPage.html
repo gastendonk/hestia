@@ -8,6 +8,7 @@
             <a href="/deploy" class="btn btn-default br">Deploy</a>
             <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
             {{if hasRepo}}
+                <a href="/branch" class="btn btn-default br">{{N.SelectBranch}}</a>
                 <a href="/push" class="btn btn-success br"><i class="fa fa-arrow-up"></i> Push</a>
                 <a href="/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
                 <a href="/x/push" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.UploadConfig}}</a>
@@ -46,6 +47,7 @@
             <a href="/otc/kill?m=s" class="btn btn-success">Restart OTC</a>
         </p>
         <hr>
+        <p>Monitored targets folder: {{mtFolder}}</p>
         
         <hr>
         <p><small>{{datetime}} | {{VERSION}}</small></p>

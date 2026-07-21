@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.soltaufintel.amalia.base.FileService;
+import github.soltaufintel.amalia.base.IdGenerator;
+import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
 
 public class EnvironmentDAO {
@@ -41,9 +43,20 @@ public class EnvironmentDAO {
         return load().stream().filter(i -> i.getId().equals(id)).findFirst().orElseThrow();
     }
 
-    public static void save(Environment env) {
+    public static void save(Environment env, boolean setCustomerKey) {
         var list = load();
         list.removeIf(i -> i.getId().equals(env.getId()));
+        if (setCustomerKey) {
+            for (Environment i : list) {
+                if (i.getCustomer().equals(env.getCustomer())) {
+                    env.setCustomerKey(env.getCustomerKey());
+                    break;
+                }
+            }
+            if (StringService.isNullOrEmpty(env.getCustomerKey())) {
+                env.setCustomerKey(IdGenerator.createId25());
+            }
+        }
         list.add(env);
         save(list);
     }

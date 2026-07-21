@@ -12,6 +12,7 @@ import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
 import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
+import hestia.git.GitBranchPage;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
@@ -45,6 +46,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/deploy", DeployAction.class);
         get("/push", GitPushAction.class);
         get("/pull", GitPullAction.class);
+        form("/branch", GitBranchPage.class);
 
         form("/mt/:id/add", AddMTPage.class);
         form("/mt/:id/:id2/edit", EditMTPage.class);
@@ -62,7 +64,7 @@ public class HestiaWebapp extends RouteDefinitions {
         
         form("/tablesort/:id/:col", TableSortAction.class);
         
-        get("/x/push", PushAction.class);
+        get("/x/push/:tag", PushAction.class);
         post("/x/receive/:tag", ReceiveAction.class);
         get("/x/pull", PullAction.class);
         get("/x/serve/:key", ServeAction.class);

@@ -1,10 +1,16 @@
 package hestia.environment;
 
+/**
+ * Environment saves environment name and also customer data.
+ */
 public class Environment {
     private String id;
     private String name;
+    private String customer;
+    /** This is the secret key that the customer instance uses to retrieve data from the cloud instance. */
+    private String customerKey;
     private boolean active = true;
-    
+
     public String getId() {
         return id;
     }
@@ -19,6 +25,22 @@ public class Environment {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
+    public String getCustomerKey() {
+        return customerKey;
+    }
+
+    public void setCustomerKey(String customerKey) {
+        this.customerKey = customerKey;
     }
 
     public boolean isActive() {

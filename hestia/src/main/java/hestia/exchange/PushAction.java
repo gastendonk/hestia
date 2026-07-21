@@ -6,7 +6,9 @@ public class PushAction extends HAction {
 
     @Override
     protected void execute() {
-        new ExchangeService().push();
+        String tag = ctx.pathParam("tag");
+        
+        new ExchangeService().push(tag);
         
         ctx.redirect("/");
     }

@@ -47,3 +47,7 @@ Options=Options
 Close=Close
 DownloadConfig=Download configuration
 UploadConfig=Upload configuration
+CreateTag=Create Git tag
+Customer=Customer
+CustomerKey=Customer key
+SelectBranch=Select branch

@@ -31,18 +31,22 @@ public class ExchangeService {
 
     /**
      * Serve data for customer
-     * @param key -
+     * @param key secret customer key
      * @return JSON
      */
     public String serve(String key) {
-        // TODO
-        return "{}";
+        Logger.info("[exchange] serve " + key);
+        // TODO vom key zum tag
+        var data = getData();
+        var json = new Gson().toJson(data);
+        return json;
     }
     
     /**
      * Push data to cloud server
      */
     public void push(String tag) {
+        Logger.info("[exchange] push " + tag);
         var url = "...";
         var json = "";
         new REST(url).post(json).close();
@@ -55,11 +59,12 @@ public class ExchangeService {
      * @param body JSON
      */
     public void receive(String tag, String body) {
-        Logger.info("receive " + tag);
+        Logger.info("[exchange] receive " + tag);
         ExchangeData data = new Gson().fromJson(body, ExchangeData.class);
         setData(data, tag);
     }
     
+    // TODO tag
     public ExchangeData getData() {
         var data = new ExchangeData();
         data.setFiles(new HashMap<>());
@@ -90,5 +95,9 @@ public class ExchangeService {
             }
             FileService.savePlainTextFile(file, json);
         }
+    }
+
+    public static File file(String customerKey, String tag) {
+        return new File(HestiaWebapp.config.getBaseFolder(), customerKey + "/" + tag + ".json");
     }
 }

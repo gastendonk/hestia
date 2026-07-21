@@ -1,6 +1,8 @@
 package hestia.base;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.pmw.tinylog.Logger;
 
@@ -9,10 +11,13 @@ import github.soltaufintel.amalia.git.Repository;
 import github.soltaufintel.amalia.git.RepositoryDefinition;
 
 public class HestiaConfig {
+    static IConfig configAccess = new HestiaAppConfig();
     private final File otelcolContrib;
     private final String prometheusHost;
     private final String alertmanagerHost;
     private final File baseFolder; // DATAFOLDER: persistent data
+    private final File customersFolder;
+    private final List<String> customers;
     private final File environmentsFolder;
     private final File monitoredTargetsFolder;
     private final File alertsFolder;
@@ -35,6 +40,7 @@ public class HestiaConfig {
         language = get("LANGUAGE", "en");
         customer = !"0".equals(get("CUSTOMER", "1"));
         if (StringService.isNullOrEmpty(get("REPO"))) {
+            Logger.info("not REPO mode");
             repoAuthor = null;
             repoMail = null;
             repodefinition = null;
@@ -46,26 +52,31 @@ public class HestiaConfig {
             repodefinition = new RepositoryDefinitionImpl(repoAuthor, get("REPOPASSWORD"), get("REPO"),
                     new File(get("REPOFOLDER")));
             repo = new Repository(repodefinition);
-            Logger.info("Git repository folder: " + repodefinition.getLocalFolder().getAbsolutePath()
-                    + ", " + repodefinition.getLocalFolder().isDirectory());   
-            repo.pull();
+            if ("1".equals(get("PULLREPO", "1"))) { // needed for test
+                Logger.info("Git repository folder: " + repodefinition.getLocalFolder().getAbsolutePath()
+                        + ", " + repodefinition.getLocalFolder().isDirectory());
+                repo.pull();
+            }
             baseFolder = repodefinition.getLocalFolder();
         }
-        // /work: working directory, exchange files with other containers
+        customersFolder = baseFolder;
+        customers = Arrays.asList(get("CUSTOMERS", "").split(","));
+        customers.sort((a, b) -> a.compareToIgnoreCase(b));
         environmentsFolder = new File(baseFolder, "environments");
         monitoredTargetsFolder = new File(baseFolder, "monitoredtargets");
         alertsFolder = new File(baseFolder, "alerts");
+        // /work: working directory, exchange files with other containers
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
     }
     
     private static String get(String key, String defaultValue) {
-        return HestiaAppConfig.getenv(key, defaultValue);
+        return configAccess.get(key, defaultValue);
     }
 
     private static String get(String key) {
-        return HestiaAppConfig.getenv(key, null);
+        return configAccess.get(key);
     }
 
     public File getOtelcolContrib() {
@@ -82,6 +93,14 @@ public class HestiaConfig {
 
     public File getBaseFolder() {
         return baseFolder;
+    }
+
+    public File getCustomersFolder() {
+        return customersFolder;
+    }
+
+    public List<String> getCustomers() {
+        return customers;
     }
 
     public File getEnvironmentsFolder() {

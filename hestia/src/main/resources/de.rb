@@ -47,3 +47,7 @@ Options=Einstellungen
 Close=Schlieﬂen
 DownloadConfig=Einstellungen laden
 UploadConfig=Konfiguration hochladen
+CreateTag=Git tag erstllen
+Customer=Kunde
+CustomerKey=Customer-Key
+SelectBranch=Branch w‰hlen
