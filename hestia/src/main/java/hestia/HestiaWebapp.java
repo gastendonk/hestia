@@ -12,7 +12,6 @@ import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
 import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
-import hestia.git.GitBranchPage;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
@@ -39,13 +38,11 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
-        get("/", IndexPage.class);
         form("/:branch/environment/add", AddEnvironmentPage.class);
         form("/:branch/environment/:id", EditEnvironmentPage.class);
         get("/:branch/deploy", DeployAction.class);
         get("/:branch/push", GitPushAction.class);
         get("/:branch/pull", GitPullAction.class);
-        form("/branch", GitBranchPage.class);
 
         form("/:branch/mt/:id/add", AddMTPage.class);
         form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
@@ -70,7 +67,9 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/x/pull", PullAction.class);
         get("/x/serve/:branch/:key", ServeAction.class);
 
-        get("/:branch", IndexPage.class); // ganz unten
+        // at last
+        form("/", IndexPage.class);
+        form("/:branch", IndexPage.class);
     }
 
     public static void main(String[] args) {

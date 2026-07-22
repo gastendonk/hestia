@@ -5,13 +5,24 @@
         <h1 class="page-header">Status</h1>
 
         <p>
-            <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
-            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
             {{if hasRepo}}
-                <a href="/branch" class="btn btn-default br">{{N.SelectBranch}}</a>
-                <a href="/{{branch}}/push" class="btn btn-success br"><i class="fa fa-arrow-up"></i> Push</a>
-                <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
-                <a href="/x/push" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.UploadConfig}}</a>
+		        <form class="form-horizontal" method="post">
+		            <fieldset>
+		                <div class="form-group">
+		                    <div class="col-lg-2">
+		                        <select class="form-control" id="branch2" name="branch2">
+		                            {{each a in branchs}}
+		                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+		                            {{/each}}
+		                        </select>
+		                    </div>
+		                    <button type="submit" class="btn btn-primary br" title="{{N.SelectBranch}}"><i class="fa fa-check"></i></button>
+			                <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
+			                <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"><i class="fa fa-arrow-up"></i> Push</a>
+	                        <a href="{{git}}" class="btn btn-default br" target="_blank">Git Repo</a>
+		                </div>
+		            </fieldset>
+		        </form>
             {{/if}}
             {{if customer}}
                 <a href="/x/pull" class="btn btn-default br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
@@ -24,6 +35,13 @@
             <a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
         </p>
         {{if envs}}{{table}}{{/if}}
+        
+        <hr>
+        <p>
+            <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
+            <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
+            <a href="/x/push" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.UploadConfig}}</a>
+        </p>
 
         <hr>
         <p>webapp run mode: "{{info}}"</p>

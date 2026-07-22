@@ -2,6 +2,8 @@ package hestia.git;
 
 import java.io.File;
 
+import org.pmw.tinylog.Logger;
+
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.git.Repository;
 import github.soltaufintel.amalia.git.RepositoryDefinition;
@@ -57,7 +59,9 @@ public class GitRepository implements IRepository {
 
     @Override
     public void save(String file, String content, String commitMessage) {
-        FileService.savePlainTextFile(getFile(file), content);
+        var f = getFile(file);
+        FileService.savePlainTextFile(f, content);
         repo.commit(commitMessage, author, mail);
+        Logger.info(f.getAbsolutePath() + " -> commit: " + commitMessage); // XXX DEBUG
     }
 }

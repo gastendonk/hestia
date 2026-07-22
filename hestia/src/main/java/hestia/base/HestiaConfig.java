@@ -60,6 +60,7 @@ public class HestiaConfig {
             if ("1".equals(get("PULLREPO", "1"))) { // needed for test
                 Logger.info("Git repository folder: " + repodefinition.getLocalFolder().getAbsolutePath()
                         + ", " + repodefinition.getLocalFolder().isDirectory());
+                repodefinition.getLocalFolder().getParentFile().mkdirs(); // TODO amalia-git
                 repo.pull();
             }
             baseFolder = repodefinition.getLocalFolder();

@@ -21,6 +21,10 @@ public class IndexPage extends HPage {
 
     @Override
     protected void execute() {
+        if (isPOST()) {
+            post();
+            return;
+        }
         OtcProcess otc = HestiaWebapp.otcProcess;
         List<Environment> envs = environmentDAO().load();
 
@@ -37,6 +41,10 @@ public class IndexPage extends HPage {
         if (ctx.pathParam("branch") == null) {
             put("branch", "master");
         }
+        var repo = HestiaWebapp.config.getRepo();
+        combobox("branchs", repo.getBranchNames(), repo.getBranch(), false);
+        put("git", esc(HestiaWebapp.config.getRepoDefinition().getUrl()));
+        put("unpushed", repo.hasUnpushedCommits("refs/heads/master", "refs/remotes/origin/master") > 0);
 
         var list = list("envs");
         for (Environment env : envs) {
@@ -77,5 +85,13 @@ public class IndexPage extends HPage {
             String b = ctx.pathParam("branch");
             return StringService.isNullOrEmpty(b) ? "master" : b;
         };
+    }
+    
+    private void post() {
+        String branch = ctx.formParam("branch2");
+        var repo = HestiaWebapp.config.getRepo();
+        repo.switchToBranch(branch);
+        repo.pull();
+        ctx.redirect("/" + branch);
     }
 }
