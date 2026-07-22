@@ -10,14 +10,15 @@ import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
 import hestia.base.FileRepository;
 import hestia.base.IRepository;
+import hestia.git.GitPersistenceTest;
 
 public class EnvironmentsTest {
-    private static final String f = "data/testdata/EnvironmentsTest/";
+    private static final String f = GitPersistenceTest.BASEDIR;
     
     @Test
     public void insert() {
         // Prepare
-        var folder = new File(f + "insert");
+        var folder = new File(f + "/insert");
         FileService.deleteFolder(folder);
         IRepository repo = new FileRepository(folder);
         
@@ -38,7 +39,7 @@ public class EnvironmentsTest {
     @Test
     public void update() {
         // Prepare
-        var folder = new File(f + "update");
+        var folder = new File(f + "/update");
         FileService.deleteFolder(folder);
         IRepository repo = new FileRepository(folder);
         Environment env = new Environment();
@@ -60,7 +61,7 @@ public class EnvironmentsTest {
     @Test
     public void delete() {
         // Prepare
-        var folder = new File(f + "delete");
+        var folder = new File(f + "/delete");
         FileService.deleteFolder(folder);
         IRepository repo = new FileRepository(folder);
         Environment env = new Environment();

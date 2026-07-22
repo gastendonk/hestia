@@ -88,16 +88,16 @@ public class EnvironmentDAO extends AbstractJsonListDAO<Environment> {
 
     @Override
     protected String getInsertCommitMessage(String environmentId, Environment object) {
-        return "Add environment";
+        return "add environment";
     }
 
     @Override
     protected String getUpdateCommitMessage(String environmentId, Environment object) {
-        return "Update environment";
+        return "update environment";
     }
 
     @Override
     protected String getDeleteCommitMessage(String environmentId, String id) {
-        return "Delete environment";
+        return "delete environment";
     }
 }

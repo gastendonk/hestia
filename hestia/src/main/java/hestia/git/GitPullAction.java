@@ -11,7 +11,7 @@ public class GitPullAction extends HAction {
             throw new RuntimeException();
         }
 
-        HestiaWebapp.config.pull();
+// TODO        HestiaWebapp.config.pull();
 
         ctx.redirect("/" + ctx.pathParam("branch"));
     }

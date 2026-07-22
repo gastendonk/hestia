@@ -36,15 +36,15 @@ public class IndexPage extends HPage {
         put("info1", esc(otc.info1));
         put("info2", esc(otc.info2));
         put("config", esc(FileService.loadPlainTextFile(new File("/work/config.yaml"))));
-        put("hasRepo", HestiaWebapp.config.getRepo() != null && !HestiaWebapp.config.isCustomer());
-        put("mtFolder", HestiaWebapp.config.getMonitoredTargetsFolder().getAbsolutePath());
-        if (ctx.pathParam("branch") == null) {
-            put("branch", "master");
-        }
-        var repo = HestiaWebapp.config.getRepo();
-        combobox("branchs", repo.getBranchNames(), repo.getBranch(), false);
-        put("git", esc(HestiaWebapp.config.getRepoDefinition().getUrl()));
-        put("unpushed", repo.hasUnpushedCommits("refs/heads/master", "refs/remotes/origin/master") > 0);
+// TODO Baustelle        
+//        put("hasRepo", HestiaWebapp.config.getRepo() != null && !HestiaWebapp.config.isCustomer());
+//        if (ctx.pathParam("branch") == null) {
+//            put("branch", "master");
+//        }
+//        var repo = HestiaWebapp.config.getRepo();
+//        combobox("branchs", repo.getBranchNames(), repo.getBranch(), false);
+//        put("git", esc(HestiaWebapp.config.getRepoDefinition().getUrl()));
+//        put("unpushed", repo.hasUnpushedCommits("refs/heads/master", "refs/remotes/origin/master") > 0);
 
         var list = list("envs");
         for (Environment env : envs) {
@@ -88,10 +88,11 @@ public class IndexPage extends HPage {
     }
     
     private void post() {
-        String branch = ctx.formParam("branch2");
-        var repo = HestiaWebapp.config.getRepo();
-        repo.switchToBranch(branch);
-        repo.pull();
-        ctx.redirect("/" + branch);
+// TODO Baustelle        
+//        String branch = ctx.formParam("branch2");
+//        var repo = HestiaWebapp.config.getRepo();
+//        repo.switchToBranch(branch);
+//        repo.pull();
+//        ctx.redirect("/" + branch);
     }
 }

@@ -11,7 +11,7 @@ public class GitPushAction extends HAction {
             throw new RuntimeException();
         }
 
-        HestiaWebapp.config.push();
+     // TODO      HestiaWebapp.config.push();
 
         ctx.redirect("/" + ctx.pathParam("branch"));
     }

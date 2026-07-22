@@ -11,6 +11,7 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import hestia.git.GitRepository;
 import hestia.git.RepositoryPersistenceException;
 
 /**
@@ -232,6 +233,14 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
             gitRepository.save(path, json, commitMessage);
         } catch (RuntimeException e) {
             throw new RepositoryPersistenceException("Could not write and commit JSON file: " + path, e);
+        }
+    }
+    
+    public void push(String user, String password) {
+        if (gitRepository instanceof GitRepository g) {
+            g.getRepo().push(user, password);
+        } else {
+            throw new RuntimeException("Can't call push() because it's a " + gitRepository.getClass().getName());
         }
     }
 }

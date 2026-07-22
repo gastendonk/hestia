@@ -45,13 +45,16 @@ public class GitRepository implements IRepository {
 
     @Override
     public File getFile(String file) {
-        return new File(folder, file);
+        var f = new File(folder, file);
+        Logger.info("getFile: " + f.getAbsolutePath());
+        return f;
     }
 
     @Override
     public String load(String file) {
         if (!folder.isDirectory()) {
             // TODO Wie oft soll ich pullen?
+            folder.getParentFile().mkdirs(); // TODO amalia-git
             repo.pull();
         }
         return FileService.loadPlainTextFile(getFile(file));
@@ -63,5 +66,9 @@ public class GitRepository implements IRepository {
         FileService.savePlainTextFile(f, content);
         repo.commit(commitMessage, author, mail);
         Logger.info(f.getAbsolutePath() + " -> commit: " + commitMessage); // XXX DEBUG
+    }
+
+    public Repository getRepo() {
+        return repo;
     }
 }
