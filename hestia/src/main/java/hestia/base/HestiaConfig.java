@@ -117,7 +117,7 @@ public class HestiaConfig {
         return new AlertRuleDAO(alertGroupDAO(branch));
     }
 
-    private IRepository getRepository(IBranch branch) {
+    public IRepository getRepository(IBranch branch) {
         var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {
             var folder = new File(get("DATAFOLDER"));

@@ -10,12 +10,14 @@ import github.soltaufintel.amalia.git.RepositoryDefinition;
 import hestia.base.IRepository;
 
 public class GitRepository implements IRepository {
+    private final String url;
     private final File folder;
     private final String author;
     private final String mail;
     private final Repository repo;
 
     public GitRepository(String url, String user, String mail, String password, File baseFolder, String branch) {
+        this.url = url;
         author = user;
         this.mail = mail;
         folder = new File(baseFolder, branch);
@@ -70,5 +72,9 @@ public class GitRepository implements IRepository {
 
     public Repository getRepo() {
         return repo;
+    }
+    
+    public String getUrl() {
+        return url;
     }
 }

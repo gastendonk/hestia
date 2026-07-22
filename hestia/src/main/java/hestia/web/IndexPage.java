@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.web.table.Col;
@@ -13,7 +15,9 @@ import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
 import hestia.base.HPage;
 import hestia.base.IBranch;
+import hestia.base.IRepository;
 import hestia.environment.Environment;
+import hestia.git.GitRepository;
 import hestia.otc.OtcProcess;
 import hestia.prometheus.alert.AlertGroup;
 
@@ -22,7 +26,8 @@ public class IndexPage extends HPage {
     @Override
     protected void execute() {
         if (isPOST()) {
-            post();
+            String branch = ctx.formParam("branch2");
+            ctx.redirect("/" + branch);
             return;
         }
         OtcProcess otc = HestiaWebapp.otcProcess;
@@ -36,15 +41,24 @@ public class IndexPage extends HPage {
         put("info1", esc(otc.info1));
         put("info2", esc(otc.info2));
         put("config", esc(FileService.loadPlainTextFile(new File("/work/config.yaml"))));
-// TODO Baustelle        
-//        put("hasRepo", HestiaWebapp.config.getRepo() != null && !HestiaWebapp.config.isCustomer());
-//        if (ctx.pathParam("branch") == null) {
-//            put("branch", "master");
-//        }
-//        var repo = HestiaWebapp.config.getRepo();
-//        combobox("branchs", repo.getBranchNames(), repo.getBranch(), false);
-//        put("git", esc(HestiaWebapp.config.getRepoDefinition().getUrl()));
-//        put("unpushed", repo.hasUnpushedCommits("refs/heads/master", "refs/remotes/origin/master") > 0);
+        if (ctx.pathParam("branch") == null) {
+            put("branch", "master");
+        }
+        var b = b();
+        IRepository repo = HestiaWebapp.config.getRepository(b);
+        put("hasRepo", repo instanceof GitRepository && !HestiaWebapp.config.isCustomer());
+        if (repo instanceof GitRepository g) {
+            var branch = b.getBranch();
+            combobox("branchs", g.getRepo().getBranchNames(), branch, false);
+            put("git", esc(g.getUrl()));
+            int r = 99;
+            try {
+                r = g.getRepo().hasUnpushedCommits("refs/heads/" + branch, "refs/remotes/origin/" + branch);
+            } catch (Exception e) {
+                Logger.warn("hasUnpushedCommits: " + e.getMessage());
+            }
+            put("unpushed", r > 0);
+        }
 
         var list = list("envs");
         for (Environment env : envs) {
@@ -85,14 +99,5 @@ public class IndexPage extends HPage {
             String b = ctx.pathParam("branch");
             return StringService.isNullOrEmpty(b) ? "master" : b;
         };
-    }
-    
-    private void post() {
-// TODO Baustelle        
-//        String branch = ctx.formParam("branch2");
-//        var repo = HestiaWebapp.config.getRepo();
-//        repo.switchToBranch(branch);
-//        repo.pull();
-//        ctx.redirect("/" + branch);
     }
 }
