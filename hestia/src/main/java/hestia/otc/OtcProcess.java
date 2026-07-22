@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.rest.REST;
+import hestia.HestiaWebapp;
 
 /**
  * Start and stop otelcol-contrib application
@@ -25,11 +26,18 @@ public class OtcProcess {
                 Logger.info("!!  otc process not started because env var RUN is not 1");
                 return;
             }
-            String x = "/app/otel/otelcol-contrib";
-            String c = "--config=/work/config.yaml";
-            Logger.info("starting otc process... | " + x + " " + c);
+            var program = HestiaWebapp.config.getOtelcolContrib();
+            if (!program.isFile()) {
+                throw new RuntimeException("otc start error! Program file not found: " + program.getAbsolutePath());
+            }
+            var configYaml = HestiaWebapp.config.getConfigYaml();
+            if (!configYaml.isFile()) {
+                throw new RuntimeException("otc start error! Config file not found: " + configYaml.getAbsolutePath());
+            }
+            String c = "--config=" + configYaml.getAbsolutePath();
+            Logger.info("starting otc process... | " + program.getAbsolutePath() + " " + c);
             try {
-                ProcessBuilder pb = new ProcessBuilder(x, c);
+                ProcessBuilder pb = new ProcessBuilder(program.getAbsolutePath(), c);
                 pb.redirectErrorStream(true);
                 p = pb.start();
                 Logger.info("new process style. pid " + p.pid());

@@ -16,16 +16,14 @@ public class HestiaConfig {
     private final File otelcolContrib;
     private final String prometheusHost;
     private final String alertmanagerHost;
-    private final File baseFolder; // DATAFOLDER: persistent data
     private final List<String> customers;
-    private final File monitoredTargetsFolder;
-    private final File alertsFolder;
     /** Prometheus alert rules file */
     private final File alertRulesFile;
     /** OTel Collector config file */
     private final File configYaml;
     private final File configYamlForValidate;
     private final String language;
+    /** true: customer mode, false: manufacturer or cloud mode */
     private final boolean customer;
     
     public HestiaConfig() {
@@ -36,9 +34,7 @@ public class HestiaConfig {
         customer = !"0".equals(get("CUSTOMER", "1"));
         customers = Arrays.asList(get("CUSTOMERS", "").split(","));
         customers.sort((a, b) -> a.compareToIgnoreCase(b));
-        baseFolder = new File(get("DATAFOLDER", "data"));
-        monitoredTargetsFolder = new File(baseFolder, "monitoredtargets");
-        alertsFolder = new File(baseFolder, "alerts");
+        
         // /work: working directory, exchange files with other containers
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
@@ -65,20 +61,8 @@ public class HestiaConfig {
         return alertmanagerHost;
     }
 
-    public File getBaseFolder() {
-        return baseFolder;
-    }
-
     public List<String> getCustomers() {
         return customers;
-    }
-
-    public File getMonitoredTargetsFolder() {
-        return monitoredTargetsFolder;
-    }
-
-    public File getAlertsFolder() {
-        return alertsFolder;
     }
 
     public File getAlertRulesFile() {
@@ -120,11 +104,32 @@ public class HestiaConfig {
     public IRepository getRepository(IBranch branch) {
         var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {
-            var folder = new File(get("DATAFOLDER"));
-            return new FileRepository(folder);
+            return new FileRepository(getBaseFolder());
         } else {
-            var folder = new File(get("REPOFOLDER"));
-            return new GitRepository(url, get("REPOUSER"), get("REPOMAIL"), get("REPOPASSWORD"), folder, branch.getBranch());
+            var user = get("REPOUSER");
+            check(user);
+            return new GitRepository(url, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branch.getBranch());
+        }
+    }
+
+    public File getBaseFolder() {
+        var url = get("REPO");
+        String folder;
+        if (StringService.isNullOrEmpty(url)) {
+            folder = get("DATAFOLDER");
+            if (StringService.isNullOrEmpty(folder)) {
+                throw new IllegalStateException("Please set env var DATAFOLDER (or REPO).");
+            }
+        } else {
+            folder = get("REPOFOLDER");
+            check(folder);
+        }
+        return new File(folder);
+    }
+    
+    private void check(String c) {
+        if (StringService.isNullOrEmpty(c)) {
+            throw new IllegalStateException("Please set env vars REPOFOLDER, REPOUSER, REPOMAIL and REPOPASSWORD.");
         }
     }
 }
