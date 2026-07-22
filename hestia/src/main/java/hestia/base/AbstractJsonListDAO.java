@@ -53,26 +53,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
         return gitRepository.getFile(getPath(environmentId));
     }
 
-    /**
-     * Returns the commit message used after inserting an object.
-     *
-     * @return the commit message
-     */
-    protected abstract String getInsertCommitMessage();
-
-    /**
-     * Returns the commit message used after updating an object.
-     *
-     * @return the commit message
-     */
-    protected abstract String getUpdateCommitMessage();
-
-    /**
-     * Returns the commit message used after deleting an object.
-     *
-     * @return the commit message
-     */
-    protected abstract String getDeleteCommitMessage();
+    protected abstract String getItemNameForCommitMessage();
 
     public List<T> loadAll(Collection<String> environmentIdList) {
         List<T> ret = new ArrayList<>();
@@ -143,7 +124,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
         saveAndCommit(
                 environmentId,
                 values,
-                getInsertCommitMessage()
+                "add " + getItemNameForCommitMessage()
         );
     }
     
@@ -171,7 +152,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
                 saveAndCommit(
                         environmentId,
                         values,
-                        getUpdateCommitMessage()
+                        "update " + getItemNameForCommitMessage()
                 );
 
                 return;
@@ -208,7 +189,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
         saveAndCommit(
                 environmentId,
                 values,
-                getDeleteCommitMessage()
+                "delete " + getItemNameForCommitMessage()
         );
     }
 
