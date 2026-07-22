@@ -16,7 +16,7 @@ import hestia.prometheus.alert.AlertGroupDAO;
 import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public class HestiaConfig {
-    static IConfig configAccess = new HestiaAppConfig();
+    static IConfig configAccess = new EnvVarAppConfig();
     private final File otelcolContrib;
     private final String prometheusHost;
     private final String alertmanagerHost;

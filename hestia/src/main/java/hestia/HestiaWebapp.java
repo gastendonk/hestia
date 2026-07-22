@@ -3,7 +3,7 @@ package hestia;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
-import hestia.base.HestiaAppConfig;
+import hestia.base.EnvVarAppConfig;
 import hestia.base.HestiaConfig;
 import hestia.base.HestiaPageInitializer;
 import hestia.environment.AddEnvironmentPage;
@@ -74,7 +74,7 @@ public class HestiaWebapp extends RouteDefinitions {
 
     public static void main(String[] args) {
         new WebAppBuilder(VERSION)
-                .withConfig(new HestiaAppConfig())
+                .withConfig(new EnvVarAppConfig())
                 .withTemplatesFolders(HestiaWebapp.class, "/templates")
                 .withPageInitializer(new HestiaPageInitializer())
                 .withInitializer(c -> config = new HestiaConfig())
