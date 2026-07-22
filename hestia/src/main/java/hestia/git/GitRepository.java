@@ -10,18 +10,13 @@ import github.soltaufintel.amalia.git.RepositoryDefinition;
 import hestia.base.IRepository;
 
 public class GitRepository implements IRepository {
-    private final String url;
-    private final File folder;
-    private final String author;
     private final String mail;
+    private final RepositoryDefinition rd;
     private final Repository repo;
-
+    
     public GitRepository(String url, String user, String mail, String password, File baseFolder, String branch) {
-        this.url = url;
-        author = user;
         this.mail = mail;
-        folder = new File(baseFolder, branch);
-        var rd = new RepositoryDefinition() {
+        rd = new RepositoryDefinition() {
             @Override
             public String getUser() {
                 return user;
@@ -39,21 +34,21 @@ public class GitRepository implements IRepository {
 
             @Override
             public File getLocalFolder() {
-                return folder;
+                return new File(baseFolder, branch);
             }
         };
         repo = new Repository(rd);
+        repo.switchToBranch(branch);
     }
 
     @Override
     public File getFile(String file) {
-        var f = new File(folder, file);
-        Logger.info("getFile: " + f.getAbsolutePath());
-        return f;
+        return new File(rd.getLocalFolder(), file);
     }
 
     @Override
     public String load(String file) {
+        var folder = rd.getLocalFolder();
         if (!folder.isDirectory()) {
             // TODO Wie oft soll ich pullen?
             folder.getParentFile().mkdirs(); // TODO amalia-git
@@ -63,18 +58,33 @@ public class GitRepository implements IRepository {
     }
 
     @Override
-    public void save(String file, String content, String commitMessage) {
-        var f = getFile(file);
-        FileService.savePlainTextFile(f, content);
-        repo.commit(commitMessage, author, mail);
-        Logger.info(f.getAbsolutePath() + " -> commit: " + commitMessage); // XXX DEBUG
+    public void save(String filename, String content, String commitMessage) {
+        File file = getFile(filename);
+        FileService.savePlainTextFile(file, content);
+        repo.commit(commitMessage, rd.getUser(), mail);
     }
 
     public Repository getRepo() {
         return repo;
     }
     
+    @Override
+    public void pull() {
+        Logger.info("pull | " + rd.getLocalFolder());
+        try {
+            repo.pull();
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+    }
+    
+    @Override
+    public void push() {
+        Logger.info("push | " + rd.getLocalFolder());
+        repo.push(rd.getUser(), rd.getPassword());
+    }
+    
     public String getUrl() {
-        return url;
+        return rd.getUrl();
     }
 }

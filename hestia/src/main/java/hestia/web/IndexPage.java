@@ -55,9 +55,15 @@ public class IndexPage extends HPage {
             try {
                 r = g.getRepo().hasUnpushedCommits("refs/heads/" + branch, "refs/remotes/origin/" + branch);
             } catch (Exception e) {
-                Logger.warn("hasUnpushedCommits: " + e.getMessage());
+                if (!e.getMessage().contains("Local branch does not exist")) {
+                    Logger.warn("hasUnpushedCommits: " + e.getMessage());
+                }
             }
             put("unpushed", r > 0);
+        } else {
+            list("branchs");
+            put("git", "#");
+            put("unpushed", false);
         }
 
         var list = list("envs");

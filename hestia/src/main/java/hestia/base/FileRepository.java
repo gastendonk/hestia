@@ -25,4 +25,12 @@ public class FileRepository implements IRepository {
     public void save(String file, String content, String commitMessage) {
         FileService.savePlainTextFile(getFile(file), content);
     }
+
+    @Override
+    public void pull() {
+    }
+
+    @Override
+    public void push() {
+    }
 }

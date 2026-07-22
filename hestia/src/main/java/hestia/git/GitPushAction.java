@@ -7,11 +7,7 @@ public class GitPushAction extends HAction {
 
     @Override
     protected void execute() {
-        if (HestiaWebapp.config.isCustomer()) {
-            throw new RuntimeException();
-        }
-
-     // TODO      HestiaWebapp.config.push();
+        HestiaWebapp.config.getRepository(b()).push();
 
         ctx.redirect("/" + ctx.pathParam("branch"));
     }

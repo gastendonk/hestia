@@ -9,4 +9,8 @@ public interface IRepository {
     String load(String file);
 
     void save(String file, String content, String commitMessage);
+    
+    void pull();
+    
+    void push();
 }
