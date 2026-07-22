@@ -23,17 +23,17 @@ public class MonitoredTargetDAO extends AbstractJsonListDAO<MonitoredTarget> {
     }
 
     @Override
-    protected String getInsertCommitMessage(String environmentId, MonitoredTarget object) {
+    protected String getInsertCommitMessage() {
         return "add monitored target";
     }
 
     @Override
-    protected String getUpdateCommitMessage(String environmentId, MonitoredTarget object) {
+    protected String getUpdateCommitMessage() {
         return "update monitored target";
     }
 
     @Override
-    protected String getDeleteCommitMessage(String environmentId, String id) {
+    protected String getDeleteCommitMessage() {
         return "delete monitored target";
     }
 }

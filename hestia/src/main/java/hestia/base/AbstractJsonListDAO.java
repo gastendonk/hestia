@@ -56,29 +56,23 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
     /**
      * Returns the commit message used after inserting an object.
      *
-     * @param environmentId the environment identifier
-     * @param object the inserted object
      * @return the commit message
      */
-    protected abstract String getInsertCommitMessage(String environmentId, T object);
+    protected abstract String getInsertCommitMessage();
 
     /**
      * Returns the commit message used after updating an object.
      *
-     * @param environmentId the environment identifier
-     * @param object the updated object
      * @return the commit message
      */
-    protected abstract String getUpdateCommitMessage(String environmentId, T object);
+    protected abstract String getUpdateCommitMessage();
 
     /**
      * Returns the commit message used after deleting an object.
      *
-     * @param environmentId the environment identifier
-     * @param id the deleted object identifier
      * @return the commit message
      */
-    protected abstract String getDeleteCommitMessage(String environmentId, String id);
+    protected abstract String getDeleteCommitMessage();
 
     public List<T> loadAll(Collection<String> environmentIdList) {
         List<T> ret = new ArrayList<>();
@@ -149,7 +143,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
         saveAndCommit(
                 environmentId,
                 values,
-                getInsertCommitMessage(environmentId, object)
+                getInsertCommitMessage()
         );
     }
     
@@ -177,7 +171,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
                 saveAndCommit(
                         environmentId,
                         values,
-                        getUpdateCommitMessage(environmentId, object)
+                        getUpdateCommitMessage()
                 );
 
                 return;
@@ -214,7 +208,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
         saveAndCommit(
                 environmentId,
                 values,
-                getDeleteCommitMessage(environmentId, id)
+                getDeleteCommitMessage()
         );
     }
 

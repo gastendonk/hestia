@@ -23,17 +23,17 @@ public class AlertGroupDAO extends AbstractJsonListDAO<AlertGroup> {
     }
 
     @Override
-    protected String getInsertCommitMessage(String environmentId, AlertGroup object) {
+    protected String getInsertCommitMessage() {
         return "add alert group";
     }
 
     @Override
-    protected String getUpdateCommitMessage(String environmentId, AlertGroup object) {
+    protected String getUpdateCommitMessage() {
         return "update alert group";
     }
 
     @Override
-    protected String getDeleteCommitMessage(String environmentId, String id) {
+    protected String getDeleteCommitMessage() {
         return "delete alert group";
     }
 }
