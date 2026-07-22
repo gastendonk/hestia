@@ -45,8 +45,6 @@ public class HestiaConfig {
         configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
     }
     
-    
-    
     private static String get(String key, String defaultValue) {
         return configAccess.get(key, defaultValue);
     }
@@ -104,29 +102,29 @@ public class HestiaConfig {
     }
     
     public EnvironmentDAO environmentDAO(IBranch branch) {
-        return new EnvironmentDAO(repo(branch));
+        return new EnvironmentDAO(getRepository(branch));
     }
 
     public MonitoredTargetDAO mtDAO(IBranch branch) {
-        return new MonitoredTargetDAO(repo(branch));
+        return new MonitoredTargetDAO(getRepository(branch));
     }
 
     public AlertGroupDAO alertGroupDAO(IBranch branch) {
-        return new AlertGroupDAO(repo(branch));
+        return new AlertGroupDAO(getRepository(branch));
     }
 
     public AlertRuleDAO alertRuleDAO(IBranch branch) {
         return new AlertRuleDAO(alertGroupDAO(branch));
     }
 
-    private IRepository repo(IBranch b) {
+    private IRepository getRepository(IBranch branch) {
         var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {
             var folder = new File(get("DATAFOLDER"));
             return new FileRepository(folder);
         } else {
             var folder = new File(get("REPOFOLDER"));
-            return new GitRepository(url, get("REPOUSER"), get("REPOMAIL"), get("REPOPASSWORD"), folder, b.getBranch());
+            return new GitRepository(url, get("REPOUSER"), get("REPOMAIL"), get("REPOPASSWORD"), folder, branch.getBranch());
         }
     }
 }
