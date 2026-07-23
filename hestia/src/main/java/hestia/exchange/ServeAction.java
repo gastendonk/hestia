@@ -1,5 +1,7 @@
 package hestia.exchange;
 
+import org.pmw.tinylog.Logger;
+
 import hestia.web.base.HAction;
 
 public class ServeAction extends HAction {
@@ -7,9 +9,13 @@ public class ServeAction extends HAction {
     
     @Override
     protected void execute() {
-        String key = ctx.pathParam("key");
+        Logger.info("ServeAction | " + ctx.fullPath());
+        String customerKey = ctx.pathParam("customerkey");
     
-        r = new ExchangeService().serve(key, () -> ctx.pathParam("branch"));
+        r = new ExchangeService().serve(customerKey);
+        if (r == null) {
+            ctx.status(404);
+        }
     }
     
     @Override
