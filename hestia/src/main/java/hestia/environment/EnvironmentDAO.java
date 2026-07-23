@@ -54,7 +54,7 @@ public class EnvironmentDAO extends AbstractJsonListDAO<Environment> {
     protected void insertExtras(Environment env, List<Environment> list) {
         for (Environment i : list) {
             if (i.getCustomer().equals(env.getCustomer())) {
-                env.setCustomerKey(env.getCustomerKey());
+                env.setCustomerKey(i.getCustomerKey());
                 break;
             }
         }
