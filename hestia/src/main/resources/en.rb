@@ -68,3 +68,4 @@ startOTC=Start OTC
 killOTC=Kill OTC
 otcDownloadUrl=OTC download source
 taggen=tag with $t
+Auslieferung=Delivery

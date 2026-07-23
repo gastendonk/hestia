@@ -83,7 +83,7 @@ public class GitRepository implements IRepository {
         repo.push(rd.getUser(), rd.getPassword());
     }
     
-    public String calculateNextTag() {
+    public String calculateNextTag(int add) {
         int highest = 0;
         repo.pull();
         var tags = repo.getTagNames();
@@ -100,7 +100,7 @@ public class GitRepository implements IRepository {
                 }
             }
         }
-        highest++;
+        highest += add;
         return "k" + highest;
     }
 

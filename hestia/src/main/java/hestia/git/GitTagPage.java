@@ -14,7 +14,7 @@ public class GitTagPage extends HPage {
         IRepository irepo = HestiaWebapp.config.getRepository(b());
         if (irepo instanceof GitRepository repo) {
             if (StringService.isNullOrEmpty(tag)) {
-                tag = repo.calculateNextTag();
+                tag = repo.calculateNextTag(1);
                 
                 put("tag", esc(tag));
                 put("label", esc(n("taggen").replace("$t", tag)));

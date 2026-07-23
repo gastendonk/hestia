@@ -33,6 +33,7 @@
                             <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
                             <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"><i class="fa fa-arrow-up"></i> Push</a>
                             <a href="/{{branch}}/tag" class="btn btn-default br"><i class="fa fa-tag"></i> tag</a>
+                            <a href="/x/push/{{branch}}" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.Auslieferung}}</a>
                             <a href="{{git}}" class="btn btn-default" target="_blank">Git Repo</a>
                         </div>
                     </fieldset>
@@ -44,9 +45,6 @@
         <p>
             <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
             <a href="/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
-            {{if not customer}}
-                <a href="/x/push" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.UploadConfig}}</a>
-            {{/if}}
             <a href="/otc" class="btn {{if alive}}btn-success{{else}}btn-danger{{/if}} br">{{N.otcStatus}}</a>
         </p>
 
