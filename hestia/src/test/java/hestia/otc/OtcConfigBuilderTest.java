@@ -56,7 +56,7 @@ public class OtcConfigBuilderTest {
                       - endpoint: "http://server"
 
                 processors:
-                  batch:
+                  batch: {}
                   attributes:
                     actions:
                       - key: process.command_line
@@ -89,14 +89,6 @@ public class OtcConfigBuilderTest {
                   health_check:
 
                 service:
-                  telemetry:
-                    metrics:
-                      readers:
-                        - pull:
-                            exporter:
-                              prometheus:
-                                host: "0.0.0.0"
-                                port: 8888
                   extensions: [health_check]
                   pipelines:
                     metrics:
@@ -157,7 +149,7 @@ public class OtcConfigBuilderTest {
                         http: { endpoint: "0.0.0.0:4318" }
                 
                 processors:
-                  batch:
+                  batch: {}
                   attributes:
                     actions:
                       - key: process.command_line
@@ -195,14 +187,6 @@ public class OtcConfigBuilderTest {
                   health_check:
 
                 service:
-                  telemetry:
-                    metrics:
-                      readers:
-                        - pull:
-                            exporter:
-                              prometheus:
-                                host: "0.0.0.0"
-                                port: 8888
                   extensions: [health_check]
                   pipelines:
                     metrics:
