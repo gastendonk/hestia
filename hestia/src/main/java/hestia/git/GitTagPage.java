@@ -25,10 +25,10 @@ public class GitTagPage extends HPage {
             // data/4711abcd/k000074.json
             
             // Kunde will Daten pullen. Er hat dazu Kunden-Key "4711abcd".
-            // Cloud-Instanz: "4711abcd" -> Kunde BASF -> neueste Daten liefern (hˆchste Nr.)
+            // Cloud-Instanz: "4711abcd" -> Kunde BASF -> neueste Daten liefern (h√∂chste Nr.)
             
             
-            // Wie l‰uft das wohl in der Praxis ab?
+            // Wie l√§uft das wohl in der Praxis ab?
             
             String tag = ctx.formParam("tag");
 
