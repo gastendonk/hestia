@@ -46,44 +46,48 @@ public class OtcService {
         String out = sc.executeAndGetLog(cmd, exe.getParentFile());
         configFile.delete();
         if (sc.getExitValue() != 0) {
-            throw new RuntimeException("Validate error\n" + out);
+            throw new RuntimeException("Validate error:\n" + out);
         }
     }
     
-    // TODO otelcol-contrib im -v Ordner auf host mounten!
     public boolean deployOtelcolContrib() {
         try {
             // download
             var downloadFile = Files.createTempFile("", ".tar.gz").toFile();
-            Logger.debug("deployOtelcolContrib | downloadFile: " + downloadFile);
             downloadFile.delete();
             var url = HestiaWebapp.config.getOtelcolContribDownloadUrl();
-            Logger.info("deployOtelcolContrib | download: " + url);
+            Logger.info("deployOtelcolContrib | URL: " + url);
             Downloader.download(url, Duration.ofMinutes(2), downloadFile);
-            Logger.info("deployOtelcolContrib | download: " + downloadFile.getAbsolutePath() + ", " + downloadFile.isFile());
+            Logger.info("deployOtelcolContrib | download file: " + downloadFile.getAbsolutePath() + ", " + downloadFile.isFile());
 
             // unzip
             Path tempDir = Files.createTempDirectory("extract");
-            Logger.debug("deployOtelcolContrib | temp dir: " + tempDir.toFile().getAbsolutePath());
+            Logger.info("deployOtelcolContrib | temp folder: " + tempDir.toFile().getAbsolutePath()); // XXX debug
             Downloader.extractTarGz(downloadFile.toPath(), tempDir);
+            downloadFile.delete();
 
             // check if expected file is there
-            File target = new File(tempDir.toFile(), "otelcol-contrib"); // TODO dn param.
+            File target = new File(tempDir.toFile(), HestiaWebapp.config.getOtelcolContrib().getName()); // expected file after unzip
             boolean exists = target.isFile();
-            Logger.debug("deployOtelcolContrib | target file: " + target.getAbsolutePath() + ", " + exists);
+            var msg = "deployOtelcolContrib | target file: " + target.getAbsolutePath() + ", " + exists;
             if (exists) {
+                Logger.info(msg); // XXX debug
                 
                 // deploy program
                 var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
                 FileService.copyFile(target, otelcolContrib.getParentFile());
                 exists = otelcolContrib.isFile();
-                Logger.info("installed file: " + otelcolContrib.getAbsolutePath() + ", " + (exists ? "SUCCESS" : "ERROR: missing file"));
+                Logger.info("deployOtelcolContrib | installed file: " + otelcolContrib.getAbsolutePath() +
+                        ", " + (exists ? "SUCCESS" : "ERROR: missing file"));
                 if (exists) {
+                    target.delete();
                     Downloader.makeExecutable(otelcolContrib.toPath());
                     // TODO Ich könnte noch ein Markierungs-File ablegen, mit Versionsnr.. Das signalisiert
                     //      erfolgreichen Download+Deployment.
                     //      Andere Idee wäre, dass ich die Versionsnr. mit in den Dateinamen packe. otelcol-contrib-0.137.0
                 }
+            } else {
+                Logger.error(msg);
             }
             return exists;
         } catch (Exception e) {

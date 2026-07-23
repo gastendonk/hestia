@@ -14,6 +14,8 @@ import hestia.prometheus.alert.AlertGroupDAO;
 import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public class HestiaConfig {
+    /** built-in default version */
+    public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
     private final String otelcolContribDownloadUrl;
     private final File otelcolContrib;
@@ -31,7 +33,7 @@ public class HestiaConfig {
     
     public HestiaConfig() {
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
-        otelcolContrib = new File(get("OTELCOL", "/app/otel/otelcol-contrib"));
+        otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
         prometheusHost = get("PROMETHEUS", "http://prometheus:9090");
         alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
         language = get("LANGUAGE", "en");
@@ -58,15 +60,12 @@ public class HestiaConfig {
         if (StringService.isNullOrEmpty(url)) {
             throw new IllegalStateException("Please set env var OTELCOLURL.");
         }
-        if (url.contains("{version}")) {
-            String version = get("OTELCOLVERSION", "0.137.0");
-            if (StringService.isNullOrEmpty(version)) {
-                throw new IllegalStateException("Please set env var OTELCOLVERSION.");
-            } 
-            Logger.info("otelcol-contrib version: " + version);
-            url = url.replace("{version}", version);
-        }
-        return url;
+        String version = get("OTELCOLVERSION", OTELCOLVERSION);
+        if (StringService.isNullOrEmpty(version)) {
+            throw new IllegalStateException("Please set env var OTELCOLVERSION.");
+        } 
+        Logger.info("otelcol-contrib version: " + version);
+        return url.replace("{version}", version);
     }
 
     public String getOtelcolContribDownloadUrl() {

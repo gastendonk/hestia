@@ -53,7 +53,7 @@
         {{if pid}}<p>OTC process ID: {{pid}}</p>{{/if}}
         {{if info1}}<p>{{info1}}</p>{{/if}}
         {{if info2}}<p>{{info2}}</p>{{/if}}
-        <p>Health check status code: {{status}} | webapp run mode: "{{info}}"</p>
+        <p>Health check status code: {{status}} | webapp run mode: "{{info}}" | {{otcFileInfo}}</p>
         <p>
             <a href="/otc/deploy-otelcol-contrib" class="btn btn-primary br">Deploy OTC</a>
             <a href="/otc/kill" class="btn btn-danger br">Kill OTC</a>

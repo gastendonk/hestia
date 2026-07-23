@@ -41,6 +41,8 @@ public class IndexPage extends HPage {
         } else {
             putInt("status", otc.checkHealth());
         }
+        File otcFile = HestiaWebapp.config.getOtelcolContrib();
+        put("otcFileInfo", otcFile.getName() + (otcFile.isFile() ? " exists." : " doesn't exist."));
         put("datetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         put("info1", otc == null ? "" : esc(otc.info1));
         put("info2", otc == null ? "" : esc(otc.info2));
