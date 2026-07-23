@@ -24,6 +24,8 @@ public class HestiaConfig {
     public static IConfig configAccess = new EnvVarAppConfig();
     private final String otelcolContribDownloadUrl;
     private final File otelcolContrib;
+    /** true: otelcol-contrib should be started; false: otelcol-contrib should only be started manually. */
+    private final boolean run;
     private final String prometheusHost;
     private final String alertmanagerHost;
     private final List<String> customers;
@@ -39,6 +41,7 @@ public class HestiaConfig {
     public HestiaConfig() {
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
+        run = "1".equals(get("RUN", "1"));
         prometheusHost = get("PROMETHEUS", "http://prometheus:9090");
         alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
         language = get("LANGUAGE", "en");
@@ -79,6 +82,10 @@ public class HestiaConfig {
 
     public File getOtelcolContrib() {
         return otelcolContrib;
+    }
+
+    public boolean isRun() {
+        return run;
     }
 
     public String getPrometheusHost() {

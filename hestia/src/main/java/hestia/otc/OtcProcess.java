@@ -22,7 +22,7 @@ public class OtcProcess {
 
     public OtcProcess() {
         synchronized (LOCK) {
-            if (!"1".equals(System.getenv("RUN"))) {
+            if (!HestiaWebapp.config.isRun()) {
                 Logger.info("!!  otc process not started because env var RUN is not 1");
                 return;
             }
