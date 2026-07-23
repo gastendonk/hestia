@@ -32,6 +32,6 @@ public class KillAction extends HAction {
             }
         }
 
-        ctx.redirect("/");
+        ctx.redirect("/otc");
     }
 }
