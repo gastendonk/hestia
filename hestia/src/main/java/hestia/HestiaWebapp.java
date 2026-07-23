@@ -1,7 +1,9 @@
 package hestia;
 
+import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
+import github.soltaufintel.amalia.web.builder.LoggingInitializer;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
@@ -84,6 +86,7 @@ public class HestiaWebapp extends RouteDefinitions {
     public static void main(String[] args) {
         new WebAppBuilder(VERSION)
                 .withConfig(new EnvVarAppConfig())
+                .withLogging(new LoggingInitializer(Level.INFO, "{date} {level}  {message}"))
                 .withTemplatesFolders(HestiaWebapp.class, "/templates")
                 .withErrorPage(HestiaErrorPage.class, HestiaError404Page.class)
                 .withPageInitializer(new HestiaPageInitializer())

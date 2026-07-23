@@ -74,6 +74,9 @@ public class Downloader {
     
     // TODO amalia
     public static void makeExecutable(Path binaryPath) throws IOException { // 755
+        if (ShellScriptExecutor.isWindows()) {
+            return;
+        }
         Set<PosixFilePermission> permissions = Set.of(
                 PosixFilePermission.OWNER_READ,
                 PosixFilePermission.OWNER_WRITE,
