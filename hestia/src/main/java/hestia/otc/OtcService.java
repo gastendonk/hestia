@@ -50,6 +50,7 @@ public class OtcService {
         }
     }
     
+    // TODO otelcol-contrib im -v Ordner auf host mounten!
     public boolean deployOtelcolContrib() {
         try {
             // download
