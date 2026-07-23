@@ -21,8 +21,8 @@ import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
-import hestia.otc.DeployOtelcolcontribAction;
 import hestia.otc.EditMTPage;
+import hestia.otc.InstallOtelcolContribAction;
 import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
 import hestia.otc.OtcService;
@@ -67,7 +67,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         
-        get("/otc/deploy-otelcol-contrib", DeployOtelcolcontribAction.class);
+        get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/kill", KillAction.class);
         form("/tablesort/:id/:col", TableSortAction.class);
         
@@ -94,7 +94,7 @@ public class HestiaWebapp extends RouteDefinitions {
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         try {
             if (!config.getOtelcolContrib().isFile()) {
-                new OtcService().deployOtelcolContrib();
+                new OtcService().installOtelcolContrib();
             }
             if (config.getOtelcolContrib().isFile()) {
                 otcProcess = new OtcProcess();
