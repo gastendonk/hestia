@@ -33,7 +33,6 @@ public class IndexPage extends HPage {
         OtcProcess otc = HestiaWebapp.otcProcess;
         List<Environment> envs = environmentDAO().load();
 
-        put("info", esc(System.getenv("INFO")));
         put("pid", otc == null || otc.pid() <= 0 ? "" : "" + otc.pid());
         put("alive", otc != null && otc.alive());
         if (otc == null) {
