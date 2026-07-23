@@ -13,7 +13,7 @@ import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
 import hestia.exchange.PullAction;
-import hestia.exchange.PushPage;
+import hestia.exchange.DeliverPage;
 import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
@@ -70,7 +70,7 @@ public class HestiaWebapp extends RouteDefinitions {
             get("/:branch/pull", GitPullAction.class);
             get("/:branch/tag", GitTagPage.class);
             
-            form("/x/push/:branch", PushPage.class);
+            form("/x/push/:branch", DeliverPage.class);
         }
 
         get("/otc", OtcStatusPage.class);

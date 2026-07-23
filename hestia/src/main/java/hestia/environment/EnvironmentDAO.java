@@ -1,5 +1,6 @@
 package hestia.environment;
 
+import java.io.File;
 import java.util.List;
 
 import github.soltaufintel.amalia.base.IdGenerator;
@@ -89,5 +90,9 @@ public class EnvironmentDAO extends AbstractJsonListDAO<Environment> {
     @Override
     protected String getItemNameForCommitMessage() {
         return "environment";
+    }
+    
+    public File getFile() {
+        return getFile("");
     }
 }

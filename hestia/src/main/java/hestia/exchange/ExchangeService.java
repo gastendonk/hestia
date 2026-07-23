@@ -14,6 +14,12 @@ import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.environment.Environment;
+import hestia.environment.EnvironmentDAO;
+import hestia.git.GitRepository;
+import hestia.otc.model.MonitoredTargetDAO;
+import hestia.persist.GsonFactory;
+import hestia.persist.IRepository;
+import hestia.prometheus.alert.AlertGroupDAO;
 
 public class ExchangeService {
 
@@ -36,7 +42,7 @@ public class ExchangeService {
     public String serve(String key, IBranch branch) {
         Logger.info("[exchange] serve " + key);
         // TODO vom key zum tag
-        var data = getData(branch);
+        var data = getData(branch, "???");
         var json = new Gson().toJson(data);
         return json;
     }
@@ -44,12 +50,18 @@ public class ExchangeService {
     /**
      * Push data to cloud server
      */
-    public void push(String tag) {
-        Logger.info("[exchange] push " + tag);
-        var url = "...";
-        var json = "";
+    public void push(IBranch branch, String tag) {
+        var ci = HestiaWebapp.config.getCloudInstance();
+        if (StringService.isNullOrEmpty(ci)) {
+            throw new RuntimeException("Cloud instance is not set");
+        }
+        Logger.info("[exchange] push " + tag + " (branch: " + branch + ")");
+        var data = getData(branch, tag);
+        var json = GsonFactory.create().toJson(data);
+        Logger.info(json);
+        var url = ci + "/x/receive/" + tag;
+        Logger.info("POST " + url);
         new REST(url).post(json).close();
-        // TODO
     }
     
     /**
@@ -59,19 +71,39 @@ public class ExchangeService {
      */
     public void receive(String tag, String body) {
         Logger.info("[exchange] receive " + tag);
-        ExchangeData data = new Gson().fromJson(body, ExchangeData.class);
-        setData(data, tag);
+        Logger.info(body);
+        try {
+            ExchangeData data = GsonFactory.create().fromJson(body, ExchangeData.class);
+            Logger.info(data.getFiles().keySet());
+//          setData(data, tag);
+        } catch (Exception e) {
+            Logger.error(e);
+        }
     }
     
-    // TODO tag
-    public ExchangeData getData(IBranch branch) {
+    // TODO wenn ich das hier mache, darf sonst keiner aufs Repo dieses Branches zugreifen! sync...
+    public ExchangeData getData(IBranch branch, String tag) {
         var data = new ExchangeData();
         data.setFiles(new HashMap<>());
-        var dao = HestiaWebapp.config.environmentDAO(branch);
-        data.put(dao.getFile(""));
-        for (Environment env : dao.load()) {
-            data.put(HestiaWebapp.config.mtDAO(branch).getFile(env.getId()));
-            data.put(HestiaWebapp.config.alertGroupDAO(branch).getFile(env.getId()));
+        IRepository repo = HestiaWebapp.config.getRepository(branch);
+        if (repo instanceof GitRepository git) {
+            git.getRepo().selectCommit(tag);
+            git.getRepo().pull();
+        }
+        try {
+            var dao1 = new EnvironmentDAO(repo);
+            var dao2 = new MonitoredTargetDAO(repo);
+            var dao3 = new AlertGroupDAO(repo);
+            data.put(dao1.getFile());
+            for (Environment env : dao1.load()) {
+                data.put(dao2.getFile(env.getId()));
+                data.put(dao3.getFile(env.getId()));
+            }
+        } finally {
+            if (repo instanceof GitRepository git) {
+                git.getRepo().switchToBranch(branch.getBranch());
+                git.getRepo().pull();
+            }
         }
         return data;
     }

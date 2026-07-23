@@ -22,7 +22,8 @@ public class HestiaConfig {
     /** built-in default version */
     public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
-    private final boolean cloud;
+    /** "1": instance is in cloud mode, value: address of cloud instance */
+    private final String cloud;
     private final String otelcolContribDownloadUrl;
     private final File otelcolContrib;
     /** true: otelcol-contrib should be started; false: otelcol-contrib should only be started manually. */
@@ -40,7 +41,7 @@ public class HestiaConfig {
     private final boolean customer;
     
     public HestiaConfig() {
-        cloud = "1".equals(get("CLOUD"));
+        cloud = get("CLOUD");
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
         run = "1".equals(get("RUN", "1"));
@@ -87,7 +88,14 @@ public class HestiaConfig {
     }
 
     public boolean isCloud() {
-        return cloud;
+        return "1".equals(cloud);
+    }
+    
+    /**
+     * @return null or address of cloud instance
+     */
+    public String getCloudInstance() {
+        return StringService.isNullOrEmpty(cloud) || "1".equals(cloud) ? null : cloud;
     }
 
     public boolean isRun() {
@@ -142,6 +150,7 @@ public class HestiaConfig {
         return new AlertRuleDAO(alertGroupDAO(branch));
     }
 
+    // TODO Ich sollte besser die Objekte vorhalten und nicht immer neu erstellen.
     public IRepository getRepository(IBranch branch) {
         var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {

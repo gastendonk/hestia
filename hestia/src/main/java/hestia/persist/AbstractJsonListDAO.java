@@ -218,4 +218,22 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
             throw new RuntimeException("Can't call push() because it's a " + gitRepository.getClass().getName());
         }
     }
+    
+    public void selectTag(String tag) {
+        if (gitRepository instanceof GitRepository g) {
+            g.getRepo().selectCommit(tag);
+            g.getRepo().pull();
+        } else {
+            throw new RuntimeException("Can't call selectTag() because it's a " + gitRepository.getClass().getName());
+        }
+    }
+    
+    public void selectBranch(String branch) {
+        if (gitRepository instanceof GitRepository g) {
+            g.getRepo().switchToBranch(branch);
+            g.getRepo().pull();
+        } else {
+            throw new RuntimeException("Can't call selectBranch() because it's a " + gitRepository.getClass().getName());
+        }
+    }
 }
