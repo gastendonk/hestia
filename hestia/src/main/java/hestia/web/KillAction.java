@@ -15,6 +15,10 @@ public class KillAction extends HAction {
         if ("s".equals(m)) {
             Logger.info("KillAction -> restart");
             HestiaWebapp.otcProcess = new OtcProcess();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+            }
         } else if ("hard".equals(m)) {
             Logger.info("KillAction -> check & hard kill");
             ProcessHandle.allProcesses() //

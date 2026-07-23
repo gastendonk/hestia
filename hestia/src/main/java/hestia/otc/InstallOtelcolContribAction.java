@@ -10,6 +10,6 @@ public class InstallOtelcolContribAction extends HAction {
             throw new RuntimeException(n("installOtelcolContribFailed"));
         }
         
-        ctx.redirect("/");
+        ctx.redirect("/otc");
     }
 }
