@@ -23,7 +23,7 @@ public class PrometheusService {
         var dao = HestiaWebapp.config.alertGroupDAO(branch);
         List<AlertGroup> groups = dao.loadAll(environments);
         var yaml = new AlertRulesYamlBuilder(groups).build();
-        FileService.saveJsonFile(HestiaWebapp.config.getAlertRulesFile(), yaml);
+        FileService.savePlainTextFile(HestiaWebapp.config.getAlertRulesFile(), yaml);
         reloadPrometheus();
     }
 

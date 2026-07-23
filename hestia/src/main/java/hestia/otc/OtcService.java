@@ -29,9 +29,11 @@ public class OtcService {
             MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
             List<MonitoredTarget> list = dao.loadAll(environments);
             var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
-            Logger.info("config.yaml: " + yaml); // XXX
+            Logger.info("\\r enthalten? " + yaml.contains("\r"));
+            Logger.info("(1) config.yaml: " + yaml); // XXX
             validate(yaml);
-            FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);
+            FileService.savePlainTextFile(HestiaWebapp.config.getConfigYaml(), yaml);
+            Logger.info("(2) config.yaml: " + FileService.loadPlainTextFile(HestiaWebapp.config.getConfigYaml()));
             HestiaWebapp.otcProcess.kill();
             HestiaWebapp.otcProcess = new OtcProcess();
         }
@@ -39,7 +41,8 @@ public class OtcService {
 
     private void validate(String yaml) {
         File configFile = HestiaWebapp.config.getConfigYamlForValidate();
-        FileService.saveJsonFile(configFile, yaml);
+        FileService.savePlainTextFile(configFile, yaml);
+        Logger.info("(3) config.yaml: " + FileService.loadPlainTextFile(configFile));
         var sc = new ShellScriptExecutor();
         var exe = HestiaWebapp.config.getOtelcolContrib();
         var cmd = (ShellScriptExecutor.isWindows() ? "@" : "") + exe.getAbsolutePath() + " validate" //
