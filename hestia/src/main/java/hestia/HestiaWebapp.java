@@ -25,6 +25,7 @@ import hestia.otc.DeployOtelcolcontribAction;
 import hestia.otc.EditMTPage;
 import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
+import hestia.otc.OtcService;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
@@ -92,7 +93,12 @@ public class HestiaWebapp extends RouteDefinitions {
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         try {
-            otcProcess = new OtcProcess();
+            if (!config.getOtelcolContrib().isFile()) {
+                new OtcService().deployOtelcolContrib();
+            }
+            if (config.getOtelcolContrib().isFile()) {
+                otcProcess = new OtcProcess();
+            }
         } catch (Exception e) {
             Logger.error(e);
         }

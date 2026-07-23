@@ -53,3 +53,4 @@ CustomerKey=Customer key
 SelectBranch=Select branch
 InstallOTC=Install OTC
 CantDeleteEnvironment=The environment cannot be deleted because there are still monitored targets and/or alarm rules.
+installOtelcolContribFailed=Installation of otelcol-contrib failed

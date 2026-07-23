@@ -50,7 +50,7 @@ public class OtcService {
         }
     }
     
-    public boolean deployOtelcolContrib() {
+    public boolean installOtelcolContrib() {
         try {
             // download
             var downloadFile = Files.createTempFile("", ".tar.gz").toFile();
@@ -75,7 +75,7 @@ public class OtcService {
             if (exists) {
                 Logger.info(msg); // XXX debug
                 
-                // deploy program
+                // install program
                 var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
                 Downloader.copyFileToFile(target, otelcolContrib);
                 exists = otelcolContrib.isFile();
