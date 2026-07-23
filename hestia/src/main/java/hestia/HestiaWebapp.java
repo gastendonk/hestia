@@ -5,6 +5,7 @@ import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.web.builder.LoggingInitializer;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
+import github.soltaufintel.amalia.web.route.PingRouteDefinition.PingAction;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.EnvVarAppConfig;
@@ -12,8 +13,8 @@ import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
-import hestia.exchange.PullAction;
 import hestia.exchange.DeliverPage;
+import hestia.exchange.PullAction;
 import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
@@ -41,6 +42,7 @@ import hestia.web.KillAction;
 import hestia.web.base.HestiaError404Page;
 import hestia.web.base.HestiaErrorPage;
 import hestia.web.base.HestiaPageInitializer;
+import spark.Spark;
 
 public class HestiaWebapp extends RouteDefinitions {
     public static final String VERSION = "0.1.0";
@@ -49,12 +51,17 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
+        get("/ping", PingAction.class);
+        
         if (config.isCloud()) {
+            Spark.get("/", (req, res) -> "Hestia " + VERSION + " in cloud mode");
+            // TODO Auskunft (JSON?) welche Daten verwaltet werden
             post("/x/receive/:tag", ReceiveAction.class);
             get("/x/serve/:branch/:key", ServeAction.class);
             Logger.info("cloud mode");
             return;
         }
+        
         environments();
         monitoredTargets();
         alerts();
