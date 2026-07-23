@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.persist;
 
 public interface Identifiable {
 

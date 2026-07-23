@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.persist;
 
 import java.io.File;
 import java.lang.reflect.Type;

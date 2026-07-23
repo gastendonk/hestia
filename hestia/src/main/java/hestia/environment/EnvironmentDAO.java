@@ -4,8 +4,8 @@ import java.util.List;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
-import hestia.base.AbstractJsonListDAO;
-import hestia.base.IRepository;
+import hestia.persist.AbstractJsonListDAO;
+import hestia.persist.IRepository;
 
 /**
  * Stores all environments in a single JSON file.

@@ -1,7 +1,7 @@
 package hestia.otc.model;
 
-import hestia.base.AbstractJsonListDAO;
-import hestia.base.IRepository;
+import hestia.persist.AbstractJsonListDAO;
+import hestia.persist.IRepository;
 
 /**
  * Stores monitored targets grouped by environment.

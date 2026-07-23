@@ -1,6 +1,6 @@
 package hestia.otc.model;
 
-import hestia.base.Identifiable;
+import hestia.persist.Identifiable;
 
 /**
  * A monitored target can be a site, a server or a database.

@@ -1,6 +1,6 @@
 package hestia.environment;
 
-import hestia.base.Identifiable;
+import hestia.persist.Identifiable;
 
 /**
  * Environment saves environment name and also customer data.

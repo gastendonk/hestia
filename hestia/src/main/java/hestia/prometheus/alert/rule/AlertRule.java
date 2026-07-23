@@ -1,6 +1,6 @@
 package hestia.prometheus.alert.rule;
 
-import hestia.base.Identifiable;
+import hestia.persist.Identifiable;
 
 public class AlertRule implements Identifiable {
     private String id;

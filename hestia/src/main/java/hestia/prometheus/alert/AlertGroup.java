@@ -3,7 +3,7 @@ package hestia.prometheus.alert;
 import java.util.ArrayList;
 import java.util.List;
 
-import hestia.base.Identifiable;
+import hestia.persist.Identifiable;
 import hestia.prometheus.alert.rule.AlertRule;
 
 public class AlertGroup implements Identifiable {

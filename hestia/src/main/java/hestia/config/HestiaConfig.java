@@ -8,13 +8,13 @@ import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.StringService;
 import hestia.base.EnvVarAppConfig;
-import hestia.base.FileRepository;
 import hestia.base.IBranch;
 import hestia.base.IConfig;
-import hestia.base.IRepository;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
 import hestia.otc.model.MonitoredTargetDAO;
+import hestia.persist.FileRepository;
+import hestia.persist.IRepository;
 import hestia.prometheus.alert.AlertGroupDAO;
 import hestia.prometheus.alert.rule.AlertRuleDAO;
 

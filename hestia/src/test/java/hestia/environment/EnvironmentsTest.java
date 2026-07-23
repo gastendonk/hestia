@@ -8,9 +8,9 @@ import org.junit.Test;
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
-import hestia.base.FileRepository;
-import hestia.base.IRepository;
 import hestia.git.GitPersistenceTest;
+import hestia.persist.FileRepository;
+import hestia.persist.IRepository;
 
 public class EnvironmentsTest {
     private static final String f = GitPersistenceTest.BASEDIR;

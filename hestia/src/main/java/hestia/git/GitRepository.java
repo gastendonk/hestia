@@ -7,7 +7,7 @@ import org.pmw.tinylog.Logger;
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.git.Repository;
 import github.soltaufintel.amalia.git.RepositoryDefinition;
-import hestia.base.IRepository;
+import hestia.persist.IRepository;
 
 public class GitRepository implements IRepository {
     private final String mail;

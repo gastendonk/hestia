@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.persist;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

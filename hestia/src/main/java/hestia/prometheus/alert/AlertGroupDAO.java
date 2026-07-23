@@ -1,7 +1,7 @@
 package hestia.prometheus.alert;
 
-import hestia.base.AbstractJsonListDAO;
-import hestia.base.IRepository;
+import hestia.persist.AbstractJsonListDAO;
+import hestia.persist.IRepository;
 
 /**
  * Stores alert groups grouped by environment.
