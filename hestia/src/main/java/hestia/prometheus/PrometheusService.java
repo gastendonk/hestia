@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import github.soltaufintel.amalia.base.FileService;
+import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
@@ -16,6 +17,9 @@ import hestia.prometheus.alert.AlertRulesYamlBuilder;
 public class PrometheusService {
 
     public void deploy(Collection<String> environments, IBranch branch) {
+        if (StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
+            return;
+        }
         var dao = HestiaWebapp.config.alertGroupDAO(branch);
         List<AlertGroup> groups = dao.loadAll(environments);
         var yaml = new AlertRulesYamlBuilder(groups).build();
@@ -24,10 +28,14 @@ public class PrometheusService {
     }
 
     public void reloadPrometheus() {
-        REST.post(HestiaWebapp.config.getPrometheusHost() + "/-/reload", "");
+        if (!StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
+            REST.post(HestiaWebapp.config.getPrometheusHost() + "/-/reload", "");
+        }
     }
     
     public void reloadAlertmanager() {
-        REST.post(HestiaWebapp.config.getAlertmanagerHost() + "/-/reload", "");
+        if (!StringService.isNullOrEmpty(HestiaWebapp.config.getAlertmanagerHost())) {
+            REST.post(HestiaWebapp.config.getAlertmanagerHost() + "/-/reload", "");
+        }
     }
 }

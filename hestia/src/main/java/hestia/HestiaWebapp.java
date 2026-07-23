@@ -94,7 +94,7 @@ public class HestiaWebapp extends RouteDefinitions {
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         try {
             if (!config.getOtelcolContrib().isFile()) {
-                new OtcService().installOtelcolContrib();
+                new OtcService().installOtelcolContrib(); // auto-install
             }
             if (config.getOtelcolContrib().isFile()) {
                 otcProcess = new OtcProcess();

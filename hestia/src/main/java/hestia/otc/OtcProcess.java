@@ -28,11 +28,13 @@ public class OtcProcess {
             }
             var program = HestiaWebapp.config.getOtelcolContrib();
             if (!program.isFile()) {
-                throw new RuntimeException("otc start error! Program file not found: " + program.getAbsolutePath());
+                Logger.error("OTC can't be started! Program file not found: " + program.getAbsolutePath());
+                return;
             }
             var configYaml = HestiaWebapp.config.getConfigYaml();
             if (!configYaml.isFile()) {
-                throw new RuntimeException("otc start error! Config file not found: " + configYaml.getAbsolutePath());
+                Logger.error("OTC can't be started! Config file not found: " + configYaml.getAbsolutePath());
+                return;
             }
             String c = "--config=" + configYaml.getAbsolutePath();
             Logger.info("starting otc process... | " + program.getAbsolutePath() + " " + c);

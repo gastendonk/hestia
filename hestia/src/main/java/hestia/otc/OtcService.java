@@ -29,6 +29,7 @@ public class OtcService {
             MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
             List<MonitoredTarget> list = dao.loadAll(environments);
             var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
+            Logger.info("config.yaml: " + yaml); // XXX
             validate(yaml);
             FileService.saveJsonFile(HestiaWebapp.config.getConfigYaml(), yaml);
             HestiaWebapp.otcProcess.kill();
@@ -62,7 +63,7 @@ public class OtcService {
 
             // unzip
             Path tempDir = Files.createTempDirectory("extract");
-            Logger.info("deployOtelcolContrib | temp folder: " + tempDir.toFile().getAbsolutePath()); // XXX debug
+            Logger.debug("deployOtelcolContrib | temp folder: " + tempDir.toFile().getAbsolutePath());
             Downloader.extractTarGz(downloadFile.toPath(), tempDir);
             downloadFile.delete();
 
@@ -73,7 +74,7 @@ public class OtcService {
             boolean exists = target.isFile();
             var msg = "deployOtelcolContrib | target file: " + target.getAbsolutePath() + ", " + exists;
             if (exists) {
-                Logger.info(msg); // XXX debug
+                Logger.debug(msg);
                 
                 // install program
                 var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
@@ -84,9 +85,6 @@ public class OtcService {
                 if (exists) {
                     target.delete();
                     Downloader.makeExecutable(otelcolContrib.toPath());
-                    // TODO Ich könnte noch ein Markierungs-File ablegen, mit Versionsnr.. Das signalisiert
-                    //      erfolgreichen Download+Deployment.
-                    //      Andere Idee wäre, dass ich die Versionsnr. mit in den Dateinamen packe. otelcol-contrib-0.137.0
                 }
             } else {
                 Logger.error(msg);
