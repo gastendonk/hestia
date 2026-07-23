@@ -17,8 +17,8 @@ import hestia.HestiaWebapp;
 public class OtcProcess {
     private static final Object LOCK = new Object();
     private Process p;
-    public String info1 = "--";
-    public String info2 = "--";
+    public String info1 = "";
+    public String info2 = "";
 
     public OtcProcess() {
         synchronized (LOCK) {

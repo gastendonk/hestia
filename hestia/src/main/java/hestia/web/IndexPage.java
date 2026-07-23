@@ -34,7 +34,7 @@ public class IndexPage extends HPage {
         List<Environment> envs = environmentDAO().load();
 
         put("info", esc(System.getenv("INFO")));
-        put("pid", otc == null ? "" : "" + otc.pid());
+        put("pid", otc == null || otc.pid() <= 0 ? "" : "" + otc.pid());
         put("alive", otc != null && otc.alive());
         if (otc == null) {
             put("status", "--");
@@ -42,9 +42,10 @@ public class IndexPage extends HPage {
             putInt("status", otc.checkHealth());
         }
         put("datetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        put("info1", otc == null ? "---" : esc(otc.info1));
-        put("info2", otc == null ? "---" : esc(otc.info2));
-        put("config", esc(FileService.loadPlainTextFile(new File("/work/config.yaml"))));
+        put("info1", otc == null ? "" : esc(otc.info1));
+        put("info2", otc == null ? "" : esc(otc.info2));
+        var config = FileService.loadPlainTextFile(new File("/work/config.yaml"));
+        put("config", config == null ? "File config.yaml not found" : esc(config));
         if (ctx.pathParam("branch") == null) {
             put("branch", "master");
         }

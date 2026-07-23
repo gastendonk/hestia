@@ -73,12 +73,18 @@ public class OtcService {
             if (exists) {
                 
                 // deploy program
-                var x = HestiaWebapp.config.getOtelcolContrib();
-                FileService.copyFile(target, x.getParentFile());
-                Logger.info("installed file: " + x.getAbsolutePath() + ", " + (x.isFile() ? "SUCCESS" : "ERROR: missing file"));
-                return x.isFile();
+                var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
+                FileService.copyFile(target, otelcolContrib.getParentFile());
+                exists = otelcolContrib.isFile();
+                Logger.info("installed file: " + otelcolContrib.getAbsolutePath() + ", " + (exists ? "SUCCESS" : "ERROR: missing file"));
+                if (exists) {
+                    Downloader.makeExecutable(otelcolContrib.toPath());
+                    // TODO Ich könnte noch ein Markierungs-File ablegen, mit Versionsnr.. Das signalisiert
+                    //      erfolgreichen Download+Deployment.
+                    //      Andere Idee wäre, dass ich die Versionsnr. mit in den Dateinamen packe. otelcol-contrib-0.137.0
+                }
             }
-            return false;
+            return exists;
         } catch (Exception e) {
             Logger.error(e);
             return false;

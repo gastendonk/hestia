@@ -52,7 +52,6 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id", MonitoredTargetsPage.class);
         
-        get("/deploy-otelcol-contrib", DeployOtelcolcontribAction.class);
         form("/options", EditOtcOptsPage.class);
 
         get("/:branch/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
@@ -63,6 +62,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         
+        get("/otc/deploy-otelcol-contrib", DeployOtelcolcontribAction.class);
         get("/otc/kill", KillAction.class);
         form("/tablesort/:id/:col", TableSortAction.class);
         

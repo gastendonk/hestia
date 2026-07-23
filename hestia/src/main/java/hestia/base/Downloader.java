@@ -12,20 +12,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.PosixFilePermission;
 import java.time.Duration;
+import java.util.Set;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.pmw.tinylog.Logger;
 
-// TODO amalia-http
 public class Downloader {
 
     private Downloader() {
     }
     
-    // Duration.ofMinutes(5)
+    // TODO amalia-http
     public static void download(String fileUrl, Duration timeout, File destination) {
         try {
             long start = System.currentTimeMillis();
@@ -69,5 +70,18 @@ public class Downloader {
                 }
             }
         }
+    }
+    
+    public static void makeExecutable(Path binaryPath) throws IOException { // 755
+        Set<PosixFilePermission> permissions = Set.of(
+                PosixFilePermission.OWNER_READ,
+                PosixFilePermission.OWNER_WRITE,
+                PosixFilePermission.OWNER_EXECUTE,
+                PosixFilePermission.GROUP_READ,
+                PosixFilePermission.GROUP_EXECUTE,
+                PosixFilePermission.OTHERS_READ,
+                PosixFilePermission.OTHERS_EXECUTE
+        );
+        Files.setPosixFilePermissions(binaryPath, permissions);
     }
 }
