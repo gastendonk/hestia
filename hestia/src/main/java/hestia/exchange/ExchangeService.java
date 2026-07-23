@@ -28,7 +28,7 @@ public class ExchangeService {
      * Pull data from cloud
      */
     public void pull() {
-        if (HestiaWebapp.config.isCustomer()) {
+        if (!HestiaWebapp.config.isCustomer()) {
             throw new IllegalStateException("Hestia is not in customer mode.");
         }
         if (HestiaWebapp.config.getCloudInstance() == null) {
@@ -133,8 +133,8 @@ public class ExchangeService {
         Logger.debug("[exchange] receive | body: " + body);
         try {
             File file = new File(HestiaWebapp.config.getBaseFolder(), "x/" + customerKey + "/" + tag + ".json");
-            Logger.info("[exchange] receive | saved as " + file.getAbsolutePath() + ", " + file.isFile());
             FileService.savePlainTextFile(file, body);
+            Logger.info("[exchange] receive | saved as " + file.getAbsolutePath() + ", " + file.isFile());
         } catch (Exception e) {
             Logger.error(e);
         }
