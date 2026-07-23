@@ -34,12 +34,16 @@ public class IndexPage extends HPage {
         List<Environment> envs = environmentDAO().load();
 
         put("info", esc(System.getenv("INFO")));
-        put("pid", "" + otc.pid());
-        put("alive", otc.alive());
-        putInt("status", otc.checkHealth());
+        put("pid", otc == null ? "" : "" + otc.pid());
+        put("alive", otc != null && otc.alive());
+        if (otc == null) {
+            put("status", "--");
+        } else {
+            putInt("status", otc.checkHealth());
+        }
         put("datetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        put("info1", esc(otc.info1));
-        put("info2", esc(otc.info2));
+        put("info1", otc == null ? "---" : esc(otc.info1));
+        put("info2", otc == null ? "---" : esc(otc.info2));
         put("config", esc(FileService.loadPlainTextFile(new File("/work/config.yaml"))));
         if (ctx.pathParam("branch") == null) {
             put("branch", "master");

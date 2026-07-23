@@ -24,8 +24,12 @@ public class KillAction extends HAction {
                         ph.destroyForcibly();
                     });
         } else {
-            Logger.info("KillAction -> kill");
-            HestiaWebapp.otcProcess.kill();
+            if (HestiaWebapp.otcProcess == null) {
+                Logger.error("otcProcess is null, can't kill");
+            } else {
+                Logger.info("KillAction -> kill");
+                HestiaWebapp.otcProcess.kill();
+            }
         }
 
         ctx.redirect("/");

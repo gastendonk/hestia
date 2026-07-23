@@ -1,5 +1,7 @@
 package hestia;
 
+import org.pmw.tinylog.Logger;
+
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
@@ -83,6 +85,10 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();
-        otcProcess = new OtcProcess();
+        try {
+            otcProcess = new OtcProcess();
+        } catch (Exception e) {
+            Logger.error(e);
+        }
     }
 }
