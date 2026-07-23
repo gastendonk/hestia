@@ -67,7 +67,9 @@ public class OtcService {
             downloadFile.delete();
 
             // check if expected file is there
-            File target = new File(tempDir.toFile(), HestiaWebapp.config.getOtelcolContrib().getName()); // expected file after unzip
+            String dn = HestiaWebapp.config.getOtelcolContrib().getName();
+            dn = dn.substring(0, dn.lastIndexOf("-")); // remove version
+            File target = new File(tempDir.toFile(), dn); // expected file after unzip
             boolean exists = target.isFile();
             var msg = "deployOtelcolContrib | target file: " + target.getAbsolutePath() + ", " + exists;
             if (exists) {
