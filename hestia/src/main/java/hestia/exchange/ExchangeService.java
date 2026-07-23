@@ -50,31 +50,32 @@ public class ExchangeService {
     /**
      * Push data to cloud server
      */
-    public void push(IBranch branch, String tag) {
+    public void push(IBranch branch, String customerKey, String tag) {
         var ci = HestiaWebapp.config.getCloudInstance();
         if (StringService.isNullOrEmpty(ci)) {
             throw new RuntimeException("Cloud instance is not set");
         }
-        Logger.info("[exchange] push " + tag + " (branch: " + branch + ")");
+        Logger.info("[exchange] push | tag: " + tag + " | branch: " + branch + " | customer key: " + customerKey);
         var data = getData(branch, tag);
         var json = GsonFactory.create().toJson(data);
-        Logger.info(json);
         var url = ci + "/x/receive/" + tag;
-        Logger.info("POST " + url);
+        Logger.info("[exchange] push | POST " + url);
+        Logger.info("[exchange] push | JSON: " + json);
         new REST(url).post(json).close();
     }
     
     /**
      * Cloud server receives data from Burg
+     * @param customerKey -
      * @param tag -
      * @param body JSON
      */
-    public void receive(String tag, String body) {
-        Logger.info("[exchange] receive " + tag);
-        Logger.info(body);
+    public void receive(String customerKey, String tag, String body) {
+        Logger.info("[exchange] receive | customer key: " + customerKey + " | tag: " + tag);
+        Logger.info("[exchange] receive | body: " + body);
         try {
             ExchangeData data = GsonFactory.create().fromJson(body, ExchangeData.class);
-            Logger.info(data.getFiles().keySet());
+            Logger.info("[exchange] receive | received files: " + data.getFiles().keySet());
 //          setData(data, tag);
         } catch (Exception e) {
             Logger.error(e);
