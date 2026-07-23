@@ -85,8 +85,10 @@ public class GitRepository implements IRepository {
     
     public String calculateNextTag() {
         int highest = 0;
-Logger.info("getTagNames: " + repo.getTagNames()); // XXX debug
-        for (String tag : repo.getTagNames()) {
+        repo.pull();
+        var tags = repo.getTagNames();
+        Logger.debug("calculateNextTag: " + tags);
+        for (String tag : tags) {
             if (tag.startsWith("k")) {
                 try {
                     int num = Integer.parseInt(tag.substring(1));

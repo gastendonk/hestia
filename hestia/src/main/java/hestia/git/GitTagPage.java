@@ -15,6 +15,7 @@ public class GitTagPage extends HPage {
         if (irepo instanceof GitRepository repo) {
             if (StringService.isNullOrEmpty(tag)) {
                 tag = repo.calculateNextTag();
+                
                 put("tag", esc(tag));
                 put("label", esc(n("taggen").replace("$t", tag)));
             } else {

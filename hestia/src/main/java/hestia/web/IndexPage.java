@@ -72,8 +72,8 @@ public class IndexPage extends HPage {
                 name = env.getCustomer() + " " + name;
             }
             m.put("name", esc(name));
-            m.putInt("nr1", env.isActive() ? mtDAO().count(env.getId()) : 0);
-            m.putInt("nr2", env.isActive() ? alertGroupDAO().count(env.getId()) : 0);
+            m.put("nr1", env.isActive() ? "" + mtDAO().count(env.getId()) : "&ndash;");
+            m.put("nr2", env.isActive() ? "" + alertGroupDAO().count(env.getId()) : "&ndash;");
             m.put("active", env.isActive());
         }
         Cols cols = Cols.of( //
@@ -83,8 +83,8 @@ public class IndexPage extends HPage {
                         + " class=\"fa fa-pencil\"></i></a>"
                         + " <a href=\"/{{branch}}/environment/{{i.id}}/delete\" onclick=\"return confirm('{{N.Delete}}?');\""
                         + " class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>"
-                        + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
-                        + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("Alerts") + " ({{i.nr2}})</a>"
+                        + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default mw1\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
+                        + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default mw2\">" + n("Alerts") + " ({{i.nr2}})</a>"
                         ));
         put("table", new TableComponent("wauto", cols, model, "envs").sort(0));
     }
