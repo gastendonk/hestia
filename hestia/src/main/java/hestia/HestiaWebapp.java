@@ -5,7 +5,6 @@ import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.web.builder.LoggingInitializer;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
-import github.soltaufintel.amalia.web.route.PingRouteDefinition.PingAction;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.EnvVarAppConfig;
@@ -51,8 +50,6 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
-        get("/ping", PingAction.class);
-        
         if (config.isCloud()) {
             Spark.get("/", (req, res) -> "Hestia " + VERSION + " in cloud mode");
             // TODO Auskunft (JSON?) welche Daten verwaltet werden
@@ -68,7 +65,6 @@ public class HestiaWebapp extends RouteDefinitions {
 
         get("/:branch/deploy", DeployAction.class);
 
-        form("/options", EditOtcOptsPage.class);
 
         if (config.isCustomer()) {
             get("/x/pull", PullAction.class);
@@ -80,7 +76,8 @@ public class HestiaWebapp extends RouteDefinitions {
             form("/x/push/:branch", DeliverPage.class);
         }
 
-        get("/otc", OtcStatusPage.class);
+        get("/otc/status", OtcStatusPage.class);
+        form("/otc/options", EditOtcOptsPage.class);
         get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/kill", KillAction.class); // kill or restart OTC
 
