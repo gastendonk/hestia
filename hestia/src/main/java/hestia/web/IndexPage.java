@@ -77,7 +77,11 @@ public class IndexPage extends HPage {
         for (Environment env : envs) {
             var m = list.add();
             m.put("id", esc(env.getId()));
-            m.put("name", esc(env.getCustomer() + " " + env.getName()));
+            String name = env.getName();
+            if (!HestiaWebapp.config.isCustomer()) {
+                name = env.getCustomer() + " " + name;
+            }
+            m.put("name", esc(name));
             m.putInt("nr1", env.isActive() ? nr1(env) : 0);
             m.putInt("nr2", env.isActive() ? nr2(env) : 0);
             m.put("active", env.isActive());

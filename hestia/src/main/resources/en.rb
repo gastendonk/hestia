@@ -51,3 +51,4 @@ CreateTag=Create Git tag
 Customer=Customer
 CustomerKey=Customer key
 SelectBranch=Select branch
+InstallOTC=Install OTC

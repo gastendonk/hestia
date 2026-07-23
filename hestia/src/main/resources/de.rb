@@ -51,3 +51,4 @@ CreateTag=Git tag erstllen
 Customer=Kunde
 CustomerKey=Customer-Key
 SelectBranch=Branch wählen
+InstallOTC=OTC installieren
