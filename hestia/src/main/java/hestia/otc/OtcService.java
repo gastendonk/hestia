@@ -77,7 +77,7 @@ public class OtcService {
                 
                 // deploy program
                 var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
-                FileService.copyFile(target, otelcolContrib.getParentFile());
+                Downloader.copyFileToFile(target, otelcolContrib);
                 exists = otelcolContrib.isFile();
                 Logger.info("deployOtelcolContrib | installed file: " + otelcolContrib.getAbsolutePath() +
                         ", " + (exists ? "SUCCESS" : "ERROR: missing file"));

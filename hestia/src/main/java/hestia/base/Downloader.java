@@ -72,6 +72,7 @@ public class Downloader {
         }
     }
     
+    // TODO amalia
     public static void makeExecutable(Path binaryPath) throws IOException { // 755
         Set<PosixFilePermission> permissions = Set.of(
                 PosixFilePermission.OWNER_READ,
@@ -83,5 +84,17 @@ public class Downloader {
                 PosixFilePermission.OTHERS_EXECUTE
         );
         Files.setPosixFilePermissions(binaryPath, permissions);
+    }
+
+    // TODO amalia
+    public static void copyFileToFile(File fromFile, File toFile) {
+        try {
+            toFile.getParentFile().mkdirs();
+            Files.copy(fromFile.toPath(), toFile.toPath(), //
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            Logger.error(e, "Error copying file from " + fromFile.getAbsolutePath() + " to file: " + toFile.getAbsolutePath());
+            throw new RuntimeException("Error copying file. See log.");
+        }
     }
 }
