@@ -8,9 +8,6 @@ import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.EnvVarAppConfig;
-import hestia.base.HestiaError404Page;
-import hestia.base.HestiaErrorPage;
-import hestia.base.HestiaPageInitializer;
 import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
@@ -39,6 +36,9 @@ import hestia.prometheus.alert.rule.EditAlertRulePage;
 import hestia.web.DeployAction;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
+import hestia.web.base.HestiaError404Page;
+import hestia.web.base.HestiaErrorPage;
+import hestia.web.base.HestiaPageInitializer;
 
 public class HestiaWebapp extends RouteDefinitions {
     public static final String VERSION = "0.1.0";

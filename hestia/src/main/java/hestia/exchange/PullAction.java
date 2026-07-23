@@ -1,6 +1,6 @@
 package hestia.exchange;
 
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class PullAction extends HAction {
 

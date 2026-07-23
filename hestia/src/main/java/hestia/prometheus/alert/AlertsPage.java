@@ -2,8 +2,8 @@ package hestia.prometheus.alert;
 
 import java.util.List;
 
-import hestia.base.HPage;
 import hestia.prometheus.alert.rule.AlertRule;
+import hestia.web.base.HPage;
 
 public class AlertsPage extends HPage {
 

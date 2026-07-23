@@ -9,12 +9,12 @@ import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
 import hestia.base.IBranch;
 import hestia.base.IRepository;
 import hestia.environment.Environment;
 import hestia.git.GitRepository;
 import hestia.otc.OtcProcess;
+import hestia.web.base.HPage;
 
 public class IndexPage extends HPage {
 

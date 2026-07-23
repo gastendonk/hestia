@@ -3,7 +3,7 @@ package hestia.git;
 import java.util.ArrayList;
 import java.util.List;
 
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class GitTagPage extends HPage {
 

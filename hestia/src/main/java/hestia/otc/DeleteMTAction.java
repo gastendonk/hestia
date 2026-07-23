@@ -1,7 +1,7 @@
 package hestia.otc;
 
 import hestia.HestiaWebapp;
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class DeleteMTAction extends HAction {
 

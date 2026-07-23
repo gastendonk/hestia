@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.web.base;
 
 import org.pmw.tinylog.Logger;
 

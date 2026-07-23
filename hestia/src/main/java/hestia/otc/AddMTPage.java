@@ -3,13 +3,13 @@ package hestia.otc;
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.ServerType;
 import hestia.otc.model.Site;
+import hestia.web.base.HPage;
 
 public class AddMTPage extends HPage {
 

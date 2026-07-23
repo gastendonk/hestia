@@ -1,7 +1,7 @@
 package hestia.prometheus.alert.rule;
 
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class EditAlertRulePage extends HPage {
 

@@ -1,8 +1,8 @@
 package hestia.web;
 
-import hestia.base.HAction;
 import hestia.otc.OtcService;
 import hestia.prometheus.PrometheusService;
+import hestia.web.base.HAction;
 
 public class DeployAction extends HAction {
 

@@ -1,7 +1,7 @@
 package hestia.environment;
 
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class EditEnvironmentPage extends HPage {
 

@@ -1,7 +1,8 @@
-package hestia.base;
+package hestia.web.base;
 
 import github.soltaufintel.amalia.web.action.Action;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.environment.EnvironmentDAO;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.prometheus.alert.AlertGroupDAO;

@@ -3,8 +3,8 @@ package hestia.web;
 import org.pmw.tinylog.Logger;
 
 import hestia.HestiaWebapp;
-import hestia.base.HAction;
 import hestia.otc.OtcProcess;
+import hestia.web.base.HAction;
 
 public class KillAction extends HAction {
 

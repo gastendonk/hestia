@@ -2,7 +2,7 @@ package hestia.prometheus.alert.rule;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class AddAlertRulePage extends HPage {
 

@@ -1,6 +1,6 @@
 package hestia.otc;
 
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class InstallOtelcolContribAction extends HAction {
 

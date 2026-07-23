@@ -1,7 +1,7 @@
 package hestia.prometheus.alert;
 
 import hestia.HestiaWebapp;
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class DeleteAlertGroupAction extends HAction {
 

@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.web.base;
 
 import static github.soltaufintel.amalia.web.action.NLSService.loadDataMap;
 

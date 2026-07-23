@@ -2,7 +2,7 @@ package hestia.prometheus.alert;
 
 import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class EditAlertGroupPage extends HPage {
 

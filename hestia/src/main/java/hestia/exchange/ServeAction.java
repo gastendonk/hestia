@@ -1,6 +1,6 @@
 package hestia.exchange;
 
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class ServeAction extends HAction {
     private String r;

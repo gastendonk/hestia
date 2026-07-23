@@ -1,6 +1,6 @@
 package hestia.environment;
 
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class DeleteEnvironmentAction extends HAction {
 

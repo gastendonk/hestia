@@ -1,7 +1,7 @@
 package hestia.prometheus.alert.rule;
 
 import hestia.HestiaWebapp;
-import hestia.base.HAction;
+import hestia.web.base.HAction;
 
 public class DeleteAlertRuleAction extends HAction {
 

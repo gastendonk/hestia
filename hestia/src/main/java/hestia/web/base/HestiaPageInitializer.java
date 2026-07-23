@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.web.base;
 
 import github.soltaufintel.amalia.spark.Context;
 import github.soltaufintel.amalia.web.action.Escaper;

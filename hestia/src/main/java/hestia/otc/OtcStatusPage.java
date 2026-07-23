@@ -2,7 +2,7 @@ package hestia.otc;
 
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class OtcStatusPage extends HPage {
 

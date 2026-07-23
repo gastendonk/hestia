@@ -1,6 +1,6 @@
 package hestia.otc.opts;
 
-import hestia.base.HPage;
+import hestia.web.base.HPage;
 
 public class EditOtcOptsPage extends HPage {
 

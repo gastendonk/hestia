@@ -6,11 +6,11 @@ import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
-import hestia.base.HPage;
 import hestia.otc.model.Database;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.Site;
+import hestia.web.base.HPage;
 
 public class MonitoredTargetsPage extends HPage {
 
