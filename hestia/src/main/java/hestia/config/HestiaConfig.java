@@ -22,6 +22,7 @@ public class HestiaConfig {
     /** built-in default version */
     public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
+    private final boolean cloud;
     private final String otelcolContribDownloadUrl;
     private final File otelcolContrib;
     /** true: otelcol-contrib should be started; false: otelcol-contrib should only be started manually. */
@@ -39,6 +40,7 @@ public class HestiaConfig {
     private final boolean customer;
     
     public HestiaConfig() {
+        cloud = "1".equals(get("CLOUD"));
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
         run = "1".equals(get("RUN", "1"));
@@ -82,6 +84,10 @@ public class HestiaConfig {
 
     public File getOtelcolContrib() {
         return otelcolContrib;
+    }
+
+    public boolean isCloud() {
+        return cloud;
     }
 
     public boolean isRun() {

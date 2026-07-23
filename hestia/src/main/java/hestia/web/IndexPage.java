@@ -1,13 +1,9 @@
 package hestia.web;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.pmw.tinylog.Logger;
 
-import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
@@ -19,7 +15,6 @@ import hestia.base.IRepository;
 import hestia.environment.Environment;
 import hestia.git.GitRepository;
 import hestia.otc.OtcProcess;
-import hestia.prometheus.alert.AlertGroup;
 
 public class IndexPage extends HPage {
 
@@ -30,26 +25,22 @@ public class IndexPage extends HPage {
             ctx.redirect("/" + branch);
             return;
         }
-        OtcProcess otc = HestiaWebapp.otcProcess;
+        
+        var b = b();
+        IRepository repo = HestiaWebapp.config.getRepository(b);
         List<Environment> envs = environmentDAO().load();
-
-        put("pid", otc == null || otc.pid() <= 0 ? "" : "" + otc.pid());
-        put("alive", otc != null && otc.alive());
-        if (otc == null) {
-            put("status", "--");
-        } else {
-            putInt("status", otc.checkHealth());
-        }
-        File otcFile = HestiaWebapp.config.getOtelcolContrib();
-        put("otcFileInfo", otcFile.getName() + (otcFile.isFile() ? " exists." : " doesn't exist."));
-        put("datetime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        var config = FileService.loadPlainTextFile(new File("/work/config.yaml"));
-        put("config", config == null ? "File config.yaml not found" : esc(config));
+        OtcProcess otc = HestiaWebapp.otcProcess;
+        boolean otcAlive = otc != null && otc.alive();
+        
+        displayGit(repo, b);
+        displayEnvironments(envs);
+        put("alive", otcAlive);
+    }
+    
+    private void displayGit(IRepository repo, IBranch b) {
         if (ctx.pathParam("branch") == null) {
             put("branch", "master");
         }
-        var b = b();
-        IRepository repo = HestiaWebapp.config.getRepository(b);
         put("hasRepo", repo instanceof GitRepository && !HestiaWebapp.config.isCustomer());
         if (repo instanceof GitRepository g) {
             var branch = b.getBranch();
@@ -69,7 +60,9 @@ public class IndexPage extends HPage {
             put("git", "#");
             put("unpushed", false);
         }
-
+    }
+    
+    private void displayEnvironments(List<Environment> envs) {
         var list = list("envs");
         for (Environment env : envs) {
             var m = list.add();
@@ -79,8 +72,8 @@ public class IndexPage extends HPage {
                 name = env.getCustomer() + " " + name;
             }
             m.put("name", esc(name));
-            m.putInt("nr1", env.isActive() ? nr1(env) : 0);
-            m.putInt("nr2", env.isActive() ? nr2(env) : 0);
+            m.putInt("nr1", env.isActive() ? mtDAO().count(env.getId()) : 0);
+            m.putInt("nr2", env.isActive() ? alertGroupDAO().count(env.getId()) : 0);
             m.put("active", env.isActive());
         }
         Cols cols = Cols.of( //
@@ -96,19 +89,6 @@ public class IndexPage extends HPage {
         put("table", new TableComponent("wauto", cols, model, "envs").sort(0));
     }
 
-    private int nr1(Environment env) {
-        return mtDAO().count(env.getId());
-    }
-
-    private int nr2(Environment env) {
-        int ret = 0;
-        var groups = alertGroupDAO().load(env.getId());
-        for (AlertGroup g : groups) {
-            ret += g.getRules().stream().filter(i -> i.isActive()).count();
-        }
-        return ret;
-    }
-    
     @Override
     protected IBranch b() {
         return () -> {

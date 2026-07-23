@@ -2,39 +2,42 @@
 
 <div class="row"> 
     <div class="col-lg-12">
-        <h1 class="page-header">Status</h1>
-
-        <p>
-            {{if hasRepo}}
-		        <form class="form-horizontal" method="post">
-		            <fieldset>
-		                <div class="form-group">
-		                    <div class="col-lg-2">
-		                        <select class="form-control" id="branch2" name="branch2" title="Branch">
-		                            {{each a in branchs}}
-		                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
-		                            {{/each}}
-		                        </select>
-		                    </div>
-		                    <button type="submit" class="btn btn-primary br" title="{{N.SelectBranch}}"><i class="fa fa-check"></i></button>
-			                <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
-			                <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"><i class="fa fa-arrow-up"></i> Push</a>
-	                        <a href="{{git}}" class="btn btn-default br" target="_blank">Git Repo</a>
-		                </div>
-		            </fieldset>
-		        </form>
-            {{/if}}
-            {{if customer}}
+        {{if customer}}
+            <p class="mt2">
                 <a href="/x/pull" class="btn btn-default br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
-            {{/if}}
-        </p>
+            </p>
+            <hr>
+        {{/if}}
         
-        <hr>
         <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
         <p>
             <a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
         </p>
         {{if envs}}{{table}}{{/if}}
+        
+        {{if hasRepo}}
+            <hr>
+            <h2>Git</h2>
+            <p class="mt2">
+                <form class="form-horizontal" method="post">
+                    <fieldset>
+                        <div class="form-group">
+                            <div class="col-lg-2">
+                                <select class="form-control" id="branch2" name="branch2" title="Branch">
+                                    {{each a in branchs}}
+                                        <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary br" title="{{N.SelectBranch}}"><i class="fa fa-check"></i></button>
+                            <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
+                            <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"><i class="fa fa-arrow-up"></i> Push</a>
+                            <a href="{{git}}" class="btn btn-default" target="_blank">Git Repo</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </p>
+        {{/if}}
         
         <hr>
         <p>

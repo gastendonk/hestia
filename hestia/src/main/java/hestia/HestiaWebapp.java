@@ -15,10 +15,9 @@ import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
+import hestia.exchange.CloudMode;
 import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
-import hestia.exchange.ReceiveAction;
-import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
@@ -48,20 +47,49 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
+        environments();
+        monitoredTargets();
+        alerts();
+
+        get("/:branch/deploy", DeployAction.class);
+
+        form("/options", EditOtcOptsPage.class);
+
+        if (config.isCustomer()) {
+            get("/x/pull", PullAction.class);
+        } else { // only for manufacturer
+            get("/:branch/push", GitPushAction.class);
+            get("/:branch/pull", GitPullAction.class);
+            
+            get("/x/push/:tag", PushAction.class);
+        }
+
+        get("/otc", OtcStatusPage.class);
+        get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
+        get("/otc/kill", KillAction.class); // kill or restart OTC
+
+        form("/tablesort/:id/:col", TableSortAction.class);
+
+        // at last
+        form("/", IndexPage.class);
+        form("/:branch", IndexPage.class);
+        Logger.info("web mode");
+    }
+
+    private void environments() {
         form("/:branch/environment/add", AddEnvironmentPage.class);
         get("/:branch/environment/:id/delete", DeleteEnvironmentAction.class);
         form("/:branch/environment/:id", EditEnvironmentPage.class);
-        get("/:branch/deploy", DeployAction.class);
-        get("/:branch/push", GitPushAction.class);
-        get("/:branch/pull", GitPullAction.class);
+    }
 
+    private void monitoredTargets() {
         form("/:branch/mt/:id/add", AddMTPage.class);
         form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id", MonitoredTargetsPage.class);
-        
-        form("/options", EditOtcOptsPage.class);
+    }
 
+    private void alerts() {
         get("/:branch/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
         form("/:branch/alert-group/:env/add", AddAlertGroupPage.class);
         form("/:branch/alert-group/:env/:id/edit", EditAlertGroupPage.class);
@@ -69,20 +97,6 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/alert-rule/:env/:g/add", AddAlertRulePage.class);
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
-        
-        get("/otc", OtcStatusPage.class);
-        get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
-        get("/otc/kill", KillAction.class);
-        form("/tablesort/:id/:col", TableSortAction.class);
-        
-        get("/x/push/:tag", PushAction.class);
-        post("/x/receive/:tag", ReceiveAction.class);
-        get("/x/pull", PullAction.class);
-        get("/x/serve/:branch/:key", ServeAction.class);
-
-        // at last
-        form("/", IndexPage.class);
-        form("/:branch", IndexPage.class);
     }
 
     public static void main(String[] args) {
@@ -93,19 +107,21 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withErrorPage(HestiaErrorPage.class, HestiaError404Page.class)
                 .withPageInitializer(new HestiaPageInitializer())
                 .withInitializer(c -> config = new HestiaConfig())
-                .withRoutes(new HestiaWebapp())
+                .withRoutes(config.isCloud() ? new CloudMode() : new HestiaWebapp())
                 .build()
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
-        try {
-            if (!config.getOtelcolContrib().isFile()) {
-                new OtcService().installOtelcolContrib(); // auto-install
+        if (!config.isCloud()) {
+            try {
+                if (!config.getOtelcolContrib().isFile()) {
+                    new OtcService().installOtelcolContrib(); // auto-install
+                }
+                if (config.getOtelcolContrib().isFile()) {
+                    otcProcess = new OtcProcess();
+                }
+            } catch (Exception e) {
+                Logger.error(e);
             }
-            if (config.getOtelcolContrib().isFile()) {
-                otcProcess = new OtcProcess();
-            }
-        } catch (Exception e) {
-            Logger.error(e);
         }
     }
 }
