@@ -9,8 +9,8 @@ import org.junit.Test;
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.git.Repository;
+import github.soltaufintel.amalia.git.RepositoryDefinition;
 import hestia.HestiaWebapp;
-import hestia.base.RepositoryDefinitionImpl;
 import hestia.config.HestiaConfig;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
@@ -34,7 +34,27 @@ public class GitPersistenceTest {
 
         // LOCAL GIT REPO
         File localDir = new File(mainTempFolder, "2-local-dir");
-        var rd = new RepositoryDefinitionImpl("me", "", remoteDir.toURI().toString(), localDir);
+        var rd = new RepositoryDefinition() {
+            @Override
+            public String getUser() {
+                return "me";
+            }
+            
+            @Override
+            public String getPassword() {
+                return "";
+            }
+            
+            @Override
+            public String getUrl() {
+                return remoteDir.toURI().toString();
+            }
+            
+            @Override
+            public File getLocalFolder() {
+                return localDir;
+            }
+        };
         var repo = new Repository(rd);
         repo.pull();
         
@@ -45,11 +65,31 @@ public class GitPersistenceTest {
         repo.push("me", "");
         
         // ---- VERIFY ----
-        localDir = new File(mainTempFolder, "3-local-dir-verify");
-        rd = new RepositoryDefinitionImpl("me", "", remoteDir.toURI().toString(), localDir);
-        repo = new Repository(rd);
+        final var localDir2 = new File(mainTempFolder, "3-local-dir-verify");
+        var rd2 = new RepositoryDefinition() {
+            @Override
+            public String getUser() {
+                return "me";
+            }
+
+            @Override
+            public String getPassword() {
+                return "";
+            }
+
+            @Override
+            public String getUrl() {
+                return remoteDir.toURI().toString();
+            }
+
+            @Override
+            public File getLocalFolder() {
+                return localDir2;
+            }
+        };
+        repo = new Repository(rd2);
         repo.pull();
-        String c = FileService.loadPlainTextFile(new File(localDir, "a/b/c.txt"));
+        String c = FileService.loadPlainTextFile(new File(localDir2, "a/b/c.txt"));
         Assert.assertEquals("my content", c);
     }
 
