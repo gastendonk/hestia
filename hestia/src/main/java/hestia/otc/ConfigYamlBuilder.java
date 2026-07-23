@@ -142,7 +142,7 @@ public class ConfigYamlBuilder {
         return """
                 
                 processors:
-                  batch:
+                  batch: {}
                   attributes:
                     actions:
                       - key: process.command_line
@@ -217,8 +217,8 @@ public class ConfigYamlBuilder {
     }
 
     private String service() {
-        String ret = """
-                service:
+        /* Das darf nur rein, wenn es prometheus dingens gibt.
+        String prometheus = """
                   telemetry:
                     metrics:
                       readers:
@@ -227,6 +227,12 @@ public class ConfigYamlBuilder {
                               prometheus:
                                 host: "0.0.0.0"
                                 port: 8888
+                """;*/
+        String ret = """
+                service:
+                  telemetry:
+                    metrics:
+                      address: "0.0.0.0:8888"
                   extensions: [health_check]
                   pipelines:
                     metrics:
