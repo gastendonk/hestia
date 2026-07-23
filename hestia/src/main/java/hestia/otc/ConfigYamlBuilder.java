@@ -230,9 +230,6 @@ public class ConfigYamlBuilder {
                 """;*/
         String ret = """
                 service:
-                  telemetry:
-                    metrics:
-                      address: "0.0.0.0:8888"
                   extensions: [health_check]
                   pipelines:
                     metrics:
