@@ -12,5 +12,6 @@ encoding//src/main/resources/templates/EditAlertRulePage.html=UTF-8
 encoding//src/main/resources/templates/EditEnvironmentPage.html=UTF-8
 encoding//src/main/resources/templates/EditMTPage.html=UTF-8
 encoding//src/main/resources/templates/GitTagPage.html=UTF-8
+encoding//src/main/resources/templates/HestiaErrorPage.html=UTF-8
 encoding//src/main/resources/templates/IndexPage.html=UTF-8
 encoding//src/main/resources/templates/MonitoredTargetsPage.html=UTF-8
