@@ -1,4 +1,4 @@
-package hestia.base;
+package hestia.config;
 
 import java.io.File;
 import java.util.Arrays;
@@ -7,6 +7,11 @@ import java.util.List;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.StringService;
+import hestia.base.EnvVarAppConfig;
+import hestia.base.FileRepository;
+import hestia.base.IBranch;
+import hestia.base.IConfig;
+import hestia.base.IRepository;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
 import hestia.otc.model.MonitoredTargetDAO;

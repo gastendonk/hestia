@@ -10,8 +10,8 @@ import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.git.Repository;
 import hestia.HestiaWebapp;
-import hestia.base.HestiaConfig;
 import hestia.base.RepositoryDefinitionImpl;
+import hestia.config.HestiaConfig;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
 
