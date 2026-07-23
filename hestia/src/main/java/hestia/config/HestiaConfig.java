@@ -42,8 +42,8 @@ public class HestiaConfig {
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
         run = "1".equals(get("RUN", "1"));
-        prometheusHost = get("PROMETHEUS", "http://prometheus:9090");
-        alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
+        prometheusHost = get("PROMETHEUS");     // http://prometheus:9090
+        alertmanagerHost = get("ALERTMANAGER"); // http://alertmanager:9093
         language = get("LANGUAGE", "en");
         customer = !"0".equals(get("CUSTOMER", "1"));
         customers = Arrays.asList(get("CUSTOMERS", "").split(","));

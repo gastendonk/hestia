@@ -3,6 +3,8 @@ package hestia.prometheus;
 import java.util.Collection;
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
@@ -29,13 +31,17 @@ public class PrometheusService {
 
     public void reloadPrometheus() {
         if (!StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
-            REST.post(HestiaWebapp.config.getPrometheusHost() + "/-/reload", "");
+            var url = HestiaWebapp.config.getPrometheusHost() + "/-/reload";
+            Logger.info("reloadPrometheus: " + url);
+            REST.post(url, "");
         }
     }
     
     public void reloadAlertmanager() {
         if (!StringService.isNullOrEmpty(HestiaWebapp.config.getAlertmanagerHost())) {
-            REST.post(HestiaWebapp.config.getAlertmanagerHost() + "/-/reload", "");
+            var url = HestiaWebapp.config.getAlertmanagerHost() + "/-/reload";
+            Logger.info("reloadAlertmanager: " + url);
+            REST.post(url, "");
         }
     }
 }
