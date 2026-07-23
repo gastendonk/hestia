@@ -52,3 +52,4 @@ Customer=Kunde
 CustomerKey=Customer-Key
 SelectBranch=Branch wählen
 InstallOTC=OTC installieren
+CantDeleteEnvironment=Umgebung darf nicht gelöscht werden, da es noch Beobachtete Ziele und/oder Alarmregeln gibt.

@@ -12,6 +12,6 @@ public class DeployAction extends HAction {
         new OtcService().deploy(envs, b());
         new PrometheusService().deploy(envs, b());
         
-        ctx.redirect("/" + ctx.pathParam("branch"));
+        backToStartpage();
     }
 }

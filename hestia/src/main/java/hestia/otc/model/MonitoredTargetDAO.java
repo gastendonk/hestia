@@ -26,4 +26,8 @@ public class MonitoredTargetDAO extends AbstractJsonListDAO<MonitoredTarget> {
     protected String getItemNameForCommitMessage() {
         return "monitored target";
     }
+    
+    public int count(String envId) {
+        return (int) load(envId).stream().filter(i -> i.isActive()).count();
+    }
 }

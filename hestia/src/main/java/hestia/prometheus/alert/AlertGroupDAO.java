@@ -26,4 +26,13 @@ public class AlertGroupDAO extends AbstractJsonListDAO<AlertGroup> {
     protected String getItemNameForCommitMessage() {
         return "alert group";
     }
+    
+    public int count(String envId) {
+        int ret = 0;
+        var groups = load(envId);
+        for (AlertGroup g : groups) {
+            ret += g.getRules().stream().filter(i -> i.isActive()).count();
+        }
+        return ret;
+    }
 }

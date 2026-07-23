@@ -38,4 +38,7 @@ public abstract class HPage extends Page {
         return () -> ctx.pathParam("branch");
     }
 
+    protected void backToStartpage() {
+        ctx.redirect("/" + b().getBranch());
+    }
 }

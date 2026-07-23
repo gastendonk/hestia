@@ -20,7 +20,7 @@ public class AddEnvironmentPage extends HPage {
             env.setCustomer(ctx.formParam("customer"));
             environmentDAO().insert(env);
             
-            ctx.redirect("/" + ctx.pathParam("branch"));
+            backToStartpage();
         } else {
             header(n("NewEnvironment"));
             combobox("customers", HestiaWebapp.config.getCustomers(), (String) null, false);

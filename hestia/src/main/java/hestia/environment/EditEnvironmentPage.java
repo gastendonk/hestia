@@ -24,7 +24,7 @@ public class EditEnvironmentPage extends HPage {
             env.setActive("on".equals(ctx.formParam("active")));
             dao.update(env);
             
-            ctx.redirect("/" + ctx.pathParam("branch"));
+            backToStartpage();
         } else {
             header(n("EditEnvironment"));
             put("name", esc(env.getName()));

@@ -11,6 +11,7 @@ import hestia.base.HestiaErrorPage;
 import hestia.base.HestiaPageInitializer;
 import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
+import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
 import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
@@ -44,6 +45,7 @@ public class HestiaWebapp extends RouteDefinitions {
     @Override
     public void routes() {
         form("/:branch/environment/add", AddEnvironmentPage.class);
+        get("/:branch/environment/:id/delete", DeleteEnvironmentAction.class);
         form("/:branch/environment/:id", EditEnvironmentPage.class);
         get("/:branch/deploy", DeployAction.class);
         get("/:branch/push", GitPushAction.class);
@@ -88,6 +90,7 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();
+        Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         try {
             otcProcess = new OtcProcess();
         } catch (Exception e) {

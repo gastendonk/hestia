@@ -89,8 +89,10 @@ public class IndexPage extends HPage {
         Cols cols = Cols.of( //
                 new Col(n("Environment"), "{{if not i.active}}<span class=\"not-active\">{{/if}}{{i.name}}"
                         + "{{if not i.active}}</span>{{/if}}").sortable("name"), //
-                new Col("", "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"Bearbeiten\"><i"
+                new Col("", "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
                         + " class=\"fa fa-pencil\"></i></a>"
+                        + " <a href=\"/{{branch}}/environment/{{i.id}}/delete\" onclick=\"return confirm('{{N.Delete}}?');\""
+                        + " class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>"
                         + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
                         + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default\">" + n("Alerts") + " ({{i.nr2}})</a>"
                         ));
@@ -98,7 +100,7 @@ public class IndexPage extends HPage {
     }
 
     private int nr1(Environment env) {
-        return (int) mtDAO().load(env.getId()).stream().filter(i -> i.isActive()).count();
+        return mtDAO().count(env.getId());
     }
 
     private int nr2(Environment env) {

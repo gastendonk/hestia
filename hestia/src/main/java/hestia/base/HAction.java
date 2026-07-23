@@ -9,6 +9,10 @@ import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public abstract class HAction extends Action {
     
+    protected final String n(String key) {
+        return NLS.get(HestiaWebapp.config.getLanguage(), key);
+    }
+
     protected final EnvironmentDAO environmentDAO() {
         return HestiaWebapp.config.environmentDAO(b());
     }
@@ -27,5 +31,9 @@ public abstract class HAction extends Action {
     
     protected IBranch b() {
         return () -> ctx.pathParam("branch");
+    }
+    
+    protected void backToStartpage() {
+        ctx.redirect("/" + b().getBranch());
     }
 }
