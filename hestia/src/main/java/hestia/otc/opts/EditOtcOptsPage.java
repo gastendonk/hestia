@@ -24,6 +24,12 @@ public class EditOtcOptsPage extends HPage {
             put("loki", esc(opts.getLoki()));
             put("otc", esc(opts.getOtc()));
             put("debug", opts.isDebug());
+            
+            var tv = n("typicalValue") + ": ";
+            put("hint1", tv + "http://prometheus:9090/api/v1/write");
+            put("hint2", tv + "tempo:4317");
+            put("hint3", tv + "http://loki:3100/otlp");
+            put("hint4", ""); // URL of cloud instance not known yet
         }
     }
 }

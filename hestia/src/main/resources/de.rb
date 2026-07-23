@@ -54,3 +54,4 @@ SelectBranch=Branch wählen
 InstallOTC=OTC installieren
 CantDeleteEnvironment=Umgebung darf nicht gelöscht werden, da es noch Beobachtete Ziele und/oder Alarmregeln gibt.
 installOtelcolContribFailed=Die Installation von otelcol-contrib ist fehlgeschlagen.
+typicalValue=typischer Wert
