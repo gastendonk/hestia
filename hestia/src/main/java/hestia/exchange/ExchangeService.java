@@ -77,7 +77,7 @@ public class ExchangeService {
         int highest = 0;
         File found = null;
         for (File file : files) {
-            // Datei mit höchster k Nr. finden
+            // Datei mit hoechster k Nr. finden
             String name = file.getName();
             Logger.info("XXX - " + name); // XXX spaeter raus!
             if (name.startsWith("k") && name.endsWith(".json")) {
