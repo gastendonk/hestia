@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 import github.soltaufintel.amalia.base.StringService;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
@@ -13,6 +15,7 @@ import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public class HestiaConfig {
     public static IConfig configAccess = new EnvVarAppConfig();
+    private final String otelcolContribDownloadUrl;
     private final File otelcolContrib;
     private final String prometheusHost;
     private final String alertmanagerHost;
@@ -27,6 +30,7 @@ public class HestiaConfig {
     private final boolean customer;
     
     public HestiaConfig() {
+        otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/app/otel/otelcol-contrib"));
         prometheusHost = get("PROMETHEUS", "http://prometheus:9090");
         alertmanagerHost = get("ALERTMANAGER", "http://alertmanager:9093");
@@ -47,6 +51,26 @@ public class HestiaConfig {
 
     private static String get(String key) {
         return configAccess.get(key);
+    }
+
+    private static String readOtelcolContribDownloadUrl() {
+        String url = get("OTELCOLURL", "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{version}/otelcol-contrib_{version}_linux_amd64.tar.gz");
+        if (StringService.isNullOrEmpty(url)) {
+            throw new IllegalStateException("Please set env var OTELCOLURL.");
+        }
+        if (url.contains("{version}")) {
+            String version = get("OTELCOLVERSION", "0.137.0");
+            if (StringService.isNullOrEmpty(version)) {
+                throw new IllegalStateException("Please set env var OTELCOLVERSION.");
+            } 
+            Logger.info("otelcol-contrib version: " + version);
+            url = url.replace("{version}", version);
+        }
+        return url;
+    }
+
+    public String getOtelcolContribDownloadUrl() {
+        return otelcolContribDownloadUrl;
     }
 
     public File getOtelcolContrib() {

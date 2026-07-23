@@ -26,7 +26,6 @@ dockerCreateDockerfile {
         def dockerfile = destFile.get().asFile
         dockerfile.text = dockerfile.text.replace('WORKDIR', 'RUN apk add bash nano\n' +
             'ENV TZ=Europe/Berlin\n' +
-//            'COPY otelcol-contrib /app/otel/\n' +
             'WORKDIR').replace('8080', '4317 4318 8888 8080')
     }
 }

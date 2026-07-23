@@ -23,6 +23,7 @@ dependencies {
     implementation 'com.github.SoltauFintel.amalia:amalia-web:3.0.0-b1'
     implementation 'com.github.SoltauFintel.amalia:amalia-git:3.0.0-b1'
     implementation 'org.slf4j:slf4j-nop:2.0.17'
+    implementation 'org.apache.commons:commons-compress:1.28.0' // .tar.gz
 
     testImplementation 'junit:junit:4.13.2'
 }

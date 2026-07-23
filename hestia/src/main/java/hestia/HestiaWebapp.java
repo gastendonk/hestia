@@ -16,6 +16,7 @@ import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
+import hestia.otc.DeployOtelcolcontribAction;
 import hestia.otc.EditMTPage;
 import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
@@ -49,6 +50,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id", MonitoredTargetsPage.class);
         
+        get("/deploy-otelcol-contrib", DeployOtelcolcontribAction.class);
         form("/options", EditOtcOptsPage.class);
 
         get("/:branch/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
