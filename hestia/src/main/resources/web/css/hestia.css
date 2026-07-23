@@ -86,3 +86,7 @@ body {
 small {
 	color: grey;
 }
+
+.not-active {
+    text-decoration: line-through;
+}

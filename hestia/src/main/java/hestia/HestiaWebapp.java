@@ -28,6 +28,7 @@ import hestia.otc.InstallOtelcolContribAction;
 import hestia.otc.MonitoredTargetsPage;
 import hestia.otc.OtcProcess;
 import hestia.otc.OtcService;
+import hestia.otc.OtcStatusPage;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
@@ -69,6 +70,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         
+        get("/otc", OtcStatusPage.class);
         get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/kill", KillAction.class);
         form("/tablesort/:id/:col", TableSortAction.class);

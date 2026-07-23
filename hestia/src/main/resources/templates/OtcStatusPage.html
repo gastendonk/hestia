@@ -1,0 +1,46 @@
+{{master: master}}
+
+<div class="row"> 
+    <div class="col-lg-12">
+        <h1 class="page-header">{{header}}</h1>
+        
+        <p style="font-size: 12pt;">{{N.otcInfo}}</p>
+        
+        <hr>
+        <p>{{N.otcDownloadUrl}}: {{downloadUrl}}</p>
+        <p>
+            <a href="/otc/install-otelcol-contrib" class="btn btn-primary br">{{N.InstallOTC}}</a>
+        </p>
+        <p><i class="fa fa-circle {{if cp0}}sgreen{{else}}sred{{/if}}"></i> {{otcFileInfo}}</p>
+
+        <hr>
+        <p>        
+            {{if alive}}<span class="badge" style="background-color: #090; padding: 7px;">{{N.otcIsAlive}}</span>
+            {{else}}    <span class="badge" style="background-color: #c00; padding: 7px;">{{N.otcNotRunning}}</span>{{/if}}
+        </p>
+        <p>
+            Status: <i class="fa fa-circle {{if cp1}}sgreen{{else}}sred{{/if}}"></i>
+            {{if pid}} | {{N.otcProcessId}}: {{pid}}{{/if}}
+            | {{N.HealthCheck}}:
+            <i class="fa fa-circle {{if cp2}}sgreen{{else}}sred{{/if}}"></i>
+            {{if cp2}}<i class="fa fa-circle {{if cp3}}sgreen{{else}}sred{{/if}}"></i>{{/if}}
+            {{status}}
+        </p>
+        <p>
+            <a href="/otc/kill?m=s" class="btn btn-success br">{{N.startOTC}}</a>
+            <a href="/otc/kill" class="btn btn-danger br">{{N.killOTC}}</a>
+        </p>
+        
+        <hr>
+        <pre class="mt2 mb3">{{config}}</pre>
+    </div>
+</div>
+
+<style>
+.sgreen {
+    color: #090;
+}
+.sred {
+    color: #c00;
+}
+</style>

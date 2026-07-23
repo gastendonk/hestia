@@ -17,8 +17,8 @@ import hestia.HestiaWebapp;
 public class OtcProcess {
     private static final Object LOCK = new Object();
     private Process p;
-    public String info1 = "";
-    public String info2 = "";
+    private boolean checkpoint1;
+    private boolean checkpoint2;
 
     public OtcProcess() {
         synchronized (LOCK) {
@@ -42,43 +42,43 @@ public class OtcProcess {
                 ProcessBuilder pb = new ProcessBuilder(program.getAbsolutePath(), c);
                 pb.redirectErrorStream(true);
                 p = pb.start();
-                Logger.info("new process style. pid " + p.pid());
+                Logger.info("otc process has pid " + p.pid());
                 logs();
             } catch (IOException e) {
                 Logger.error(e);
             }
         }
     }
-
+    
     private void logs() {
-        // Den Output in einem separaten Thread asynchron auslesen
+        checkpoint1 = false;
+        checkpoint2 = false;
+        // Read the output asynchronously in a separate thread.
         Thread logReader = new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Option A: Das Log weiterhin in die Docker-Konsole schreiben, damit man es von
-                    // aussen sieht
-                    Logger.info("[OTel-Collector] " + line);
-
-                    // Option B: Nach der Erfolgsmeldung suchen
                     if (line.contains("Everything is ready. Begin running and processing data")) {
-                        info1 = ">>> ERFOLG: OpenTelemetry Collector ist vollständig einsatzbereit! (PID: "
-                                + p.pid() + ")";
-                        Logger.info(info1);
-                        // Hier kannst du ein Flag setzen oder ein Event triggern
+                        checkpoint1 = true; // Erfolg: Der otc ist vollstaendig einsatzbereit!
                     }
-
                     if (line.contains("health_check") && line.contains("ready")) {
-                        info2 = ">>> ERFOLG: OTel Health-Check-Erweiterung ist aktiv.";
-                        Logger.info(info2);
+                        checkpoint2 = true; // Erfolg: otc Health-Check-Erweiterung ist aktiv.
                     }
                 }
             } catch (IOException e) {
-                Logger.error("Fehler beim Lesen der Collector-Logs: ", e);
+                Logger.error("Error loading otelcol-contrib log", e);
             }
         });
-        logReader.setDaemon(true); // Thread als Daemon starten, damit er die JVM nicht am Beenden hindert
+        logReader.setDaemon(true); // Start the thread as a daemon so that it does not prevent the JVM from shutting down.
         logReader.start();
+    }
+
+    public boolean isCheckpoint1() {
+        return checkpoint1;
+    }
+
+    public boolean isCheckpoint2() {
+        return checkpoint2;
     }
 
     public long pid() {
@@ -123,26 +123,26 @@ public class OtcProcess {
             return;
         }
         synchronized (LOCK) {
-            Logger.info("destroy...");
+            Logger.info("killing...");
             try {
                 p.destroy();
-                info1 = "//";
-                info2 = "//";
+                checkpoint1 = false;
+                checkpoint2 = false;
                 try {
-                    // Warte bis zu 3 Sekunden auf das normale Beenden
+                    // Wait up to 3 seconds for normal termination.
                     if (!p.waitFor(3, TimeUnit.SECONDS)) {
-                        Logger.warn("OTel reagiert nicht auf SIGTERM. Erzwinge Abbruch (SIGKILL)...");
-                        p.destroyForcibly(); // Erzwinge harten Abbruch (SIGKILL)
-                        p.waitFor(); // Warte unbegrenzt, bis der Prozess im OS abgeräumt wurde
+                        Logger.warn("otc is not responding to SIGTERM. Forcing termination (SIGKILL)...");
+                        p.destroyForcibly(); // Force hard termination (SIGKILL)
+                        p.waitFor(); // Wait indefinitely for the process to be cleaned up by the OS.
                     }
-                    Logger.info("OTel-Prozess erfolgreich beendet.");
+                    Logger.info("otc process successfully killed.");
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             } catch (Exception e) {
                 Logger.error(e);
             }
-            Logger.info("destroy done");
+            Logger.info("kill done");
         }
     }
 }
