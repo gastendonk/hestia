@@ -78,10 +78,33 @@ public class GitRepository implements IRepository {
         }
     }
     
-    @Override
     public void push() {
         Logger.info("push | " + rd.getLocalFolder());
         repo.push(rd.getUser(), rd.getPassword());
+    }
+    
+    public String calculateNextTag() {
+        int highest = 0;
+Logger.info("getTagNames: " + repo.getTagNames()); // XXX debug
+        for (String tag : repo.getTagNames()) {
+            if (tag.startsWith("k")) {
+                try {
+                    int num = Integer.parseInt(tag.substring(1));
+                    if (num > highest) {
+                        highest = num;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+        }
+        highest++;
+        return "k" + highest;
+    }
+
+    public void tag(String tag) {
+        Logger.info("tag " + tag);
+        repo.tag(tag, null, rd.getUser(), rd.getPassword(), "tagged by Hestia");
     }
     
     public String getUrl() {

@@ -67,3 +67,4 @@ otcInfo=Der OpenTelemetry Collector (OTC) läuft innerhalb von Hestia und dient 
 startOTC=OTC starten
 killOTC=OTC stoppen
 otcDownloadUrl=OTC Download-Quelle
+taggen=Aktuellen Stand mit $t taggen.

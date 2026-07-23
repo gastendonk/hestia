@@ -12,11 +12,13 @@ import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
-import hestia.exchange.CloudMode;
 import hestia.exchange.PullAction;
 import hestia.exchange.PushAction;
+import hestia.exchange.ReceiveAction;
+import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
+import hestia.git.GitTagPage;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
 import hestia.otc.EditMTPage;
@@ -47,6 +49,12 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
+        if (config.isCloud()) {
+            post("/x/receive/:tag", ReceiveAction.class);
+            get("/x/serve/:branch/:key", ServeAction.class);
+            Logger.info("cloud mode");
+            return;
+        }
         environments();
         monitoredTargets();
         alerts();
@@ -60,6 +68,7 @@ public class HestiaWebapp extends RouteDefinitions {
         } else { // only for manufacturer
             get("/:branch/push", GitPushAction.class);
             get("/:branch/pull", GitPullAction.class);
+            get("/:branch/tag", GitTagPage.class);
             
             get("/x/push/:tag", PushAction.class);
         }
@@ -107,7 +116,7 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withErrorPage(HestiaErrorPage.class, HestiaError404Page.class)
                 .withPageInitializer(new HestiaPageInitializer())
                 .withInitializer(c -> config = new HestiaConfig())
-                .withRoutes(config.isCloud() ? new CloudMode() : new HestiaWebapp())
+                .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());

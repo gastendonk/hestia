@@ -29,8 +29,4 @@ public class FileRepository implements IRepository {
     @Override
     public void pull() {
     }
-
-    @Override
-    public void push() {
-    }
 }

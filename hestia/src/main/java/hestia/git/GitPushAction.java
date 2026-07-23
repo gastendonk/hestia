@@ -7,7 +7,9 @@ public class GitPushAction extends HAction {
 
     @Override
     protected void execute() {
-        HestiaWebapp.config.getRepository(b()).push();
+        if (HestiaWebapp.config.getRepository(b()) instanceof GitRepository git) {
+            git.push();
+        }
 
         backToStartpage();
     }
