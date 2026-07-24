@@ -25,6 +25,8 @@ public class HestiaConfig {
     public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
     private final Map<String, IRepository> repositories = new HashMap<>();
+    private final String repo;
+    private final File baseFolder;
     /** "1": instance is in cloud mode, value: address of cloud instance */
     private final String cloud;
     private final String otelcolContribDownloadUrl;
@@ -45,6 +47,8 @@ public class HestiaConfig {
     private final String customerKey;
     
     public HestiaConfig() {
+        repo = get("REPO");
+        baseFolder = calculateBaseFolder(repo);
         cloud = get("CLOUD");
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
         otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
@@ -156,8 +160,7 @@ public class HestiaConfig {
     }
 
     public IRepository getRepository(IBranch branch) {
-        var url = get("REPO");
-        if (StringService.isNullOrEmpty(url)) {
+        if (StringService.isNullOrEmpty(repo)) {
             IRepository ret = repositories.get("$file");
             if (ret == null) {
                 ret = new FileRepository(getBaseFolder());
@@ -170,17 +173,16 @@ public class HestiaConfig {
             if (ret == null) {
                 var user = get("REPOUSER");
                 check(user);
-                ret = new GitRepository(url, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branchName);
+                ret = new GitRepository(repo, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branchName);
                 repositories.put(branchName, ret);
             }
             return ret;
         }
     }
 
-    public File getBaseFolder() {
+    private static File calculateBaseFolder(String repo) {
         String folder;
-        var url = get("REPO");
-        if (StringService.isNullOrEmpty(url)) {
+        if (StringService.isNullOrEmpty(repo)) {
             folder = get("DATAFOLDER");
             if (StringService.isNullOrEmpty(folder)) {
                 throw new IllegalStateException("Please set env var DATAFOLDER (or REPO).");
@@ -192,7 +194,11 @@ public class HestiaConfig {
         return new File(folder);
     }
     
-    private void check(String c) {
+    public File getBaseFolder() {
+        return baseFolder;
+    }
+    
+    private static void check(String c) {
         if (StringService.isNullOrEmpty(c)) {
             throw new IllegalStateException("Please set env vars REPOFOLDER, REPOUSER, REPOMAIL and REPOPASSWORD.");
         }
