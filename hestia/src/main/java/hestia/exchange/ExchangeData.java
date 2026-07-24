@@ -32,11 +32,7 @@ public class ExchangeData {
     }
     
     public void put(File file, String content) {
-        var d = dn(file);
-        if (content == null) {
-            throw new RuntimeException("File not found or is empty: " + d);
-        }
-        files.put(d, content);
+        files.put(dn(file), content);
     }
 
     private String dn(File file) {
