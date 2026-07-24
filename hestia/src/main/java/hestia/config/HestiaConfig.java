@@ -2,7 +2,9 @@ package hestia.config;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.pmw.tinylog.Logger;
 
@@ -22,6 +24,7 @@ public class HestiaConfig {
     /** built-in default version */
     public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
+    private final Map<String, IRepository> repositories = new HashMap<>();
     /** "1": instance is in cloud mode, value: address of cloud instance */
     private final String cloud;
     private final String otelcolContribDownloadUrl;
@@ -152,21 +155,31 @@ public class HestiaConfig {
         return new AlertRuleDAO(alertGroupDAO(branch));
     }
 
-    // TODO Ich sollte besser die Objekte vorhalten und nicht immer neu erstellen.
     public IRepository getRepository(IBranch branch) {
         var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {
-            return new FileRepository(getBaseFolder());
+            IRepository ret = repositories.get("$file");
+            if (ret == null) {
+                ret = new FileRepository(getBaseFolder());
+                repositories.put("$file", ret);
+            }
+            return ret;
         } else {
-            var user = get("REPOUSER");
-            check(user);
-            return new GitRepository(url, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branch.getBranch());
+            String branchName = branch.getBranch();
+            IRepository ret = repositories.get(branchName);
+            if (ret == null) {
+                var user = get("REPOUSER");
+                check(user);
+                ret = new GitRepository(url, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branchName);
+                repositories.put(branchName, ret);
+            }
+            return ret;
         }
     }
 
     public File getBaseFolder() {
-        var url = get("REPO");
         String folder;
+        var url = get("REPO");
         if (StringService.isNullOrEmpty(url)) {
             folder = get("DATAFOLDER");
             if (StringService.isNullOrEmpty(folder)) {

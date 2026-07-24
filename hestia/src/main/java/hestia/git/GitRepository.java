@@ -52,7 +52,6 @@ public class GitRepository implements IRepository {
     public String load(String file) {
         var folder = rd.getLocalFolder();
         if (!folder.isDirectory()) {
-            // TODO Wie oft soll ich pullen?
             folder.getParentFile().mkdirs(); // TODO amalia-git
             repo.pull();
         }
