@@ -12,6 +12,7 @@ import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
 import hestia.environment.EditEnvironmentPage;
+import hestia.environment.EnvironmentsPage;
 import hestia.exchange.DeliverPage;
 import hestia.exchange.PullAction;
 import hestia.exchange.ReceiveAction;
@@ -93,6 +94,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/environment/add", AddEnvironmentPage.class);
         get("/:branch/environment/:id/delete", DeleteEnvironmentAction.class);
         form("/:branch/environment/:id", EditEnvironmentPage.class);
+        get("/:branch/environment", EnvironmentsPage.class);
     }
 
     private void monitoredTargets() {

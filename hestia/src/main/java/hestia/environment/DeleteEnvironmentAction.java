@@ -1,5 +1,6 @@
 package hestia.environment;
 
+import hestia.HestiaWebapp;
 import hestia.web.base.HAction;
 
 public class DeleteEnvironmentAction extends HAction {
@@ -8,6 +9,9 @@ public class DeleteEnvironmentAction extends HAction {
     protected void execute() {
         String id = ctx.pathParam("id");
         
+        if (HestiaWebapp.config.isCustomer()) {
+            throw new RuntimeException("Delete not allowed");
+        }
         if (mtDAO().count(id) > 0 || alertGroupDAO().count(id) > 0) {
             throw new RuntimeException(n("CantDeleteEnvironment"));
         }
