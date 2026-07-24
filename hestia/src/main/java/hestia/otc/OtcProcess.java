@@ -67,7 +67,9 @@ public class OtcProcess {
                     }
                 }
             } catch (IOException e) {
-                Logger.error(e, "Error loading otelcol-contrib log");
+                if (!e.getMessage().contains("Stream closed")) {
+                    Logger.error(e, "Error loading otelcol-contrib log");
+                }
             }
         });
         logReader.setDaemon(true); // Start the thread as a daemon so that it does not prevent the JVM from shutting down.
@@ -109,7 +111,7 @@ public class OtcProcess {
             try {
                 var r = new REST("http://localhost:13133/").get();
                 int status = r.status();
-                Logger.info("health_check: [" + status + "] " + r.response());
+                Logger.debug("health_check: [" + status + "] " + r.response());
                 return status;
             } catch (Exception e) {
                 Logger.error("health_check: " + e.getMessage());

@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.apache.http.entity.ContentType;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
+import hestia.base.Downloader;
 import hestia.base.IBranch;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
@@ -82,7 +84,6 @@ public class ExchangeService {
         for (File file : files) {
             // Datei mit hoechster k Nr. finden
             String name = file.getName();
-            Logger.info("XXX - " + name); // XXX spaeter raus!
             if (name.startsWith("k") && name.endsWith(".json")) {
                 try {
                     name = name.substring(1);
@@ -118,7 +119,12 @@ public class ExchangeService {
         var url = ci + "/x/receive/" + customerKey + "/" + tag;
         Logger.info("[exchange] push | POST " + url);
         Logger.debug("[exchange] push | JSON: " + json);
-        new REST(url).post(json).close();
+        new REST(url) {
+            @Override
+            protected ContentType getJsonContentType() {
+                return json_cp1252();
+            }
+        }.post(json).close();
     }
     
     /**
@@ -202,8 +208,9 @@ public class ExchangeService {
             var json = e.getValue();
             var file = new File(targetFolder, dn);
             if (file.isFile()) {
-                FileService.copyFile(file, new File(backupFolder, file.getParentFile().getName()));
-                backupList.add(new File(backupFolder, file.getName()));
+                var target = new File(backupFolder, file.getParentFile().getName() + "/" + file.getName());
+                Downloader.copyFileToFile(file, target);
+                backupList.add(target);
             }
             FileService.savePlainTextFile(file, json);
             Logger.info("saved: " + file.getAbsolutePath());
