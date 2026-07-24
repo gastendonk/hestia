@@ -111,8 +111,7 @@ public class ExchangeService {
             throw new RuntimeException("Cloud instance is not set");
         }
         Logger.info("[exchange] push | tag: " + tag + " | branch: " + branch + " | customer key: " + customerKey);
-        var data = getData(branch, tag);
-        // TODO Nur Daten für diesen customerKey bereitstellen!
+        var data = getData(branch, tag, customerKey);
         var json = GsonFactory.create().toJson(data);
         var url = ci + "/x/receive/" + customerKey + "/" + tag;
         Logger.info("[exchange] push | POST " + url);
@@ -142,7 +141,7 @@ public class ExchangeService {
         }
     }
     
-    public ExchangeData getData(IBranch branch, String tag) {
+    public ExchangeData getData(IBranch branch, String tag, String customerKey) {
         var data = new ExchangeData();
         data.setTag(tag);
         data.setFiles(new HashMap<>());
@@ -158,6 +157,11 @@ public class ExchangeService {
                     Logger.info("RepositoryAdapter.getFile: " + f.getAbsolutePath() + ", " + f.isFile());
                     return f;
                 }
+                
+                @Override
+                public String load(String file) {
+                    return FileService.loadPlainTextFile(getFile(file));
+                }
             };
         } else {
             workspace = null;
@@ -166,11 +170,16 @@ public class ExchangeService {
             var dao1 = new EnvironmentDAO(repo);
             var dao2 = new MonitoredTargetDAO(repo);
             var dao3 = new AlertGroupDAO(repo);
-            data.put(dao1.getFile());
+            List<Environment> envs = new ArrayList<>();
             for (Environment env : dao1.load()) {
-                data.put(dao2.getFile(env.getId()));
-                data.put(dao3.getFile(env.getId()));
+                if (env.getCustomerKey().equals(customerKey)) {
+                    envs.add(env);
+                    Logger.info("getData: " + env.getCustomer() + " " + env.getName());
+                    data.put(dao2.getFile(env.getId()));
+                    data.put(dao3.getFile(env.getId()));
+                }
             }
+            data.put(dao1.getFile(), dao1.json(envs));
         } finally {
             if (workspace != null) {
                 FileService.deleteFolder(workspace);

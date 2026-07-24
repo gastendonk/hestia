@@ -202,13 +202,16 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
      */
     private void saveAndCommit(String environmentId, List<T> values, String commitMessage) {
         String path = getPath(environmentId);
-
         try {
             String json = gson.toJson(values, listType);
             gitRepository.save(path, json, commitMessage);
         } catch (RuntimeException e) {
             throw new RepositoryPersistenceException("Could not write and commit JSON file: " + path, e);
         }
+    }
+    
+    public String json(List<T> values) {
+        return gson.toJson(values, listType);
     }
     
     public void push(String user, String password) {
