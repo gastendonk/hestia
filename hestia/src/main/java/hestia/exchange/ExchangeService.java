@@ -1,6 +1,8 @@
 package hestia.exchange;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,9 +155,7 @@ public class ExchangeService {
             repo = new RepositoryAdapter() {
                 @Override
                 public File getFile(String file) {
-                    var f = new File(workspace, file);
-                    Logger.info("RepositoryAdapter.getFile: " + f.getAbsolutePath() + ", " + f.isFile());
-                    return f;
+                    return new File(workspace, file);
                 }
                 
                 @Override
@@ -174,7 +174,7 @@ public class ExchangeService {
             for (Environment env : dao1.load()) {
                 if (env.getCustomerKey().equals(customerKey)) {
                     envs.add(env);
-                    Logger.info("getData: " + env.getCustomer() + " " + env.getName());
+                    Logger.info("getData: environment: " + env.getCustomer() + " " + env.getName());
                     data.put(dao2.getFile(env.getId()));
                     data.put(dao3.getFile(env.getId()));
                 }
@@ -202,7 +202,7 @@ public class ExchangeService {
             var json = e.getValue();
             var file = new File(targetFolder, dn);
             if (file.isFile()) {
-                FileService.copyFile(file, backupFolder);
+                FileService.copyFile(file, new File(backupFolder, file.getParentFile().getName()));
                 backupList.add(new File(backupFolder, file.getName()));
             }
             FileService.savePlainTextFile(file, json);
@@ -212,7 +212,7 @@ public class ExchangeService {
     }
     
     private String ts() {
-        return StringService.now().replace(":", "").replace(" ", "-");
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss"));
     }
 
     public static File file(String customerKey, String tag) {

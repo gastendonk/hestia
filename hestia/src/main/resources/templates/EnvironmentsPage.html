@@ -5,7 +5,7 @@
         <h1 class="page-header">{{header}} <span class="badge">{{size envs}}</span></h1>
         
         {{if not customer}}
-            <p><a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>
+            <p><a href="/{{branch}}/environment/add?r=e" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>
         {{/if}}
         
         {{if envs}}{{table}}{{/if}}

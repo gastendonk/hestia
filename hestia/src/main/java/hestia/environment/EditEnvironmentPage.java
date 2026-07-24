@@ -1,5 +1,7 @@
 package hestia.environment;
 
+import org.pmw.tinylog.Logger;
+
 import hestia.HestiaWebapp;
 import hestia.web.base.HPage;
 
@@ -13,6 +15,7 @@ public class EditEnvironmentPage extends HPage {
         var env = dao.loadOne(id);
         
         if (isPOST()) {
+            Logger.info("EditEnvironmentPage POST " + ctx.fullPath()); // XXX
             String name = ctx.formParam("name").toLowerCase().replace(" ", "");
             if (name.isBlank()) {
                 throw new RuntimeException("Please enter name");
@@ -26,6 +29,7 @@ public class EditEnvironmentPage extends HPage {
             
             backToStartpage();
         } else {
+            Logger.info("EditEnvironmentPage GET " + ctx.fullPath()); // XXX
             header(n("EditEnvironment"));
             put("name", esc(env.getName()));
             combobox("customers", HestiaWebapp.config.getCustomers(), env.getCustomer(), false);
