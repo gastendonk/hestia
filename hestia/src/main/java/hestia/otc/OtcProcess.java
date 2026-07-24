@@ -19,7 +19,8 @@ public class OtcProcess {
     private Process p;
     private boolean checkpoint1;
     private boolean checkpoint2;
-
+    private Thread logReader;
+    
     public OtcProcess() {
         synchronized (LOCK) {
             if (!HestiaWebapp.config.isRun()) {
@@ -54,7 +55,7 @@ public class OtcProcess {
         checkpoint1 = false;
         checkpoint2 = false;
         // Read the output asynchronously in a separate thread.
-        Thread logReader = new Thread(() -> {
+        logReader = new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -66,7 +67,7 @@ public class OtcProcess {
                     }
                 }
             } catch (IOException e) {
-                Logger.error("Error loading otelcol-contrib log", e);
+                Logger.error(e, "Error loading otelcol-contrib log");
             }
         });
         logReader.setDaemon(true); // Start the thread as a daemon so that it does not prevent the JVM from shutting down.
@@ -125,6 +126,11 @@ public class OtcProcess {
         synchronized (LOCK) {
             Logger.info("killing...");
             try {
+                try {
+                    logReader.interrupt();
+                } catch (Exception ex) {
+                    Logger.error(ex);
+                }
                 p.destroy();
                 checkpoint1 = false;
                 checkpoint2 = false;

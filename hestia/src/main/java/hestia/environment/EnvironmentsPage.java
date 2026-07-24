@@ -10,7 +10,7 @@ import hestia.web.base.HPage;
 
 public class EnvironmentsPage extends HPage {
 
-    // see same code in IndexPage, ?r=e
+    // see nearly same code in IndexPage (had trouble to make a component), ?r=e is extra here
     @Override
     protected void execute() {
         List<Environment> envs = environmentDAO().load();
@@ -29,7 +29,7 @@ public class EnvironmentsPage extends HPage {
             m.put("active", env.isActive());
         }
         list.sort((a, b) -> a.get("name").toString().compareToIgnoreCase(b.get("name").toString()));
-        var delete = " <a href=\"/{{branch}}/environment/{{i.id}}/delete\" onclick=\"return confirm('{{N.Delete}}?');\""
+        var delete = " <a href=\"/{{branch}}/environment/{{i.id}}/delete?r=e\" onclick=\"return confirm('{{N.Delete}}?');\""
                 + " class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>";
         if (HestiaWebapp.config.isCustomer()) {
             delete = "";

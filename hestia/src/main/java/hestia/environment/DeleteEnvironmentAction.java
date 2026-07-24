@@ -17,6 +17,10 @@ public class DeleteEnvironmentAction extends HAction {
         }
         environmentDAO().delete(id);
         
-        backToStartpage();
+        if ("e".equals(ctx.queryParam("r"))) {
+            ctx.redirect("/" + b().getBranch() + "/environments");
+        } else {
+            backToStartpage();
+        }
     }
 }
