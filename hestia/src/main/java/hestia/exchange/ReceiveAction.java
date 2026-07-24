@@ -10,7 +10,7 @@ public class ReceiveAction extends HAction {
 
     @Override
     protected void execute() {
-        Logger.info("ReceiveAction | " + ctx.fullPath() + " | Content-Type: " + ctx.req.contentType());
+        Logger.info("ReceiveAction | " + ctx.fullPath());
         
         String customerKey = ctx.pathParam("customerkey");
         String tag = ctx.pathParam("tag");
