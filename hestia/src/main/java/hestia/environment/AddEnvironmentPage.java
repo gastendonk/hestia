@@ -21,7 +21,7 @@ public class AddEnvironmentPage extends HPage {
             environmentDAO().insert(env);
             
             if ("e".equals(ctx.queryParam("r"))) {
-                ctx.redirect("/" + b().getBranch() + "/environments");
+                ctx.redirect("/" + b().getBranch() + "/environment");
             } else {
                 backToStartpage();
             }

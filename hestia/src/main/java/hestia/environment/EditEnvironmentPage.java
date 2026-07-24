@@ -25,7 +25,7 @@ public class EditEnvironmentPage extends HPage {
             dao.update(env);
             
             if ("e".equals(ctx.queryParam("r"))) {
-                ctx.redirect("/" + b().getBranch() + "/environments");
+                ctx.redirect("/" + b().getBranch() + "/environment");
             } else {
                 backToStartpage();
             }

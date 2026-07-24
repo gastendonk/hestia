@@ -18,7 +18,7 @@ public class DeleteEnvironmentAction extends HAction {
         environmentDAO().delete(id);
         
         if ("e".equals(ctx.queryParam("r"))) {
-            ctx.redirect("/" + b().getBranch() + "/environments");
+            ctx.redirect("/" + b().getBranch() + "/environment");
         } else {
             backToStartpage();
         }
