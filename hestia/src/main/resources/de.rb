@@ -70,3 +70,6 @@ otcDownloadUrl=OTC Download-Quelle
 taggen=Aktuellen Stand mit $t taggen.
 Auslieferung=Auslieferung
 tagQuestion=Git tag erstellen?
+QueryAlertsandSilences=Aktive Alarme und Stummschaltungen
+QueryAlerts=Aktive Alarme
+Silences=Stummschaltungen

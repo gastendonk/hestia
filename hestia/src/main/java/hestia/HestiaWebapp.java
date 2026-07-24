@@ -29,6 +29,7 @@ import hestia.otc.OtcProcess;
 import hestia.otc.OtcService;
 import hestia.otc.OtcStatusPage;
 import hestia.otc.opts.EditOtcOptsPage;
+import hestia.prometheus.QueryalertsAndSilencesPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
 import hestia.prometheus.alert.DeleteAlertGroupAction;
@@ -81,6 +82,8 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/otc/options", EditOtcOptsPage.class);
         get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/kill", KillAction.class); // kill or restart OTC
+        
+        get("/qas", QueryalertsAndSilencesPage.class);
 
         form("/tablesort/:id/:col", TableSortAction.class);
 

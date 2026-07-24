@@ -70,3 +70,6 @@ otcDownloadUrl=OTC download source
 taggen=tag with $t
 Auslieferung=Delivery
 tagQuestion=Create Git tag?
+QueryAlertsandSilences=Alerts and silences
+QueryAlerts=Firing alerts
+Silences=Silences
