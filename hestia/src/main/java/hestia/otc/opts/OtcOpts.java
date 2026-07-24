@@ -14,7 +14,8 @@ public class OtcOpts {
     private String otc;
     /** true: log debug messages */
     private boolean debug = true;
-
+    private String customer;
+    
     public String getPrometheusremotewrite() {
         return prometheusremotewrite;
     }
@@ -53,5 +54,13 @@ public class OtcOpts {
 
     public void setDebug(boolean debug) {
         this.debug = debug;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 }

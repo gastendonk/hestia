@@ -18,6 +18,7 @@ public class OtcConfigBuilderTest {
     @Test
     public void build() {
         OtcOpts o = new OtcOpts();
+        o.setCustomer("COMPANY");
         o.setPrometheusremotewrite("http://prometheus:9090");
         o.setTempo("tempo:4317");
         o.setLoki("http://loki:3100/otlp");
@@ -59,6 +60,9 @@ public class OtcConfigBuilderTest {
                   batch: {}
                   attributes:
                     actions:
+                      - key: customer
+                        value: COMPANY
+                        action: insert
                       - key: process.command_line
                         action: delete
                       - key: process.pid
@@ -152,6 +156,9 @@ public class OtcConfigBuilderTest {
                   batch: {}
                   attributes:
                     actions:
+                      - key: customer
+                        value: unspecified
+                        action: insert
                       - key: process.command_line
                         action: delete
                       - key: process.pid

@@ -14,6 +14,7 @@ public class EditOtcOptsPage extends HPage {
             opts.setLoki(ctx.formParam("loki"));
             opts.setOtc(ctx.formParam("otc"));
             opts.setDebug("on".equals(ctx.formParam("debug")));
+            opts.setCustomer(ctx.formParam("customer"));
             OtcOptsDAO.save(opts);
 
             ctx.redirect("/");
@@ -24,6 +25,7 @@ public class EditOtcOptsPage extends HPage {
             put("loki", esc(opts.getLoki()));
             put("otc", esc(opts.getOtc()));
             put("debug", opts.isDebug());
+            put("customer", esc(opts.getCustomer()));
             
             var tv = n("typicalValue") + ": ";
             put("hint1", tv + "http://prometheus:9090/api/v1/write");

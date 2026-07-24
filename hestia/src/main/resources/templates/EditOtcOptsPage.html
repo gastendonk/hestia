@@ -7,6 +7,12 @@
         <form class="form-horizontal" method="post">
             <fieldset>
                 <div class="form-group">
+                    <label for="customer" class="col-lg-2 control-label">{{N.Customer}}</label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control" id="customer" name="customer" value="{{customer}}">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="prometheusremotewrite" class="col-lg-2 control-label">Prometheus {{N.database}}</label>
                     <div class="col-lg-3">
                         <input autofocus type="text" class="form-control" id="prometheusremotewrite" name="prometheusremotewrite" value="{{prometheusremotewrite}}">

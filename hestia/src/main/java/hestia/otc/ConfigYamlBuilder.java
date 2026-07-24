@@ -145,6 +145,9 @@ public class ConfigYamlBuilder {
                   batch: {}
                   attributes:
                     actions:
+                      - key: customer
+                        value: $c
+                        action: insert
                       - key: process.command_line
                         action: delete
                       - key: process.pid
@@ -160,7 +163,8 @@ public class ConfigYamlBuilder {
                           - set(attributes["database"], resource.attributes["postgresql.database.name"])
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
 
-                                """;
+                                """
+                .replace("$c", StringService.isNullOrEmpty(o.getCustomer()) ? "unspecified" : o.getCustomer());
     }
 
     private String exporters() {
