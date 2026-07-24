@@ -8,6 +8,8 @@ public class OtcStatusPage extends HPage {
 
     @Override
     protected void execute() {
+        waitForGreen(); // at begin
+        
         OtcProcess otc = HestiaWebapp.otcProcess;
         int checkHealth = otc == null ? -3 : otc.checkHealth();
         var otcFile = HestiaWebapp.config.getOtelcolContrib();
@@ -29,5 +31,17 @@ public class OtcStatusPage extends HPage {
         put("cp2", otc != null && otc.isCheckpoint2());
         put("cp3", otc != null && checkHealth == 200);
         put("downloadUrl", esc(HestiaWebapp.config.getOtelcolContribDownloadUrl()));
+    }
+
+    private void waitForGreen() {
+        for (int i = 1; i <= 4; i++) {
+            if (HestiaWebapp.otcProcess.isCheckpoint1()) {
+                break;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        }
     }
 }
