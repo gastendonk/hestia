@@ -20,6 +20,7 @@ import hestia.git.GitRepository;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.persist.GsonFactory;
 import hestia.persist.IRepository;
+import hestia.persist.RepositoryAdapter;
 import hestia.prometheus.alert.AlertGroupDAO;
 
 public class ExchangeService {
@@ -111,6 +112,7 @@ public class ExchangeService {
         }
         Logger.info("[exchange] push | tag: " + tag + " | branch: " + branch + " | customer key: " + customerKey);
         var data = getData(branch, tag);
+        // TODO Nur Daten für diesen customerKey bereitstellen!
         var json = GsonFactory.create().toJson(data);
         var url = ci + "/x/receive/" + customerKey + "/" + tag;
         Logger.info("[exchange] push | POST " + url);
@@ -140,15 +142,25 @@ public class ExchangeService {
         }
     }
     
-    // TODO wenn ich das hier mache, darf sonst keiner aufs Repo dieses Branches zugreifen! sync...
     public ExchangeData getData(IBranch branch, String tag) {
         var data = new ExchangeData();
         data.setTag(tag);
         data.setFiles(new HashMap<>());
         IRepository repo = HestiaWebapp.config.getRepository(branch);
+        File workspace;
         if (repo instanceof GitRepository git) {
-            git.getRepo().selectCommit(tag);
-            git.getRepo().pull();
+            workspace = git.checkout(branch.getBranch(), tag);
+            Logger.info("workspace: " + workspace.getAbsolutePath());
+            repo = new RepositoryAdapter() {
+                @Override
+                public File getFile(String file) {
+                    var f = new File(workspace, file);
+                    Logger.info("RepositoryAdapter.getFile: " + f.getAbsolutePath() + ", " + f.isFile());
+                    return f;
+                }
+            };
+        } else {
+            workspace = null;
         }
         try {
             var dao1 = new EnvironmentDAO(repo);
@@ -160,9 +172,8 @@ public class ExchangeService {
                 data.put(dao3.getFile(env.getId()));
             }
         } finally {
-            if (repo instanceof GitRepository git) {
-                git.getRepo().switchToBranch(branch.getBranch());
-                git.getRepo().pull();
+            if (workspace != null) {
+                FileService.deleteFolder(workspace);
             }
         }
         return data;

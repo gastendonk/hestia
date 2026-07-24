@@ -1,6 +1,8 @@
 package hestia.git;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import org.pmw.tinylog.Logger;
 
@@ -111,5 +113,47 @@ public class GitRepository implements IRepository {
     
     public String getUrl() {
         return rd.getUrl();
+    }
+    
+    /**
+     * Checkout tag. Work in a temp folder.
+     * @param branch -
+     * @param tag -
+     * @return workspace folder
+     */
+    public File checkout(String branch, String tag) {
+        try {
+            File folder = Files.createTempDirectory("checkout_" + tag).toFile();
+            FileService.deleteFolder(folder);
+            folder.getParentFile().mkdirs();
+            var repo = new Repository(new RepositoryDefinition() {
+                @Override
+                public String getUser() {
+                    return rd.getUser();
+                }
+                
+                @Override
+                public String getPassword() {
+                    return rd.getPassword();
+                }
+                
+                @Override
+                public String getUrl() {
+                    return rd.getUrl();
+                }
+                
+                @Override
+                public File getLocalFolder() {
+                    return folder;
+                }
+            });
+            repo.switchToBranch(branch);
+            repo.pull();
+            repo.selectCommit(tag);
+            repo.close();
+            return folder;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

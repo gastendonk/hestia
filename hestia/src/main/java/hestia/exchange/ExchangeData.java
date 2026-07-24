@@ -27,7 +27,12 @@ public class ExchangeData {
     }
     
     public void put(File file) {
-        files.put(dn(file), FileService.loadPlainTextFile(file));
+        var d = dn(file);
+        var content = FileService.loadPlainTextFile(file);
+        if (content == null) {
+            throw new RuntimeException("File not found or is empty: " + d);
+        }
+        files.put(d, content);
     }
 
     private String dn(File file) {
