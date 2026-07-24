@@ -50,16 +50,15 @@ public class ExchangeService {
         var url = HestiaWebapp.config.getCloudInstance() + "/x/pull/" + key;
         Logger.info("[exchange] pull | URL: " + url);
         String json = new REST(url).get().response();
-        Logger.info("[exchange] pull | response: " + json); // XXX debug
+        Logger.debug("[exchange] pull | response: " + json);
         
         // einfach mal wegspeichern
         var file = new File(HestiaWebapp.config.getBaseFolder(), "received/" + ts() + ".json");
         FileService.savePlainTextFile(file, json);
-        Logger.info("[exchange] pull | saved to " + file.getAbsolutePath());
         
         // parse data
         ExchangeData data = GsonFactory.create().fromJson(json, ExchangeData.class);
-        Logger.info("[exchange] pull | tag: " + data.getTag());
+        Logger.info("[exchange] pull | saved to " + file.getAbsolutePath() + " | tag: " + data.getTag());
         
         // save data
         setData(data);
@@ -144,7 +143,7 @@ public class ExchangeService {
      * @param body JSON
      */
     public void receive(String customerKey, String tag, String body) {
-        Logger.info("[exchange] receive | customer key: " + customerKey + " | tag: " + tag);
+        Logger.debug("[exchange] receive | customer key: " + customerKey + " | tag: " + tag);
         if (customerKey == null || customerKey.contains("/") || customerKey.contains("..")
                 || tag == null || tag.contains("/") || tag.contains("..")) {
             throw new IllegalArgumentException();
@@ -153,7 +152,7 @@ public class ExchangeService {
         try {
             File file = new File(HestiaWebapp.config.getBaseFolder(), "x/" + customerKey + "/" + tag + ".json");
             FileService.savePlainTextFile(file, body);
-            Logger.info("[exchange] receive | saved as " + file.getAbsolutePath() + ", " + file.isFile());
+            Logger.debug("[exchange] receive | saved as " + file.getAbsolutePath() + ", " + file.isFile());
         } catch (Exception e) {
             Logger.error(e);
         }
@@ -210,22 +209,21 @@ public class ExchangeService {
      */
     public void setData(ExchangeData data) {
         var base = HestiaWebapp.config.getBaseFolder();
-        var targetFolder = base;
         var backupFolder = new File(base, "backup/" + ts());
         List<File> backupList = new ArrayList<>();
         for (Entry<String, String> e : data.getFiles().entrySet()) {
             var dn = e.getKey();
             var json = e.getValue();
-            var file = new File(targetFolder, dn);
+            var file = new File(base, dn);
             if (file.isFile()) {
                 var target = new File(backupFolder, file.getParentFile().getName() + "/" + file.getName());
                 Downloader.copyFileToFile(file, target);
                 backupList.add(target);
             }
             FileService.savePlainTextFile(file, json);
-            Logger.info("saved: " + file.getAbsolutePath());
+            Logger.debug("saved: " + file.getAbsolutePath());
         }
-        Logger.info("backup files: " + backupList.stream().map(i -> i.getAbsolutePath()).collect(Collectors.joining(", ")));
+        Logger.debug("created backup files: " + backupList.stream().map(i -> i.getAbsolutePath()).collect(Collectors.joining(", ")));
     }
     
     private String ts() {

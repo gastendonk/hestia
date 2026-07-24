@@ -9,7 +9,7 @@ public class ServeAction extends HAction {
     
     @Override
     protected void execute() {
-        Logger.info("ServeAction | " + ctx.fullPath());
+        Logger.info("ServeAction " + ctx.fullPath());
         String customerKey = ctx.pathParam("customerkey");
     
         r = new ExchangeService().serve(customerKey);

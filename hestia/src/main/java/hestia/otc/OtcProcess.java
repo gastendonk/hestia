@@ -43,7 +43,7 @@ public class OtcProcess {
                 ProcessBuilder pb = new ProcessBuilder(program.getAbsolutePath(), c);
                 pb.redirectErrorStream(true);
                 p = pb.start();
-                Logger.info("otc process has pid " + p.pid());
+                Logger.info("OTC process has pid " + p.pid() + ".");
                 logs();
             } catch (IOException e) {
                 Logger.error(e);
@@ -139,18 +139,17 @@ public class OtcProcess {
                 try {
                     // Wait up to 3 seconds for normal termination.
                     if (!p.waitFor(3, TimeUnit.SECONDS)) {
-                        Logger.warn("otc is not responding to SIGTERM. Forcing termination (SIGKILL)...");
+                        Logger.warn("OTC is not responding to SIGTERM. Forcing termination (SIGKILL)...");
                         p.destroyForcibly(); // Force hard termination (SIGKILL)
                         p.waitFor(); // Wait indefinitely for the process to be cleaned up by the OS.
                     }
-                    Logger.info("otc process successfully killed.");
+                    Logger.info("OTC process successfully killed.");
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             } catch (Exception e) {
                 Logger.error(e);
             }
-            Logger.info("kill done");
         }
     }
 }

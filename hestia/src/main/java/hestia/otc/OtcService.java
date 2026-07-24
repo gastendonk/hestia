@@ -27,9 +27,7 @@ public class OtcService {
     public void deploy(Collection<String> environments, IBranch branch) {
         synchronized (LOCK) {
             MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
-            Logger.info("environments to load: " + environments); // XXX
             List<MonitoredTarget> list = dao.loadAll(environments);
-            Logger.info("monitored targets: " + list.size()); // XXX
             var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
             Logger.debug("(1) config.yaml: " + yaml);
             validate(yaml);
