@@ -31,10 +31,12 @@ public class IndexPage extends HPage {
         List<Environment> envs = environmentDAO().load();
         OtcProcess otc = HestiaWebapp.otcProcess;
         boolean otcAlive = otc != null && otc.alive();
+        String tag = getTag();
         
         displayGit(repo, b);
         displayEnvironments(envs);
         put("alive", otcAlive);
+        put("tag", esc(tag));
     }
     
     private void displayGit(IRepository repo, IBranch b) {
@@ -93,6 +95,14 @@ public class IndexPage extends HPage {
                         + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default mw2\">" + n("Alerts") + " ({{i.nr2}})</a>"
                         ));
         put("table", new TableComponent("wauto", cols, model, "envs"));
+    }
+    
+    private String getTag() {
+        IRepository irepo = HestiaWebapp.config.getRepository(b());
+        if (irepo instanceof GitRepository repo) {
+            return repo.calculateNextTag(1);
+        }
+        return null;
     }
 
     @Override

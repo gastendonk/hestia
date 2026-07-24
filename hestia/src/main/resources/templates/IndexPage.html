@@ -27,9 +27,15 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary br" title="{{N.SelectBranch}}"><i class="fa fa-check"></i></button>
-                            <a href="/{{branch}}/pull" class="btn btn-default br"><i class="fa fa-arrow-down"></i> Pull</a>
-                            <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"><i class="fa fa-arrow-up"></i> Push</a>
-                            <a href="/{{branch}}/tag" class="btn btn-default br"><i class="fa fa-tag"></i> tag</a>
+                            <a href="/{{branch}}/pull" class="btn btn-default br" onclick="document.querySelector('#s2').style='';"><i
+                                class="fa fa-arrow-down"></i> Pull <i id="s2" class="fa fa-delicious fa-spin"
+                                style="display: none;"></i></a>
+                            <a href="/{{branch}}/push" class="btn {{if unpushed}}btn-success{{else}}btn-default{{/if}} br"
+                                onclick="document.querySelector('#s3').style='';"><i class="fa fa-arrow-up"></i> Push
+                                <i id="s3" class="fa fa-delicious fa-spin" style="display: none;"></i></a>
+                            <a href="/{{branch}}/tag/{{tag}}" class="btn btn-default br"
+                                onclick="if (!confirm('{{N.tagQuestion}}')) { return false; } document.querySelector('#s1').style='';"><i class="fa fa-tag"></i> tag: {{tag}}
+                                <i id="s1" class="fa fa-delicious fa-spin" style="display: none;"></i></a>
                             <a href="/x/push/{{branch}}" class="btn btn-default br"><i class="fa fa-cloud-upload"></i> {{N.Auslieferung}}</a>
                             <a href="{{git}}" class="btn btn-default" target="_blank">Git Repo</a>
                         </div>

@@ -19,7 +19,7 @@ import hestia.exchange.ReceiveAction;
 import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
-import hestia.git.GitTagPage;
+import hestia.git.GitTagAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
 import hestia.otc.EditMTPage;
@@ -72,7 +72,7 @@ public class HestiaWebapp extends RouteDefinitions {
         } else { // only for manufacturer
             get("/:branch/push", GitPushAction.class);
             get("/:branch/pull", GitPullAction.class);
-            get("/:branch/tag", GitTagPage.class);
+            get("/:branch/tag/:tag", GitTagAction.class);
             
             form("/x/push/:branch", DeliverPage.class);
         }

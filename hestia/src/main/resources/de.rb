@@ -69,3 +69,4 @@ killOTC=OTC stoppen
 otcDownloadUrl=OTC Download-Quelle
 taggen=Aktuellen Stand mit $t taggen.
 Auslieferung=Auslieferung
+tagQuestion=Git tag erstellen?

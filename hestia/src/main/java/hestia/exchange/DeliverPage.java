@@ -1,6 +1,10 @@
 package hestia.exchange;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import hestia.HestiaWebapp;
 import hestia.environment.Environment;
@@ -13,6 +17,8 @@ import hestia.web.base.HPage;
  * Delivery: Push data from Burg to cloud instance
  */
 public class DeliverPage extends HPage {
+    // Regex matcht ein 'k' gefolgt von einer reinen Zahl (z. B. "k1", "k42")
+    private static final Pattern K_TAG_PATTERN = Pattern.compile("^k(\\d+)$");
 
     @Override
     protected void execute() {
@@ -38,6 +44,7 @@ public class DeliverPage extends HPage {
                 throw new RuntimeException("Not possible because there is not cloud instance defined.");
             }
             var tags = repo.getRepo().getTagNames();
+            sortTags(tags);
             var tag = repo.calculateNextTag(0);
             if ("k0".equals(tag)) {
                 tag = null;
@@ -60,5 +67,44 @@ public class DeliverPage extends HPage {
             throw new RuntimeException("There are no customer keys.");
         }
         return ret;
+    }
+    
+    private void sortTags(List<String> tags) {
+        tags.sort(Comparator.comparing((String tag) -> {
+
+            if (tag != null) {
+                Matcher matcher = K_TAG_PATTERN.matcher(tag);
+                if (matcher.matches()) {
+                    // Falls k+Zahl -> sortiere primär nach dem Präfix "k" (Kategorie 0) 
+                    // und sekundär nach der Zahl als Long
+                    return new Key(0, tag, Long.parseLong(matcher.group(1)));
+                }
+            }
+            // Alle anderen Tags -> Kategorie 1, sortiert nach dem String selbst
+            return new Key(1, tag, null);
+
+        }));
+    }
+
+    // Hilfs-Record (Java 17 Feature) für den mehrstufigen Vergleich
+    private record Key(int category, String rawTag, Long number) implements Comparable<Key> {
+        @Override
+        public int compareTo(Key other) {
+            // 1. Nach Kategorie vergleichen ("k"-Tags zuerst)
+            int catComp = Integer.compare(this.category, other.category);
+            if (catComp != 0) {
+                return catComp;
+            }
+
+            // 2. Innerhalb der "k"-Tags: Nach Zahl sortieren
+            if (this.number != null && other.number != null) {
+                return Long.compare(this.number, other.number);
+            }
+
+            // 3. Sonst: Normale alphabetische Sortierung
+            if (this.rawTag == null) return -1;
+            if (other.rawTag == null) return 1;
+            return this.rawTag.compareToIgnoreCase(other.rawTag);
+        }
     }
 }
