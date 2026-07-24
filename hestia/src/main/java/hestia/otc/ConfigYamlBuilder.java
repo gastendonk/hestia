@@ -146,7 +146,7 @@ public class ConfigYamlBuilder {
                   attributes:
                     actions:
                       - key: customer
-                        value: $c
+                        value: "$c"
                         action: insert
                       - key: process.command_line
                         action: delete

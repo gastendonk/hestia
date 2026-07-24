@@ -61,7 +61,7 @@ public class OtcConfigBuilderTest {
                   attributes:
                     actions:
                       - key: customer
-                        value: COMPANY
+                        value: "COMPANY"
                         action: insert
                       - key: process.command_line
                         action: delete
@@ -157,7 +157,7 @@ public class OtcConfigBuilderTest {
                   attributes:
                     actions:
                       - key: customer
-                        value: unspecified
+                        value: "unspecified"
                         action: insert
                       - key: process.command_line
                         action: delete
