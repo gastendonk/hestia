@@ -18,9 +18,11 @@ public class EditEnvironmentPage extends HPage {
                 throw new RuntimeException("Please enter name");
             }
             
-            env.setName(name);
-            env.setCustomer(ctx.formParam("customer"));
-            env.setCustomerKey(ctx.formParam("customerKey"));
+            if (!HestiaWebapp.config.isCustomer()) {
+                env.setName(name);
+                env.setCustomer(ctx.formParam("customer"));
+                env.setCustomerKey(ctx.formParam("customerKey"));
+            }
             env.setActive("on".equals(ctx.formParam("active")));
             dao.update(env);
             
