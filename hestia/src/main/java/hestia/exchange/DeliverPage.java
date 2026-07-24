@@ -71,18 +71,16 @@ public class DeliverPage extends HPage {
     
     private void sortTags(List<String> tags) {
         tags.sort(Comparator.comparing((String tag) -> {
-
             if (tag != null) {
                 Matcher matcher = K_TAG_PATTERN.matcher(tag);
                 if (matcher.matches()) {
-                    // Falls k+Zahl -> sortiere primär nach dem Präfix "k" (Kategorie 0) 
-                    // und sekundär nach der Zahl als Long
+                    // Falls k+Zahl -> sortiere primaer nach dem Praefix "k" (Kategorie 0) 
+                    // und sekundaer nach der Zahl als Long
                     return new Key(0, tag, Long.parseLong(matcher.group(1)));
                 }
             }
             // Alle anderen Tags -> Kategorie 1, sortiert nach dem String selbst
             return new Key(1, tag, null);
-
         }));
     }
 
