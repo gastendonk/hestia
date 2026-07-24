@@ -5,16 +5,13 @@
         {{if customer}}
             <p class="mt2">
                 <a href="/x/pull" class="btn btn-default br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
+                <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
             </p>
-            <hr>
+        {{else}}
+	        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
+	        <p><a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>
+	        {{if envs}}{{table}}{{/if}}
         {{/if}}
-        
-        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
-        <p>
-            <a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a>
-        </p>
-        {{if envs}}{{table}}{{/if}}
-        <a href="/{{branch}}/environment" class="btn btn-default br">{{N.Environments}}</a>
         
         {{if hasRepo}}
             <hr>
@@ -44,7 +41,11 @@
         
         <hr>
         <p>
-            <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
+            {{if customer}}
+                <a href="/{{branch}}/environment" class="btn btn-default br">{{N.Environments}}</a>
+            {{else}}
+                <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
+            {{/if}}
             <a href="/otc/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
             <a href="/otc/status" class="btn {{if alive}}btn-success{{else}}btn-danger{{/if}} br">{{N.otcStatus}}</a>
         </p>
