@@ -12,7 +12,11 @@ public class DeployAction extends HAction {
     protected void execute() {
         deploy(b(), environmentDAO());
         
-        backToStartpage();
+        if ("o".equals(ctx.queryParam("r"))) {
+            ctx.redirect("/otc/status");
+        } else {
+            backToStartpage();
+        }
     }
     
     public static void deploy(IBranch b, EnvironmentDAO envDAO) {
