@@ -1,6 +1,7 @@
 package hestia.exchange;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
 import hestia.base.Downloader;
 import hestia.base.IBranch;
+import hestia.base.ShellScriptExecutor;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
@@ -115,14 +117,21 @@ public class ExchangeService {
         }
         Logger.info("[exchange] push | tag: " + tag + " | branch: " + branch + " | customer key: " + customerKey);
         var data = getData(branch, tag, customerKey);
-        var json = GsonFactory.create().toJson(data);
         var url = ci + "/x/receive/" + customerKey + "/" + tag;
-        Logger.info("[exchange] push | POST " + url);
+        var json = GsonFactory.create().toJson(data);
+
+        ContentType ct;
+        if (ShellScriptExecutor.isWindows()) {
+            ct = ContentType.create("application/json", Charset.forName("cp1252"));
+        } else {
+            ct = ContentType.create("application/json");
+        }
+        Logger.info("[exchange] push | POST " + url + " | Content-Type: " + ct);
         Logger.debug("[exchange] push | JSON: " + json);
         new REST(url) {
             @Override
             protected ContentType getJsonContentType() {
-                return json_cp1252();
+                return ct;
             }
         }.post(json).close();
     }

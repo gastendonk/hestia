@@ -10,11 +10,17 @@ public class ReceiveAction extends HAction {
 
     @Override
     protected void execute() {
-        Logger.info("ReceiveAction | " + ctx.fullPath() + " | windows-1252");
+        Logger.info("ReceiveAction | " + ctx.fullPath() + " | Content-Type: " + ctx.req.contentType());
+        
         String customerKey = ctx.pathParam("customerkey");
         String tag = ctx.pathParam("tag");
-        String body = StringUtils.toString(ctx.req.bodyAsBytes(), "windows-1252");
-        Logger.info("ReceiveAction | body: " + body);
+        boolean windowsEncoding = "win".equals(ctx.queryParam("enc")); // If caller is Windows use ?enc=win, otherwise not.
+        String body;
+        if (windowsEncoding) {
+            body = StringUtils.toString(ctx.req.bodyAsBytes(), "windows-1252");
+        } else {
+            body = ctx.body();
+        }
         
         new ExchangeService().receive(customerKey, tag, body);
     }
