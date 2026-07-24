@@ -123,6 +123,7 @@ public class ExchangeService {
         ContentType ct;
         if (ShellScriptExecutor.isWindows()) {
             ct = ContentType.create("application/json", Charset.forName("cp1252"));
+            url += "?enc=win";
         } else {
             ct = ContentType.create("application/json");
         }
