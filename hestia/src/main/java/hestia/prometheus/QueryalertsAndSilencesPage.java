@@ -45,7 +45,6 @@ public class QueryalertsAndSilencesPage extends HPage {
                 Col.si("Instance", "instance")
                 );
         put("table1", new TableComponent("wauto", cols, model, "queryalerts"));
-    
     }
 
     private void silences(List<Silence> silences) {

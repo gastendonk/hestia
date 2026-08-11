@@ -84,7 +84,7 @@ public class DeliverPage extends HPage {
         }));
     }
 
-    // Hilfs-Record (Java 17 Feature) für den mehrstufigen Vergleich
+    // Hilfs-Record (Java 17 Feature) fuer den mehrstufigen Vergleich
     private record Key(int category, String rawTag, Long number) implements Comparable<Key> {
         @Override
         public int compareTo(Key other) {
