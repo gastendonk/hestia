@@ -69,6 +69,7 @@ killOTC=Kill OTC
 otcDownloadUrl=OTC download source
 taggen=tag with $t
 Auslieferung=Delivery
+Deliver=Deliver
 tagQuestion=Create Git tag?
 QueryAlertsandSilences=Alerts and silences
 QueryAlerts=Firing alerts

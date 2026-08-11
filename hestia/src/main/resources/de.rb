@@ -69,6 +69,7 @@ killOTC=OTC stoppen
 otcDownloadUrl=OTC Download-Quelle
 taggen=Aktuellen Stand mit $t taggen.
 Auslieferung=Auslieferung
+Deliver=Ausliefern
 tagQuestion=Git tag erstellen?
 QueryAlertsandSilences=Aktive Alarme und Stummschaltungen
 QueryAlerts=Aktive Alarme
