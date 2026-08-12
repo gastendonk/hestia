@@ -74,6 +74,7 @@ public class PrometheusService {
             var url = HestiaWebapp.config.getPrometheusHost() + "/-/reload";
             Logger.info("reloadPrometheus: " + url);
             REST.post(url, "");
+            // Status 500 ist ein Indiz dafuer, dass die alert-rules nicht valide sind.
         }
     }
     
