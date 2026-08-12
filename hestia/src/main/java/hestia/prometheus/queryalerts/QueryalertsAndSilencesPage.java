@@ -1,4 +1,4 @@
-package hestia.prometheus;
+package hestia.prometheus.queryalerts;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,8 +8,6 @@ import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
 import hestia.config.HestiaConfig;
-import hestia.prometheus.queryalerts.PrometheusQueryAlertsService;
-import hestia.prometheus.queryalerts.PrometheusResult;
 import hestia.prometheus.silences.PrometheusSilencesService;
 import hestia.prometheus.silences.Silence;
 import hestia.web.base.HPage;
