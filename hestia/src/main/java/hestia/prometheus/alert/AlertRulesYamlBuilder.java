@@ -37,6 +37,7 @@ public class AlertRulesYamlBuilder {
         String ret = "  rules:\n";
         for (AlertRule r : rules) {
             ret += "  - alert: " + r.getAlert() + "\n";
+            ret += "    expr: " + r.getExpr() + "\n";
             ret += "    for: " + r.getDurationFor() + "\n";
             var s = !StringService.isNullOrEmpty(r.getSummary());
             var d = !StringService.isNullOrEmpty(r.getDescription());
