@@ -74,3 +74,4 @@ tagQuestion=Git tag erstellen?
 QueryAlertsandSilences=Aktive Alarme und Stummschaltungen
 QueryAlerts=Aktive Alarme
 Silences=Stummschaltungen
+DoSilence=Stummschalten

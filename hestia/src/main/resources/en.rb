@@ -74,3 +74,4 @@ tagQuestion=Create Git tag?
 QueryAlertsandSilences=Alerts and silences
 QueryAlerts=Firing alerts
 Silences=Silences
+DoSilence=Silence

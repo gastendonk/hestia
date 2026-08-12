@@ -36,6 +36,7 @@ import hestia.prometheus.alert.EditAlertGroupPage;
 import hestia.prometheus.alert.rule.AddAlertRulePage;
 import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
 import hestia.prometheus.alert.rule.EditAlertRulePage;
+import hestia.prometheus.queryalerts.DoSilencePage;
 import hestia.prometheus.queryalerts.QueryalertsAndSilencesPage;
 import hestia.web.DeployAction;
 import hestia.web.IndexPage;
@@ -84,6 +85,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/otc/kill", KillAction.class); // kill or restart OTC
         
         get("/qas", QueryalertsAndSilencesPage.class);
+        form("/qas/silence/:alertname", DoSilencePage.class);
 
         form("/tablesort/:id/:col", TableSortAction.class);
 

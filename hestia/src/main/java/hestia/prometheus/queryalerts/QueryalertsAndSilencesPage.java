@@ -40,7 +40,8 @@ public class QueryalertsAndSilencesPage extends HPage {
                 Col.si("State", "state"),
                 Col.si("Value", "value"),
                 Col.si("Datum", "ts"),
-                Col.si("Instance", "instance")
+                Col.si("Instance", "instance"),
+                new Col("", "<a href=\"/qas/silence/{{i.name}}\" class=\"btn btn-xs btn-default\">" + n("DoSilence") + "</a>")
                 );
         put("table1", new TableComponent("wauto", cols, model, "queryalerts"));
     }
@@ -54,6 +55,7 @@ public class QueryalertsAndSilencesPage extends HPage {
             m.put("m", esc(s.getMatchersString()));
             m.put("s", esc(s.getStatus() == null ? "" : s.getStatus().getState()));
             m.put("end", esc(s.getEndsAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))));
+// TODO Zeitzone!
         }
         Cols cols = Cols.of(
                 Col.si("Created by", "c"),
