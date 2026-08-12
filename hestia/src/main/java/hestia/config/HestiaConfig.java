@@ -45,6 +45,7 @@ public class HestiaConfig {
     /** true: customer mode, false: manufacturer or cloud mode */
     private final boolean customer;
     private final String customerKey;
+    private final String promtool;
     
     public HestiaConfig() {
         repo = get("REPO");
@@ -60,6 +61,7 @@ public class HestiaConfig {
         customers = Arrays.asList(get("CUSTOMERS", "").split(","));
         customers.sort((a, b) -> a.compareToIgnoreCase(b));
         customerKey = get("CUSTOMERKEY");
+        promtool = get("PROMTOOL");
         
         // /work: working directory, exchange files with other containers
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
@@ -206,5 +208,9 @@ public class HestiaConfig {
     
     public String getCustomerKey() {
         return customerKey;
+    }
+
+    public String getPromtool() {
+        return promtool;
     }
 }

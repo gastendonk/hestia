@@ -19,13 +19,12 @@ dockerBuildImage {
 dockerCreateDockerfile {
     outputs.upToDateWhen { false }
     doLast {
-        copy {
-            from 'otelcol-contrib/linux'
-            into 'build/docker'
-        }
         def dockerfile = destFile.get().asFile
-        dockerfile.text = dockerfile.text.replace('WORKDIR', 'RUN apk add bash nano\n' +
-            'ENV TZ=Europe/Berlin\n' +
+        dockerfile.text = dockerfile.text.replace('FROM eclipse-temurin',
+            'FROM prom/prometheus:v3.11.2-busybox AS promtool-provider\nFROM eclipse-temurin').replace('WORKDIR',
+            'RUN apk add bash nano\n' +
+            'COPY --from=promtool-provider /bin/promtool /usr/local/bin/promtool\n' +
+            'ENV PROMTOOL=/usr/local/bin/promtool\n' +
             'WORKDIR').replace('8080', '4317 4318 8888 8080')
     }
 }

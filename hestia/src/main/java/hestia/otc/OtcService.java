@@ -42,17 +42,20 @@ public class OtcService {
     }
 
     private void validate(String yaml) {
-        File configFile = HestiaWebapp.config.getConfigYamlForValidate();
+        File configFile = HestiaWebapp.config.getConfigYamlForValidate(); // TODO Wieso nicht ein tempfile? vgl. PrometheusService
         FileService.savePlainTextFile(configFile, yaml);
-        Logger.debug("(2) config.yaml: " + FileService.loadPlainTextFile(configFile));
-        var sc = new ShellScriptExecutor();
-        var exe = HestiaWebapp.config.getOtelcolContrib();
-        var cmd = (ShellScriptExecutor.isWindows() ? "@" : "") + exe.getAbsolutePath() + " validate" //
-                + " --config=" + configFile.getAbsolutePath();
-        String out = sc.executeAndGetLog(cmd, exe.getParentFile());
-        configFile.delete();
-        if (sc.getExitValue() != 0) {
-            throw new RuntimeException("Validate error:\n" + out);
+        try {
+            Logger.debug("(2) config.yaml: " + FileService.loadPlainTextFile(configFile));
+            var sc = new ShellScriptExecutor();
+            var exe = HestiaWebapp.config.getOtelcolContrib();
+            var cmd = (ShellScriptExecutor.isWindows() ? "@" : "") + exe.getAbsolutePath() + " validate" //
+                    + " --config=" + configFile.getAbsolutePath();
+            String out = sc.executeAndGetLog(cmd, exe.getParentFile());
+            if (sc.getExitValue() != 0) {
+                throw new RuntimeException("Validate error:\n" + out);
+            }
+        } finally {
+            configFile.delete();
         }
     }
     
