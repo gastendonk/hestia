@@ -3,9 +3,11 @@
 <div class="row"> 
     <div class="col-lg-12">
         {{if customer}}
-            <p class="mt2">
-                <a href="/x/pull" class="btn btn-primary br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
-            </p>
+            {{if not dor}}
+	            <p class="mt2">
+	                <a href="/x/pull" class="btn btn-primary br"><i class="fa fa-cloud-download"></i> {{N.DownloadConfig}}</a>
+	            </p>
+            {{/if}}
         {{else}}
 	        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
 	        <p><a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>
@@ -44,7 +46,7 @@
             </p>
         {{/if}}
         
-        <hr>
+        {{if not dor}}<hr>{{/if}}
         <p>
             {{if customer}}
                 <a href="/{{branch}}/environment" class="btn btn-default br">{{N.Environments}}</a>
@@ -56,7 +58,7 @@
             <a href="/qas" class="btn btn-default br">{{N.QueryAlertsandSilences}}</a>
         </p>
 
-        <p class="mt4"><small>Version {{VERSION}}</small></p>
+        <p class="mt4"><small>Version {{VERSION}}{{if dor}} / dor{{/if}}</small></p>
     </div>
 </div>
 

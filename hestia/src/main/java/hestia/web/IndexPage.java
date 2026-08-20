@@ -38,6 +38,7 @@ public class IndexPage extends HPage {
         put("alive", otcAlive);
         put("tag", esc(tag));
         put("DeployBtn", "Deploy" + (DeployAction.isBURG() ? " (BURG)" : ""));
+        put("dor", HestiaWebapp.config.isDeployOnReceive());
     }
     
     private void displayGit(IRepository repo, IBranch b) {
