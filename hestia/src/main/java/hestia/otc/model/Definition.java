@@ -16,6 +16,14 @@ public class Definition extends AbstractMonitoredTarget {
 
     @Override
     public String getInfo() {
+        // first two lines
+        int o = definition.indexOf("\n");
+        if (o >= 0) {
+            int oo = definition.indexOf("\n", o + 1);
+            if (oo >= 0) {
+                return definition.substring(0, oo).replace("\n", "");
+            }
+        }
         return "";
     }
 }

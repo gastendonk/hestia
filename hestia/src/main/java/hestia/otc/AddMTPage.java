@@ -33,6 +33,7 @@ public class AddMTPage extends HPage {
         put("id", esc(id));
         put("m", esc(m));
         put("f3value", "");
+        put("f2textarea", false);
         if ("linux".equals(m)) {
             header(n("AddMTLinuxServer"));
             put("f2label", n("Host"));
@@ -41,6 +42,12 @@ public class AddMTPage extends HPage {
         } else if ("site".equals(m)) {
             header(n("AddMTSite"));
             put("f2label", "URL");
+            put("f3label", "");
+            put("f4label", "");
+        } else if ("definition".equals(m)) {
+            header(n("AddMTDefinition"));
+            put("f2label", "Definition");
+            put("f2textarea", true);
             put("f3label", "");
             put("f4label", "");
         } else { // DB

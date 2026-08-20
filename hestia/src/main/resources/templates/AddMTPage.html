@@ -15,7 +15,12 @@
                 <div class="form-group">
                     <label for="f2" class="col-lg-1 control-label">{{f2label}}</label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" id="f2" name="f2">
+                        {{if f2textarea}}
+                            <textarea style="font-family: 'Courier New'" rows="10" class="form-control" id="f2" name="f2">receivers:</textarea>
+                            <small>First line must be "receivers:".</small>
+                        {{else}}
+                            <input type="text" class="form-control" id="f2" name="f2">
+                        {{/if}}
                     </div>
                 </div>
                 {{if f3label}}
