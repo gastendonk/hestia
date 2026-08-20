@@ -52,7 +52,7 @@ public class MonitoredTargetsPage extends HPage {
         Cols cols = Cols.of(
                 new Col(n("Name"), "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/edit\"{{if not i.active}}"
                         + " style=\"text-decoration: line-through;\"{{/if}}>{{i.name}}</a>").sortable("name"),
-                new Col("Info", "{{i.info}}"),
+                Col.si("Info", "info"),
                 Col.si(n("Type"), "type")
                 );
         if (!HestiaWebapp.config.isCustomer()) {
