@@ -9,6 +9,7 @@ import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.EnvVarAppConfig;
+import hestia.base.IBranch;
 import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
@@ -132,7 +133,10 @@ public class HestiaWebapp extends RouteDefinitions {
                 .build()
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
-        if (!config.isCloud()) {
+        if (config.isDeployOnReceive()) {
+            IBranch b = () -> "master";
+            DeployAction.deploy(b, config.environmentDAO(b));
+        } else if (!config.isCloud()) {
             try {
                 if (!config.getOtelcolContrib().isFile()) {
                     new OtcService().installOtelcolContrib(); // auto-install
