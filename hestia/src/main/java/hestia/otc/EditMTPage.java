@@ -2,6 +2,7 @@ package hestia.otc;
 
 import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
+import hestia.otc.model.AbstractMonitoredTarget;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
 import hestia.otc.model.MonitoredTarget;
@@ -60,6 +61,7 @@ public class EditMTPage extends HPage {
             h = "Edit" + h;
         }
         header(n(h));
+        put("active", mt.isActive());
     }
 
     private void save(String envId, MonitoredTarget mt, MonitoredTargetDAO dao) {
@@ -84,6 +86,9 @@ public class EditMTPage extends HPage {
             s.setPassword(ctx.formParam("f4"));
         } else {
             throw new RuntimeException("Unsupported MonitoredTarget type");
+        }
+        if (mt instanceof AbstractMonitoredTarget a) {
+            a.setActive("on".equals(ctx.formParam("active")));
         }
         dao.update(envId, mt);
         
