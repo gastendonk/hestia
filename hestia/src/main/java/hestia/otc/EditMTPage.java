@@ -3,6 +3,7 @@ package hestia.otc;
 import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
 import hestia.otc.model.Database;
+import hestia.otc.model.DatabaseType;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.Server;
@@ -15,7 +16,6 @@ public class EditMTPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id"); // environment
         String id2 = ctx.pathParam("id2"); // MonitoredTarget
-        String m = ctx.queryParam("m");
 
         var dao = mtDAO();
         MonitoredTarget mt = dao.loadOne(id, id2);
@@ -23,14 +23,13 @@ public class EditMTPage extends HPage {
         if (isPOST()) {
             save(id, mt, dao);
         } else {
-            display(id, mt, m);
+            display(id, mt);
         }
     }
 
-    private void display(String id, MonitoredTarget mt, String m) {
+    private void display(String id, MonitoredTarget mt) {
         put("id", esc(id));
         put("id2", esc(mt.getId()));
-        put("m", esc(m));
         put("f1", esc(mt.getName()));
         String h;
         if (mt instanceof Server s) {
@@ -47,7 +46,7 @@ public class EditMTPage extends HPage {
             put("f4label", "");
             put("f2", esc(s.getUrl()));
         } else if (mt instanceof Database s) {
-            h = "oracle".equals(m) ? "MTOracleDB" : "MTPostgresDB";
+            h = s.getType() == DatabaseType.ORACLE ? "MTOracleDB" : "MTPostgresDB";
             put("f2label", n("Host"));
             put("f3label", n("User"));
             put("f4label", n("Password"));
