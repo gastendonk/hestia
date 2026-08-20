@@ -35,7 +35,7 @@ public class OtcStatusPage extends HPage {
 
     private void waitForGreen() {
         for (int i = 1; i <= 4; i++) {
-            if (HestiaWebapp.otcProcess.isCheckpoint1()) {
+            if (HestiaWebapp.otcProcess != null && HestiaWebapp.otcProcess.isCheckpoint1()) {
                 break;
             }
             try {
