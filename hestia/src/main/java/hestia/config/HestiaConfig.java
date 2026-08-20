@@ -47,6 +47,7 @@ public class HestiaConfig {
     private final boolean customer;
     private final String customerKey;
     private final String promtool;
+    private final boolean deployOnReceive;
     
     public HestiaConfig() {
         title = get("TITLE", "Hestia");
@@ -64,6 +65,7 @@ public class HestiaConfig {
         customers.sort((a, b) -> a.compareToIgnoreCase(b));
         customerKey = get("CUSTOMERKEY");
         promtool = get("PROMTOOL");
+        deployOnReceive = "1".equals(get("DEPLOY_ON_RECEIPT"));
         
         // /work: working directory, exchange files with other containers
         alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
@@ -171,6 +173,10 @@ public class HestiaConfig {
     
     public boolean isCustomer() {
         return customer;
+    }
+    
+    public boolean isDeployOnReceive() {
+        return deployOnReceive;
     }
     
     public EnvironmentDAO environmentDAO(IBranch branch) {

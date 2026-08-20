@@ -28,6 +28,7 @@ import hestia.persist.GsonFactory;
 import hestia.persist.IRepository;
 import hestia.persist.RepositoryAdapter;
 import hestia.prometheus.alert.AlertGroupDAO;
+import hestia.web.DeployAction;
 
 public class ExchangeService {
 
@@ -153,6 +154,15 @@ public class ExchangeService {
             File file = new File(HestiaWebapp.config.getBaseFolder(), "x/" + customerKey + "/" + tag + ".json");
             FileService.savePlainTextFile(file, body);
             Logger.debug("[exchange] receive | saved as " + file.getAbsolutePath() + ", " + file.isFile());
+            
+            if (HestiaWebapp.config.isDeployOnReceive()) {
+                Logger.info("[exchange] deploy on receipt");
+                ExchangeData data = GsonFactory.create().fromJson(body, ExchangeData.class);
+                setData(data);
+                
+                IBranch b = () -> "master";
+                DeployAction.deploy(b, HestiaWebapp.config.environmentDAO(b));
+            }
         } catch (Exception e) {
             Logger.error(e);
         }
