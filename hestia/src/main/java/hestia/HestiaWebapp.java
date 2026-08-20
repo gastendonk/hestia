@@ -134,12 +134,16 @@ public class HestiaWebapp extends RouteDefinitions {
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         if (config.isDeployOnReceive()) {
-            Logger.info("trying to deploy on startup...");
-            if (!config.getOtelcolContrib().isFile()) {
-                new OtcService().installOtelcolContrib(); // auto-install
+            try {
+                Logger.info("trying to deploy on startup...");
+                if (!config.getOtelcolContrib().isFile()) {
+                    new OtcService().installOtelcolContrib(); // auto-install
+                }
+                IBranch b = () -> "master";
+                DeployAction.deploy(b, config.environmentDAO(b));
+            } catch (Exception e) {
+                Logger.error(e);
             }
-            IBranch b = () -> "master";
-            DeployAction.deploy(b, config.environmentDAO(b));
         } else if (!config.isCloud()) {
             try {
                 if (!config.getOtelcolContrib().isFile()) {
