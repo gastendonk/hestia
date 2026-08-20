@@ -37,6 +37,7 @@ public class EditEnvironmentPage extends HPage {
             combobox("customers", HestiaWebapp.config.getCustomers(), env.getCustomer(), false);
             put("customerKey", esc(env.getCustomerKey()));
             put("active", env.isActive());
+            put("cancellink", "/" + b().getBranch() + (HestiaWebapp.config.isCustomer() ? "/environment" : ""));
         }
     }
 }
