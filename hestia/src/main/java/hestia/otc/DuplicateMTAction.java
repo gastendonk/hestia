@@ -3,6 +3,7 @@ package hestia.otc;
 import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.HestiaWebapp;
 import hestia.otc.model.Database;
+import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.Site;
@@ -45,6 +46,14 @@ public class DuplicateMTAction extends HAction {
             n.setName(s.getName());
             n.setUser(s.getUser());
             n.setPassword(s.getPassword());
+            n.setId(IdGenerator.createId25());
+            n.setActive(s.isActive());
+            dao.insert(id, n);
+            idNeu = n.getId();
+        } else if (m instanceof Definition s) {
+            var n = new Definition();
+            n.setDefinition(s.getDefinition());
+            n.setName(s.getName());
             n.setId(IdGenerator.createId25());
             n.setActive(s.isActive());
             dao.insert(id, n);

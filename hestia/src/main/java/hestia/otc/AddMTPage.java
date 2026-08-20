@@ -5,6 +5,7 @@ import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
+import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.ServerType;
@@ -82,6 +83,12 @@ public class AddMTPage extends HPage {
             s.setId(IdGenerator.createId25());
             s.setName(f1);
             s.setUrl(f2);
+            mt = s;
+        } else if ("definition".equals(m)) {
+            Definition s = new Definition();
+            s.setId(IdGenerator.createId25());
+            s.setName(f1);
+            s.setDefinition(f2);
             mt = s;
         } else { // DB
             Database s = new Database();

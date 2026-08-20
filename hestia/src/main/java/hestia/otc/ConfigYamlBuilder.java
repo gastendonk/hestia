@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import github.soltaufintel.amalia.base.StringService;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
+import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.Server;
 import hestia.otc.model.Site;
@@ -39,6 +40,7 @@ public class ConfigYamlBuilder {
                 + oracle() //
                 + postgres() //
                 + sites() //
+                + definitions("receivers:\n", receivers) //
                 + processors() //
                 + exporters() //
                 + extensions() //
@@ -134,6 +136,27 @@ public class ConfigYamlBuilder {
                     + "    targets:\n" //
                     + ret;
             receivers.add("httpcheck");
+        }
+        return ret;
+    }
+    
+    // TODO Das auch für processors und exporters unterstützen.
+    /**
+     * @param prefix "receivers:\n"
+     * @param target receivers
+     * @return -
+     */
+    private String definitions(String prefix, List<String> target) {
+        String ret = "";
+        for (MonitoredTarget mt : monitoredTargets) {
+            if (mt instanceof Definition s && s.getDefinition().startsWith(prefix)) {
+                String add = s.getDefinition().substring(prefix.length());
+                if (!add.endsWith("\n")) {
+                    add += "\n";
+                }
+                target.add(add.substring(0, add.indexOf("\n")).replace(":", "").trim());
+                ret += add;
+            }
         }
         return ret;
     }

@@ -5,6 +5,7 @@ import hestia.HestiaWebapp;
 import hestia.otc.model.AbstractMonitoredTarget;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
+import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.Server;
@@ -32,6 +33,7 @@ public class EditMTPage extends HPage {
         put("id", esc(id));
         put("id2", esc(mt.getId()));
         put("f1", esc(mt.getName()));
+        put("f2textarea", false);
         String h;
         if (mt instanceof Server s) {
             h = "MTLinuxServer";
@@ -54,6 +56,13 @@ public class EditMTPage extends HPage {
             put("f2", esc(s.getHost()));
             put("f3", esc(s.getUser()));
             put("f4", esc(s.getPassword()));
+        } else if (mt instanceof Definition s) {
+            h = "MTDefinition";
+            put("f2label", "Definition");
+            put("f3label", "");
+            put("f4label", "");
+            put("f2", esc(s.getDefinition()));
+            put("f2textarea", true);
         } else {
             throw new RuntimeException("Unsupported MonitoredTarget type");
         }
@@ -84,6 +93,9 @@ public class EditMTPage extends HPage {
             s.setHost(ctx.formParam("f2"));
             s.setUser(ctx.formParam("f3"));
             s.setPassword(ctx.formParam("f4"));
+        } else if (mt instanceof Definition s) {
+            s.setName(ctx.formParam("f1"));
+            s.setDefinition(ctx.formParam("f2"));
         } else {
             throw new RuntimeException("Unsupported MonitoredTarget type");
         }

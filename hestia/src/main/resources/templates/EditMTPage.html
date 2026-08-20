@@ -15,7 +15,11 @@
                 <div class="form-group">
                     <label for="f2" class="col-lg-1 control-label">{{f2label}}</label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" id="f2" name="f2" value="{{f2}}"{{if customer}} disabled{{/if}}>
+                        {{if f2textarea}}
+                            <textarea rows="10" class="form-control" id="f2" name="f2"{{if customer}} disabled{{/if}}>{{f2}}</textarea>
+                        {{else}}
+                            <input type="text" class="form-control" id="f2" name="f2" value="{{f2}}"{{if customer}} disabled{{/if}}>
+                        {{/if}}
                     </div>
                 </div>
                 {{if f3label}}
