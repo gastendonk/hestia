@@ -2,6 +2,8 @@ package hestia.web;
 
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.environment.EnvironmentDAO;
@@ -27,8 +29,10 @@ public class DeployAction extends HAction {
         List<String> envs;
         if (HestiaWebapp.config.getCustomers().contains("BURG")) {
             envs = rawEnvs.stream().filter(i -> i.isActive() && i.getCustomer().equals("BURG")).map(i -> i.getId()).toList();
+            Logger.info("BURG deploy: " + envs);
         } else {
             envs = rawEnvs.stream().filter(i -> i.isActive()).map(i -> i.getId()).toList();
+            Logger.info("deploy: " + envs);
         }
         new OtcService().deploy(envs, b);
         new PrometheusService().deploy(envs, b);
