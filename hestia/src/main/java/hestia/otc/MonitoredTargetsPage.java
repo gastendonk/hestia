@@ -27,6 +27,15 @@ public class MonitoredTargetsPage extends HPage {
             var map = list.add();
             map.put("id", esc(mt.getId()));
             map.put("name", esc(mt.getName()));
+            var info = "";
+            if (mt instanceof Server s) {
+                info = s.getHost();
+            } else if (mt instanceof Database s) {
+                info = s.getHost();
+            } else if (mt instanceof Site s) {
+                info = s.getUrl();
+            }
+            map.put("info", esc(info));
             map.put("active", mt.isActive());
             String type = "";
             if (mt instanceof Site) {
@@ -43,6 +52,7 @@ public class MonitoredTargetsPage extends HPage {
         Cols cols = Cols.of(
                 new Col(n("Name"), "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/edit\"{{if not i.active}}"
                         + " style=\"text-decoration: line-through;\"{{/if}}>{{i.name}}</a>").sortable("name"),
+                new Col("Info", "{{i.info}}"),
                 Col.si(n("Type"), "type")
                 );
         if (!HestiaWebapp.config.isCustomer()) {

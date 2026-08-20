@@ -57,7 +57,12 @@ public class AddMTPage extends HPage {
     }
 
     private void save(String id, String m) {
-        if (StringService.isNullOrEmpty(ctx.formParam("f1"))) {
+        String f1 = ctx.formParam("f1");
+        String f2 = ctx.formParam("f2");
+        if (StringService.isNullOrEmpty(f1) && "site".equals(m)) {
+            f1 = f2.replace("http://", "").replace("https://", ""); // Eingabeerleichterung
+        }
+        if (StringService.isNullOrEmpty(f1)) {
             throw new RuntimeException("Please enter name");
         }
         MonitoredTarget mt;
@@ -65,8 +70,8 @@ public class AddMTPage extends HPage {
             Server s = new Server();
             s.setType(ServerType.LINUX);
             s.setId(IdGenerator.createId25());
-            s.setName(ctx.formParam("f1"));
-            s.setHost(ctx.formParam("f2"));
+            s.setName(f1);
+            s.setHost(f2);
             s.setPath(ctx.formParam("f3"));
             if (StringService.isNullOrEmpty(s.getHost()) && !StringService.isNullOrEmpty(s.getName())) {
                 s.setHost(s.getName() + ":9100"); // Eingabeerleichterung
@@ -75,8 +80,8 @@ public class AddMTPage extends HPage {
         } else if ("site".equals(m)) {
             Site s = new Site();
             s.setId(IdGenerator.createId25());
-            s.setName(ctx.formParam("f1"));
-            s.setUrl(ctx.formParam("f2"));
+            s.setName(f1);
+            s.setUrl(f2);
             mt = s;
         } else { // DB
             Database s = new Database();
@@ -86,8 +91,8 @@ public class AddMTPage extends HPage {
                 s.setType(DatabaseType.POSTGRES);
             }
             s.setId(IdGenerator.createId25());
-            s.setName(ctx.formParam("f1"));
-            s.setHost(ctx.formParam("f2"));
+            s.setName(f1);
+            s.setHost(f2);
             s.setUser(ctx.formParam("f3"));
             s.setPassword(ctx.formParam("f4"));
             mt = s;
