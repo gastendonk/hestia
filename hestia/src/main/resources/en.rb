@@ -75,3 +75,4 @@ QueryAlertsandSilences=Alerts and silences
 QueryAlerts=Firing alerts
 Silences=Silences
 DoSilence=Silence
+instanceLabel=Target instance

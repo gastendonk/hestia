@@ -53,10 +53,10 @@ public class HestiaWebapp extends RouteDefinitions {
     
     @Override
     public void routes() {
+        post("/x/receive/:customerkey/:tag", ReceiveAction.class);
         if (config.isCloud()) {
             Spark.get("/", (req, res) -> "Hestia " + VERSION + " in cloud mode");
             // TODO Auskunft (JSON?) welche Daten verwaltet werden
-            post("/x/receive/:customerkey/:tag", ReceiveAction.class);
             get("/x/pull/:customerkey", ServeAction.class);
             Logger.info("cloud mode");
             return;

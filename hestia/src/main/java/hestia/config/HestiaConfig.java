@@ -103,10 +103,32 @@ public class HestiaConfig {
     }
     
     /**
-     * @return null or address of cloud instance
+     * @return null or addresses of cloud instances
      */
     public String getCloudInstance() {
-        return StringService.isNullOrEmpty(cloud) || "1".equals(cloud) ? null : cloud;
+        if (StringService.isNullOrEmpty(cloud) || "1".equals(cloud)) {
+            return null;
+        }
+        if (cloud.contains("=")) {
+            return cloud;
+        } else {
+            return "Cloud=" + cloud;
+        }
+    }
+    
+    public String getCloudInstanceUrl(String key) {
+        String c = getCloudInstance();
+        if (c != null) {
+            for (String i : c.split("\\|")) {
+                int o = i.indexOf("=");
+                String k = i.substring(0, o);
+                String url = i.substring(o + 1);
+                if (key.equals(k)) {
+                    return url;
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isRun() {

@@ -1,5 +1,6 @@
 package hestia.exchange;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -23,13 +24,15 @@ public class DeliverPage extends HPage {
     @Override
     protected void execute() {
         if (isPOST()) {
+            String instance = ctx.formParam("instance");
+            instance = instance.substring(instance.indexOf("=") + 1);
             String customerKey = ctx.formParam("customerKey");
             String tag = ctx.formParam("tag");
             if (customerKey == null || customerKey.indexOf(": ") < 0) {
                 throw new RuntimeException("Please select customer key");
             }
 
-            new ExchangeService().push(b(), customerKey.substring(customerKey.indexOf(": ") + 2), tag);
+            new ExchangeService().push(instance, b(), customerKey.substring(customerKey.indexOf(": ") + 2), tag);
             
             backToStartpage();
         } else {
@@ -40,8 +43,13 @@ public class DeliverPage extends HPage {
     private void display() {
         IRepository irepo = HestiaWebapp.config.getRepository(b());
         if (irepo instanceof GitRepository repo) {
-            if (HestiaWebapp.config.getCloudInstance() == null) {
+            var c = HestiaWebapp.config.getCloudInstance();
+            if (c == null) {
                 throw new RuntimeException("Not possible because there is not cloud instance defined.");
+            }
+            List<String> instances = new ArrayList<>();
+            for (String i : c.split("\\|")) {
+                instances.add(i);
             }
             var tags = repo.getRepo().getTagNames();
             sortTags(tags);
@@ -50,8 +58,10 @@ public class DeliverPage extends HPage {
                 tag = null;
             }
             var customerKeys = getCustomerKeys(irepo);
+            
             combobox("customerKeys", customerKeys, customerKeys.iterator().next(), false);
             combobox("tags", tags, tag, false);
+            combobox("instances", instances, instances.get(0), false);
             header(n("Auslieferung"));
         } else {
             throw new RuntimeException("Not possible without a Git repo."); // TODO doch es ist moeglich!

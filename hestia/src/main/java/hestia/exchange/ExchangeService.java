@@ -38,8 +38,9 @@ public class ExchangeService {
         if (!HestiaWebapp.config.isCustomer()) {
             throw new IllegalStateException("Hestia is not in customer mode.");
         }
-        if (HestiaWebapp.config.getCloudInstance() == null) {
-            throw new IllegalStateException("Please set env var CLOUD.");
+        String ci = HestiaWebapp.config.getCloudInstanceUrl("Cloud");
+        if (ci == null) {
+            throw new IllegalStateException("There is no cloud instance 'Cloud' available. Make sure that env var CLOUD is set.");
         }
         var key = HestiaWebapp.config.getCustomerKey();
         if (StringService.isNullOrEmpty(key)) {
@@ -47,7 +48,7 @@ public class ExchangeService {
         }
         
         // load data
-        var url = HestiaWebapp.config.getCloudInstance() + "/x/pull/" + key;
+        var url = ci + "/x/pull/" + key;
         Logger.info("[exchange] pull | URL: " + url);
         String json = new REST(url).get().response();
         Logger.debug("[exchange] pull | response: " + json);
@@ -109,8 +110,7 @@ public class ExchangeService {
     /**
      * Push data to cloud server
      */
-    public void push(IBranch branch, String customerKey, String tag) {
-        var ci = HestiaWebapp.config.getCloudInstance();
+    public void push(String ci, IBranch branch, String customerKey, String tag) {
         if (StringService.isNullOrEmpty(ci)) {
             throw new RuntimeException("Cloud instance is not set");
         }

@@ -26,11 +26,21 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="instance" class="col-lg-1 control-label">{{N.instanceLabel}}</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" id="instance" name="instance">
+                            {{each a in instances}}
+                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-lg-offset-1 col-lg-5">
                         <button type="submit" class="btn btn-primary br" onclick="document.querySelector('#s2').style='';">
-                        {{N.Auslieferung}} <i id="s2" class="fa fa-delicious fa-spin" style="display: none;"></i></button>
+                        {{N.Deliver}} <i id="s2" class="fa fa-delicious fa-spin" style="display: none;"></i></button>
                         <a href="/{{branch}}" class="btn btn-default">{{N.Cancel}}</a>
                     </div>
                 </div>
