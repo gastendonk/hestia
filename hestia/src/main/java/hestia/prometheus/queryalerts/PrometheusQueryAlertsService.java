@@ -2,6 +2,7 @@ package hestia.prometheus.queryalerts;
 
 import java.util.List;
 
+import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 
 /**
@@ -19,6 +20,9 @@ public class PrometheusQueryAlertsService {
     }
 
     public List<PrometheusResult> queryAlerts() {
+        if (StringService.isNullOrEmpty(prometheusHost)) {
+            return List.of();
+        }
         return new REST(prometheusHost + ENDPOINT3 + "?query=ALERTS")
                 .get()
                 .fromJson(PrometheusResponse.class)

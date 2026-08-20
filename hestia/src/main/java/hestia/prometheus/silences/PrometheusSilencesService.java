@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.reflect.TypeToken;
 
+import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.prometheus.silences.Silence.Matcher;
 import hestia.prometheus.silences.Silence.SilenceCreated;
@@ -30,6 +31,9 @@ public class PrometheusSilencesService {
      * @return all silences
      */
     public List<Silence> getSilences() {
+        if (StringService.isNullOrEmpty(alertmanagerHost)) {
+            return List.of();
+        }
         var rest = new REST(alertmanagerHost + ENDPOINT2).get();
         var json = rest.response();
         rest.close();
