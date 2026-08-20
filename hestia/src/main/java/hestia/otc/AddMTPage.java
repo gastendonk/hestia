@@ -31,6 +31,7 @@ public class AddMTPage extends HPage {
     private void display(String id, String m) {
         put("id", esc(id));
         put("m", esc(m));
+        put("f3value", "");
         if ("linux".equals(m)) {
             header(n("AddMTLinuxServer"));
             put("f2label", n("Host"));
@@ -44,8 +45,10 @@ public class AddMTPage extends HPage {
         } else { // DB
             if ("oracle".equals(m)) {
                 header(n("AddMTOracleDB"));
+                put("f3value", "METRICS"); // Eingabeerleichterung
             } else {
                 header(n("AddMTPostgresDB"));
+                put("f3value", "metrics"); // Eingabeerleichterung
             }
             put("f2label", n("Host"));
             put("f3label", n("User"));
@@ -65,6 +68,9 @@ public class AddMTPage extends HPage {
             s.setName(ctx.formParam("f1"));
             s.setHost(ctx.formParam("f2"));
             s.setPath(ctx.formParam("f3"));
+            if (StringService.isNullOrEmpty(s.getHost()) && !StringService.isNullOrEmpty(s.getName())) {
+                s.setHost(s.getName() + ":9100"); // Eingabeerleichterung
+            }
             mt = s;
         } else if ("site".equals(m)) {
             Site s = new Site();
