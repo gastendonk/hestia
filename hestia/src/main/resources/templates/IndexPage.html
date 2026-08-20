@@ -49,7 +49,7 @@
             {{if customer}}
                 <a href="/{{branch}}/environment" class="btn btn-default br">{{N.Environments}}</a>
             {{else}}
-                <a href="/{{branch}}/deploy" class="btn btn-default br">Deploy</a>
+                <a href="/{{branch}}/deploy" class="btn btn-default br">{{DeployBtn}}</a>
             {{/if}}
             <a href="/otc/options" class="btn btn-default br"><i class="fa fa-cog"></i> {{N.Options}}</a>
             <a href="/otc/status" class="btn {{if alive}}btn-success{{else}}btn-danger{{/if}} br">{{N.otcStatus}}</a>

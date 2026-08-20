@@ -37,6 +37,7 @@ public class IndexPage extends HPage {
         displayEnvironments(envs);
         put("alive", otcAlive);
         put("tag", esc(tag));
+        put("DeployBtn", "Deploy" + (DeployAction.isBURG() ? " (BURG)" : ""));
     }
     
     private void displayGit(IRepository repo, IBranch b) {
