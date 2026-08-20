@@ -66,6 +66,7 @@ public class PrometheusService {
     }
     
     private void write(Path file, String yaml) throws IOException {
+        file.toFile().getParentFile().mkdirs();
         Files.writeString(file, yaml, StandardCharsets.UTF_8);
     }
 
