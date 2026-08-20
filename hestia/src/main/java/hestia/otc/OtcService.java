@@ -36,7 +36,9 @@ public class OtcService {
             FileService.savePlainTextFile(HestiaWebapp.config.getConfigYaml(), yaml);
             Logger.debug("(3) config.yaml: " + FileService.loadPlainTextFile(HestiaWebapp.config.getConfigYaml()));
 
-            HestiaWebapp.otcProcess.kill();
+            if (HestiaWebapp.otcProcess != null) {
+                HestiaWebapp.otcProcess.kill();
+            }
             HestiaWebapp.otcProcess = new OtcProcess();
         }
     }
