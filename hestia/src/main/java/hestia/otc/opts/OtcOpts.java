@@ -4,6 +4,8 @@ package hestia.otc.opts;
  * Some options for the OTel Collector config.yaml file
  */
 public class OtcOpts {
+    /** Prometheus exporter on localhost port */
+    private String prometheusPort;
     /** host of metrics database (Prometheus) */
     private String prometheusremotewrite;
     /** host of traces database (Tempo) */
@@ -16,6 +18,14 @@ public class OtcOpts {
     private boolean debug = true;
     private String customer;
     
+    public String getPrometheusPort() {
+        return prometheusPort;
+    }
+
+    public void setPrometheusPort(String prometheusPort) {
+        this.prometheusPort = prometheusPort;
+    }
+
     public String getPrometheusremotewrite() {
         return prometheusremotewrite;
     }

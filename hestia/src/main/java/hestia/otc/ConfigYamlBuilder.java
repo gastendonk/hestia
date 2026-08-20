@@ -169,6 +169,10 @@ public class ConfigYamlBuilder {
 
     private String exporters() {
         String ret = "exporters:\n";
+        if (!StringService.isNullOrEmpty(o.getPrometheusPort())) {
+            ret += "  prometheus:\n    endpoint: \"0.0.0.0:" + o.getPrometheusPort() + "\"\n";
+            exporters.add("prometheus");
+        }
         if (!StringService.isNullOrEmpty(o.getPrometheusremotewrite())) { // write metrics to Prometheus
             ret += "  prometheusremotewrite:\n    endpoint: \"" + o.getPrometheusremotewrite() + "\"\n";
             exporters.add("prometheusremotewrite");

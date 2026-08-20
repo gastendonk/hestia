@@ -9,6 +9,7 @@ public class EditOtcOptsPage extends HPage {
         var opts = OtcOptsDAO.load();
                 
         if (isPOST()) {
+            opts.setPrometheusPort(ctx.formParam("pp"));
             opts.setPrometheusremotewrite(ctx.formParam("prometheusremotewrite"));
             opts.setTempo(ctx.formParam("tempo"));
             opts.setLoki(ctx.formParam("loki"));
@@ -20,6 +21,7 @@ public class EditOtcOptsPage extends HPage {
             ctx.redirect("/");
         } else {
             header(n("Options"));
+            put("pp", esc(opts.getPrometheusPort()));
             put("prometheusremotewrite", esc(opts.getPrometheusremotewrite()));
             put("tempo", esc(opts.getTempo()));
             put("loki", esc(opts.getLoki()));
