@@ -7,19 +7,19 @@
         <form class="form-horizontal" method="post">
             <fieldset>
                 <div class="form-group">
-                    <label for="name" class="col-lg-1 control-label">{{N.Name}}</label>
-                    <div class="col-lg-2">
-                        <input type="text" class="form-control" id="name" name="name" autofocus>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="customer" class="col-lg-1 control-label">{{N.Customer}}</label>
                     <div class="col-lg-3">
-                        <select class="form-control" id="customer" name="customer">
+                        <select class="form-control" id="customer" name="customer" autofocus>
                             {{each a in customers}}
                                 <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
                             {{/each}}
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-lg-1 control-label">{{N.Name}}</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" id="name" name="name">
                     </div>
                 </div>
                 

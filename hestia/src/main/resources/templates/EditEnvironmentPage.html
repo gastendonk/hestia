@@ -7,12 +7,6 @@
         <form class="form-horizontal" method="post">
             <fieldset>
                 <div class="form-group">
-                    <label for="name" class="col-lg-1 control-label">{{N.Name}}</label>
-                    <div class="col-lg-2">
-                        <input autofocus type="text" class="form-control" id="name" name="name" value="{{name}}"{{if customer}} disabled{{/if}}>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="customer" class="col-lg-1 control-label">{{N.Customer}}</label>
                     <div class="col-lg-2">
                         <select autofocus class="form-control" id="customer" name="customer"{{if customer}} disabled{{/if}}>
@@ -26,6 +20,12 @@
                     <label for="customerKey" class="col-lg-1 control-label">{{N.CustomerKey}}</label>
                     <div class="col-lg-2">
                         <input type="text" class="form-control" id="customerKey" name="customerKey" value="{{customerKey}}"{{if customer}} disabled{{/if}}>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="col-lg-1 control-label">{{N.Name}}</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" id="name" name="name" value="{{name}}"{{if customer}} disabled{{/if}}>
                     </div>
                 </div>
                 <div class="form-group">
