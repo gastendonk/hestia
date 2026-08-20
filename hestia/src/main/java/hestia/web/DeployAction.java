@@ -34,6 +34,10 @@ public class DeployAction extends HAction {
             envs = rawEnvs.stream().filter(i -> i.isActive()).map(i -> i.getId()).toList();
             Logger.info("deploy: " + envs);
         }
+        if (envs.isEmpty()) {
+            Logger.info("Can't deploy because there are no environments.");
+            return;
+        }
         new OtcService().deploy(envs, b);
         new PrometheusService().deploy(envs, b);
     }

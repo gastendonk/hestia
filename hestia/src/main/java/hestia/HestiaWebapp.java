@@ -134,6 +134,10 @@ public class HestiaWebapp extends RouteDefinitions {
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         if (config.isDeployOnReceive()) {
+            Logger.info("trying to deploy on startup...");
+            if (!config.getOtelcolContrib().isFile()) {
+                new OtcService().installOtelcolContrib(); // auto-install
+            }
             IBranch b = () -> "master";
             DeployAction.deploy(b, config.environmentDAO(b));
         } else if (!config.isCloud()) {
