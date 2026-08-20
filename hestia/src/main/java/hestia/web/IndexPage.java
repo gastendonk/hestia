@@ -39,6 +39,9 @@ public class IndexPage extends HPage {
         put("tag", esc(tag));
         put("DeployBtn", "Deploy" + (DeployAction.isBURG() ? " (BURG)" : ""));
         put("dor", HestiaWebapp.config.isDeployOnReceive());
+        put("pam", !StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())
+                || !StringService.isNullOrEmpty(HestiaWebapp.config.getAlertmanagerHost()));
+        put("prgname", esc(HestiaWebapp.config.getTitle()));
     }
     
     private void displayGit(IRepository repo, IBranch b) {
