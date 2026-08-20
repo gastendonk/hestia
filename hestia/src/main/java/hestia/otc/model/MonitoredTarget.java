@@ -1,5 +1,7 @@
 package hestia.otc.model;
 
+import java.util.List;
+
 import hestia.persist.Identifiable;
 
 /**
@@ -13,4 +15,11 @@ public interface MonitoredTarget extends Identifiable {
     String getName();
     
     boolean isActive();
+    
+    String getType2();
+    
+    String getInfo();
+    
+    List<Class<? extends MonitoredTarget>> CLASSES = List.of(Database.class, Server.class, Site.class,
+            Definition.class);
 }

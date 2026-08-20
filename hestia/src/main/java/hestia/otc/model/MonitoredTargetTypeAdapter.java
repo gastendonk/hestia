@@ -16,23 +16,17 @@ import com.google.gson.JsonSerializer;
  */
 public class MonitoredTargetTypeAdapter implements JsonSerializer<MonitoredTarget>, JsonDeserializer<MonitoredTarget> {
     private static final String TYPE_PROPERTY = "targetType";
-
+    
     @Override
     public JsonElement serialize(MonitoredTarget source, Type typeOfSource, JsonSerializationContext context) {
-        JsonObject jsonObject;
-        if (source instanceof Database) {
-            jsonObject = context.serialize(source, Database.class).getAsJsonObject();
-            jsonObject.addProperty(TYPE_PROPERTY, "database");
-        } else if (source instanceof Server) {
-            jsonObject = context.serialize(source, Server.class).getAsJsonObject();
-            jsonObject.addProperty(TYPE_PROPERTY, "server");
-        } else if (source instanceof Site) {
-            jsonObject = context.serialize(source, Site.class).getAsJsonObject();
-            jsonObject.addProperty(TYPE_PROPERTY, "site");
-        } else {
-            throw new JsonParseException("Unsupported MonitoredTarget implementation: " + source.getClass().getName());
+        for (Class<? extends MonitoredTarget> targetClass : MonitoredTarget.CLASSES) {
+            if (targetClass.isInstance(source)) {
+                JsonObject jsonObject = context.serialize(source, targetClass).getAsJsonObject();
+                jsonObject.addProperty(TYPE_PROPERTY, targetClass.getSimpleName().toLowerCase());
+                return jsonObject;
+            }
         }
-        return jsonObject;
+        throw new JsonParseException("Unsupported MonitoredTarget implementation: " + source.getClass().getName());
     }
 
     @Override
@@ -44,11 +38,11 @@ public class MonitoredTargetTypeAdapter implements JsonSerializer<MonitoredTarge
             throw new JsonParseException("Missing JSON property: " + TYPE_PROPERTY);
         }
         String targetType = typeElement.getAsString();
-        return switch (targetType) {
-        case "database" -> context.deserialize(jsonObject, Database.class);
-        case "server" -> context.deserialize(jsonObject, Server.class);
-        case "site" -> context.deserialize(jsonObject, Site.class);
-        default -> throw new JsonParseException("Unsupported targetType: " + targetType);
-        };
+        for (Class<? extends MonitoredTarget> targetClass : MonitoredTarget.CLASSES) {
+            if (targetClass.getSimpleName().toLowerCase().equals(targetType)) {
+                return context.deserialize(jsonObject, targetClass);
+            }
+        }
+        throw new JsonParseException("Unsupported targetType: " + targetType);
     }
 }

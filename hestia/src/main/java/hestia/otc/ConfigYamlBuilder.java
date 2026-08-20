@@ -57,7 +57,7 @@ public class ConfigYamlBuilder {
             }
         }
         if (!ret.isEmpty()) {
-            ret = "  prometheus:\n" //
+            ret =     "  prometheus:\n" //
                     + "      config:\n" //
                     + "        global:\n" //
                     + "          scrape_interval: 60s\n" //

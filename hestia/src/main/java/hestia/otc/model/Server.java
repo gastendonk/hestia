@@ -29,4 +29,14 @@ public class Server extends AbstractMonitoredTarget {
     public void setPath(String path) {
         this.path = path;
     }
+
+    @Override
+    public String getInfo() {
+        return host;
+    }
+    
+    @Override
+    public String getType2() {
+        return super.getType2() + "/" + type.name();
+    }
 }

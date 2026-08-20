@@ -6,10 +6,7 @@ import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
-import hestia.otc.model.Database;
 import hestia.otc.model.MonitoredTarget;
-import hestia.otc.model.Server;
-import hestia.otc.model.Site;
 import hestia.web.base.HPage;
 
 public class MonitoredTargetsPage extends HPage {
@@ -27,25 +24,9 @@ public class MonitoredTargetsPage extends HPage {
             var map = list.add();
             map.put("id", esc(mt.getId()));
             map.put("name", esc(mt.getName()));
-            var info = "";
-            if (mt instanceof Server s) {
-                info = s.getHost();
-            } else if (mt instanceof Database s) {
-                info = s.getHost();
-            } else if (mt instanceof Site s) {
-                info = s.getUrl();
-            }
-            map.put("info", esc(info));
+            map.put("info", esc(mt.getInfo()));
             map.put("active", mt.isActive());
-            String type = "";
-            if (mt instanceof Site) {
-                type = "SITE";
-            } else if (mt instanceof Server d) {
-                type = "SERVER/" + d.getType().name();
-            } else if (mt instanceof Database d) {
-                type = "DATABASE/" + d.getType().name();
-            }
-            map.put("type", type);
+            map.put("type", mt.getType2());
         }
         list.sort((a, b) -> (a.get("type").toString() + a.get("name").toString())
                 .compareToIgnoreCase(b.get("type").toString() + b.get("name").toString()));

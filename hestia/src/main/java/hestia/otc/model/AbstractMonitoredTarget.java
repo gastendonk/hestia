@@ -31,4 +31,9 @@ public abstract class AbstractMonitoredTarget implements MonitoredTarget {
     public void setActive(boolean active) {
         this.active = active;
     }
+    
+    @Override
+    public String getType2() {
+        return getClass().getSimpleName().toUpperCase();
+    }
 }

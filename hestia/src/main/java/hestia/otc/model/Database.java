@@ -37,4 +37,14 @@ public class Database extends AbstractMonitoredTarget {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String getInfo() {
+        return host;
+    }
+    
+    @Override
+    public String getType2() {
+        return super.getType2() + "/" + type.name();
+    }
 }
