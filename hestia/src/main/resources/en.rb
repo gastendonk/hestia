@@ -76,3 +76,4 @@ QueryAlerts=Firing alerts
 Silences=Silences
 DoSilence=Silence
 instanceLabel=Target instance
+Duplicate=Duplicate

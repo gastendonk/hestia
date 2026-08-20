@@ -56,7 +56,9 @@ public class MonitoredTargetsPage extends HPage {
                 Col.si(n("Type"), "type")
                 );
         if (!HestiaWebapp.config.isCustomer()) {
-            cols.add(new Col("", "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\""
+            cols.add(new Col("", "<a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/duplicate\" class=\"btn btn-xs btn-default\""
+                    + " title=\"{{N.Duplicate}}\"><i class=\"fa fa-copy\"></i></a>"
+                    + " <a href=\"/{{branch}}/mt/{{id}}/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\""
                     + " title=\"{{N.Delete}}\" onclick=\"return confirm('{{N.Delete}}?');\"><i class=\"fa fa-trash-o\"></i></a>"));
         }
         put("table", new TableComponent("wauto", cols, model, "list"));

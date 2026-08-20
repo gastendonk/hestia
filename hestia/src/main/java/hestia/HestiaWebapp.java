@@ -24,6 +24,7 @@ import hestia.git.GitPushAction;
 import hestia.git.GitTagAction;
 import hestia.otc.AddMTPage;
 import hestia.otc.DeleteMTAction;
+import hestia.otc.DuplicateMTAction;
 import hestia.otc.EditMTPage;
 import hestia.otc.InstallOtelcolContribAction;
 import hestia.otc.MonitoredTargetsPage;
@@ -108,6 +109,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/mt/:id/add", AddMTPage.class);
         form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
+        get("/:branch/mt/:id/:id2/duplicate", DuplicateMTAction.class);
         get("/:branch/mt/:id", MonitoredTargetsPage.class);
     }
 
