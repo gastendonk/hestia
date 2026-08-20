@@ -3,14 +3,15 @@ package hestia.web.base;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.web.action.Page;
+import hestia.HestiaWebapp;
 
 public class HestiaError404Page extends Page {
 
     @Override
     protected void execute() {
-        String title = "Hestia error 404";
-        put("title", title);
-        put("header", title);
+        String title = HestiaWebapp.config.getTitle() + " error 404";
+        put("title", esc(title));
+        put("header", esc(title));
         String msg = "Sorry, the page you are looking for is not available.";
         if (!"/fonts/glyphicons-halflings-regular.woff2".equals(ctx.path())) {
             Logger.error("Error 404 rendering path \"" + ctx.path() + "\": " + msg);

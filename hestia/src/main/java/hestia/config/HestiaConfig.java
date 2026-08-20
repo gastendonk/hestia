@@ -25,6 +25,7 @@ public class HestiaConfig {
     public static final String OTELCOLVERSION = "0.137.0";
     public static IConfig configAccess = new EnvVarAppConfig();
     private final Map<String, IRepository> repositories = new HashMap<>();
+    private final String title;
     private final String repo;
     private final File baseFolder;
     /** "1": instance is in cloud mode, value: address of cloud instance */
@@ -48,6 +49,7 @@ public class HestiaConfig {
     private final String promtool;
     
     public HestiaConfig() {
+        title = get("TITLE", "Hestia");
         repo = get("REPO");
         baseFolder = calculateBaseFolder(repo);
         cloud = get("CLOUD");
@@ -88,6 +90,10 @@ public class HestiaConfig {
         } 
         Logger.info("otelcol-contrib version: " + version);
         return url.replace("{version}", version);
+    }
+    
+    public String getTitle() {
+        return title;
     }
 
     public String getOtelcolContribDownloadUrl() {

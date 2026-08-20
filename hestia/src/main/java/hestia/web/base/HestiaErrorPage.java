@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 
 import github.soltaufintel.amalia.web.action.ErrorPage;
 import github.soltaufintel.amalia.web.action.Page;
+import hestia.HestiaWebapp;
 
 public class HestiaErrorPage extends Page implements ErrorPage {
     protected Exception exception;
@@ -40,7 +41,7 @@ public class HestiaErrorPage extends Page implements ErrorPage {
         msg = esc(msg); // for subclasses
         put("msg", msg == null ? "(no error message)" : msg.replace("\n", "<br/>").replace("\\n", "<br/>"));
         put("p", "");
-        put("title", "Minerva error");
+        put("title", esc(HestiaWebapp.config.getTitle() + " error"));
         put("header", "Sorry, this should not happen!");
     }
     

@@ -16,7 +16,7 @@ public abstract class HPage extends Page {
     
     protected final void header(String title) {
         put("header", esc(title));
-        put("title", esc(title) + " - Hestia");
+        put("title", esc(title + " - " + HestiaWebapp.config.getTitle()));
     }
     
     protected final EnvironmentDAO environmentDAO() {

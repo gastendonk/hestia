@@ -3,6 +3,7 @@ package hestia;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
+import github.soltaufintel.amalia.web.action.Escaper;
 import github.soltaufintel.amalia.web.builder.LoggingInitializer;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
 import github.soltaufintel.amalia.web.route.RouteDefinitions;
@@ -55,7 +56,7 @@ public class HestiaWebapp extends RouteDefinitions {
     public void routes() {
         post("/x/receive/:customerkey/:tag", ReceiveAction.class);
         if (config.isCloud()) {
-            Spark.get("/", (req, res) -> "Hestia " + VERSION + " in cloud mode");
+            Spark.get("/", (req, res) -> Escaper.esc(HestiaWebapp.config.getTitle() + " " + VERSION + " in cloud mode"));
             // TODO Auskunft (JSON?) welche Daten verwaltet werden
             get("/x/pull/:customerkey", ServeAction.class);
             Logger.info("cloud mode");
