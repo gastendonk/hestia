@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.pmw.tinylog.Logger;
-
 import github.soltaufintel.amalia.base.StringService;
 import hestia.otc.model.Database;
 import hestia.otc.model.DatabaseType;
@@ -149,31 +147,21 @@ public class ConfigYamlBuilder {
      * @return -
      */
     private String definitions(String prefix, List<String> target) {
-        Logger.info("definitions: \"" + prefix + "\"."); // XXX DEBUG
         String ret = "";
         for (MonitoredTarget mt : monitoredTargets) {
             if (mt instanceof Definition s) {
                 String d = s.getDefinition().replace("\r", "");
                 if (d.startsWith(prefix)) {
                     String add = d.substring(prefix.length());
-                    Logger.info("-> found: add=\"" + add + "\"."); // XXX DEBUG
                     if (!add.endsWith("\n")) {
                         add += "\n";
                     }
                     var t = add.substring(0, add.indexOf("\n")).replace(":", "").trim();
-                    Logger.info("--> " + t); // XXX DEBUG
                     target.add(t);
                     ret += add;
-                } else { // XXX DEBUG
-                    Logger.info("-> def doesnt start with prefix");
-                    Logger.info(d);
-                    if (d != null) {
-                        Logger.info("-> CR? " + d.contains("\r"));
-                    }
                 }
             }
         }
-        Logger.info("----> ret: \"" + ret + "\"."); // XXX DEBUG
         return ret;
     }
 
