@@ -20,6 +20,7 @@ public class OtcProcess {
     private boolean checkpoint1;
     private boolean checkpoint2;
     private Thread logReader;
+    private String log = "";
     
     public OtcProcess() {
         synchronized (LOCK) {
@@ -60,6 +61,7 @@ public class OtcProcess {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    log += line + "\n";
                     if (line.contains("Everything is ready. Begin running and processing data")) {
                         checkpoint1 = true; // Erfolg: Der otc ist vollstaendig einsatzbereit!
                     }
@@ -75,6 +77,10 @@ public class OtcProcess {
         });
         logReader.setDaemon(true); // Start the thread as a daemon so that it does not prevent the JVM from shutting down.
         logReader.start();
+    }
+    
+    public String getLog() {
+        return log;
     }
 
     public boolean isCheckpoint1() {

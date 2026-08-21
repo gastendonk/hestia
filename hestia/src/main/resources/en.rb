@@ -79,3 +79,5 @@ Silences=Silences
 DoSilence=Silence
 instanceLabel=Target instance
 Duplicate=Duplicate
+Configuration=Configuration
+Log=Log

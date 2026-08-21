@@ -31,6 +31,7 @@ public class OtcStatusPage extends HPage {
         put("cp2", otc != null && otc.isCheckpoint2());
         put("cp3", otc != null && checkHealth == 200);
         put("downloadUrl", esc(HestiaWebapp.config.getOtelcolContribDownloadUrl()));
+        put("log", otc == null ? "" : esc(otc.getLog()));
     }
 
     private void waitForGreen() {

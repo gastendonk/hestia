@@ -79,3 +79,5 @@ Silences=Stummschaltungen
 DoSilence=Stummschalten
 instanceLabel=Zielinstanz
 Duplicate=Duplizieren
+Configuration=Konfiguration
+Log=Protokoll
