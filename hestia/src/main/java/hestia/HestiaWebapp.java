@@ -92,6 +92,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/qas/silence/:alertname", DoSilencePage.class);
 
         form("/tablesort/:id/:col", TableSortAction.class);
+        Spark.get("/config/customerkey", (req, res) -> HestiaWebapp.config.getCustomerKey());
 
         // at last
         form("/", IndexPage.class);
@@ -154,6 +155,9 @@ public class HestiaWebapp extends RouteDefinitions {
                 }
                 if (config.getOtelcolContrib().isFile()) {
                     otcProcess = new OtcProcess();
+                } else {
+                    Logger.warn("File \"" + config.getOtelcolContrib().getAbsolutePath()
+                            + "\" does not exist. Do not start otcProcess at startup.");
                 }
             } catch (Exception e) {
                 Logger.error(e);

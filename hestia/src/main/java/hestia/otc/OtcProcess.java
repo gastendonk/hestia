@@ -35,6 +35,7 @@ public class OtcProcess {
             var configYaml = HestiaWebapp.config.getConfigYaml();
             if (!configYaml.isFile()) {
                 Logger.error("OTC can't be started! Config file not found: " + configYaml.getAbsolutePath());
+                // TODO Gäbe es denn Umgebungen?
                 return;
             }
             String c = "--config=" + configYaml.getAbsolutePath();
