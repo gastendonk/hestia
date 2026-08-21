@@ -152,18 +152,27 @@ public class ConfigYamlBuilder {
         Logger.info("definitions: \"" + prefix + "\"."); // XXX DEBUG
         String ret = "";
         for (MonitoredTarget mt : monitoredTargets) {
-            if (mt instanceof Definition s && s.getDefinition().startsWith(prefix)) {
-                String add = s.getDefinition().substring(prefix.length());
-                Logger.info("-> found: add=\"" + add + "\"."); // XXX DEBUG
-                if (!add.endsWith("\n")) {
-                    add += "\n";
+            if (mt instanceof Definition s) {
+                if (s.getDefinition().startsWith(prefix)) {
+                    String add = s.getDefinition().substring(prefix.length());
+                    Logger.info("-> found: add=\"" + add + "\"."); // XXX DEBUG
+                    if (!add.endsWith("\n")) {
+                        add += "\n";
+                    }
+                    var t = add.substring(0, add.indexOf("\n")).replace(":", "").trim();
+                    Logger.info("--> " + t); // XXX DEBUG
+                    target.add(t);
+                    ret += add;
+                } else { // XXX DEBUG
+                    Logger.info("-> def doesnt start with prefix");
+                    Logger.info(s.getDefinition());
+                    if (s.getDefinition() != null) {
+                        Logger.info("-> CR? " + s.getDefinition().contains("\r"));
+                    }
                 }
-                var t = add.substring(0, add.indexOf("\n")).replace(":", "").trim();
-                Logger.info("--> " + t); // XXX DEBUG
-                target.add(t);
-                ret += add;
             }
         }
+        Logger.info("----> ret: \"" + ret + "\"."); // XXX DEBUG
         return ret;
     }
 
