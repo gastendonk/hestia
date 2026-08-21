@@ -1,19 +1,15 @@
 {{master: master}}
 
 <style>
-pre {
-  display: block;
+.pre-scroll-wrapper {
   width: 100%;
-  max-width: 100%;
-  white-space: pre;
   overflow-x: auto;
   overflow-y: hidden;
-  box-sizing: border-box;
 }
-.col-lg-12 {
-  float: left;
-  width: 100%;
-  overflow: hidden;
+
+.pre-scroll-wrapper pre {
+  white-space: pre;
+  margin: 0;
 }
 </style>
 
@@ -54,7 +50,9 @@ pre {
 
         <hr>
         <h2>{{N.Configuration}}</h2>
-        <pre>{{config}}</pre>
+        <div class="pre-scroll-wrapper">
+            <pre>{{config}}</pre>
+        </div>
     </div>
 </div>
 
