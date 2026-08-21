@@ -82,3 +82,4 @@ instanceLabel=Zielinstanz
 Duplicate=Duplizieren
 Configuration=Konfiguration
 Log=Protokoll
+showAlertRulesFile=Alarmregeln-Datei

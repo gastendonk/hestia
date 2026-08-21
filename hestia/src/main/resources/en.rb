@@ -82,3 +82,4 @@ instanceLabel=Target instance
 Duplicate=Duplicate
 Configuration=Configuration
 Log=Log
+showAlertRulesFile=Alert rules file

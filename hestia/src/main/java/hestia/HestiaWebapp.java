@@ -37,6 +37,7 @@ import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
 import hestia.prometheus.alert.DeleteAlertGroupAction;
 import hestia.prometheus.alert.EditAlertGroupPage;
+import hestia.prometheus.alert.ShowAlertRulesFilePage;
 import hestia.prometheus.alert.rule.AddAlertRulePage;
 import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
 import hestia.prometheus.alert.rule.EditAlertRulePage;
@@ -125,6 +126,7 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/alert-rule/:env/:g/add", AddAlertRulePage.class);
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
+        get("/alert-rules-file", ShowAlertRulesFilePage.class);
     }
 
     public static void main(String[] args) {
