@@ -153,8 +153,9 @@ public class ConfigYamlBuilder {
         String ret = "";
         for (MonitoredTarget mt : monitoredTargets) {
             if (mt instanceof Definition s) {
-                if (s.getDefinition().startsWith(prefix)) {
-                    String add = s.getDefinition().substring(prefix.length());
+                String d = s.getDefinition().replace("\r", "");
+                if (d.startsWith(prefix)) {
+                    String add = d.substring(prefix.length());
                     Logger.info("-> found: add=\"" + add + "\"."); // XXX DEBUG
                     if (!add.endsWith("\n")) {
                         add += "\n";
@@ -165,9 +166,9 @@ public class ConfigYamlBuilder {
                     ret += add;
                 } else { // XXX DEBUG
                     Logger.info("-> def doesnt start with prefix");
-                    Logger.info(s.getDefinition());
-                    if (s.getDefinition() != null) {
-                        Logger.info("-> CR? " + s.getDefinition().contains("\r"));
+                    Logger.info(d);
+                    if (d != null) {
+                        Logger.info("-> CR? " + d.contains("\r"));
                     }
                 }
             }
