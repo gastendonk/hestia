@@ -142,7 +142,7 @@ public class ConfigYamlBuilder {
         return ret;
     }
     
-    // TODO Das auch für processors und exporters unterstützen.
+    // TODO Das auch fuer processors und exporters unterstuetzen.
     /**
      * @param prefix "receivers:\n"
      * @param target receivers
