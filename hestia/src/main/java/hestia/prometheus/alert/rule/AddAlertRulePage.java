@@ -15,7 +15,7 @@ public class AddAlertRulePage extends HPage {
             throw new RuntimeException();
         }
         if (isPOST()) {
-            String alert = ctx.formParam("alert").replace(" ", "");
+            String alert = id(ctx.formParam("alert"));
             if (alert.isBlank()) {
                 throw new RuntimeException("Please enter ID");
             }
@@ -38,4 +38,7 @@ public class AddAlertRulePage extends HPage {
         }
     }
 
+    public static String id(String name) {
+        return name.replace(" ", "");
+    }
 }

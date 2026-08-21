@@ -15,5 +15,9 @@
         {{/if}}
         
         {{if list}}{{table}}{{/if}}
+        
+        {{if not customer}}
+            <p class="mt2"><a href="/{{branch}}/mt/{{id}}/site-alerts" class="btn btn-default">{{N.AlertsForSites}}</a></p>
+        {{/if}}
     </div>
 </div>

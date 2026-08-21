@@ -83,3 +83,5 @@ Duplicate=Duplicate
 Configuration=Configuration
 Log=Log
 showAlertRulesFile=Alert rules file
+AlertsForSites=Create alert rules for all sites
+istDown=is down

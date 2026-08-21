@@ -1,22 +1,31 @@
 package hestia.otc;
 
+import static hestia.prometheus.alert.rule.AddAlertRulePage.id;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.FileService;
+import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.HestiaWebapp;
 import hestia.base.Downloader;
 import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.Site;
 import hestia.otc.opts.OtcOptsDAO;
+import hestia.prometheus.alert.AlertGroup;
+import hestia.prometheus.alert.AlertGroupDAO;
+import hestia.prometheus.alert.rule.AlertRule;
+import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 /**
  * Service for managing OTel Collector (otc) and its config.yaml file
@@ -104,5 +113,67 @@ public class OtcService {
             Logger.error(e);
             return false;
         }
+    }
+    
+    /**
+     * Für jede Site einen Alarm anlegen.
+     * @param branch -
+     * @param id environment ID
+     * @param istDown "ist down"
+     */
+    public void siteAlerts(IBranch branch, String id, String istDown) {
+        MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
+        AlertRuleDAO ruleDAO = HestiaWebapp.config.alertRuleDAO(branch);
+
+        List<AlertRule> allRules = new ArrayList<>();
+        AlertGroup g = group(branch, id, allRules);
+        
+        List<MonitoredTarget> mtlist = dao.load(id);
+        int n = 0;
+        for (MonitoredTarget mt : mtlist) {
+            if (mt instanceof Site s && !exist(id(s.getName()), allRules)) {
+                AlertRule rule = new AlertRule();
+                rule.setId(IdGenerator.createId25());
+                rule.setAlert(id(s.getName()));
+                rule.setSummary(s.getName() + " " + istDown);
+                rule.setDescription(s.getUrl());
+                rule.setExpr("httpcheck_status{http_url=\"" + s.getUrl() + "\"} == 0");
+                rule.setDurationFor("");
+                ruleDAO.insert(id, g.getId(), rule);
+                n++;
+            }
+        }
+        Logger.info("alert rules created: " + n);
+    }
+    
+    private AlertGroup group(IBranch branch, String id, List<AlertRule> allRules) {
+        AlertGroupDAO alertGroupDAO = HestiaWebapp.config.alertGroupDAO(branch);
+        List<AlertGroup> groups = alertGroupDAO.load(id);
+        if (groups.isEmpty()) {
+            AlertGroup g = new AlertGroup();
+            g.setId(IdGenerator.createId25());
+            g.setName("Sites");
+            alertGroupDAO.insert(id, g);
+            return g;
+        } else {
+            for (AlertGroup i : groups) {
+                allRules.addAll(i.getRules());
+            }
+            for (AlertGroup i : groups) {
+                if (i.getName().toLowerCase().contains("sites")) {
+                    return i;
+                }
+            }
+            return groups.get(0);
+        }
+    }
+
+    private boolean exist(String name, List<AlertRule> rules) {
+        for (AlertRule r : rules) {
+            if (r.getAlert().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

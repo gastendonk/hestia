@@ -32,6 +32,7 @@ import hestia.otc.OtcLogPage;
 import hestia.otc.OtcProcess;
 import hestia.otc.OtcService;
 import hestia.otc.OtcStatusPage;
+import hestia.otc.SiteAlertsAction;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
@@ -112,6 +113,7 @@ public class HestiaWebapp extends RouteDefinitions {
 
     private void monitoredTargets() {
         form("/:branch/mt/:id/add", AddMTPage.class);
+        get("/:branch/mt/:id/site-alerts", SiteAlertsAction.class);
         form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id/:id2/duplicate", DuplicateMTAction.class);
