@@ -1,15 +1,11 @@
 {{master: master}}
 
 <style>
-.pre-scroll-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-.pre-scroll-wrapper pre {
-  white-space: pre;
-  margin: 0;
+pre {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
 }
 </style>
 
@@ -17,8 +13,6 @@
     <div class="col-lg-12">
         <h1 class="page-header">{{header}}</h1>
 
-        <div class="pre-scroll-wrapper">
-            <pre>{{log}}</pre>
-        </div>
+        <pre class="log">{{log}}</pre>
     </div>
 </div>
