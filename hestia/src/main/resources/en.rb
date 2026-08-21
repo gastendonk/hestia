@@ -37,6 +37,7 @@ MTLinuxServer=Linux server
 MTOracleDB=Oracle database
 MTPostgresDB=PostgreSQL database
 MTSite=Site
+MTDefinition=Definition
 Host=Host
 User=User
 Password=Password
