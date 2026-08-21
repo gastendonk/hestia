@@ -25,6 +25,7 @@ public class PrometheusService {
 
     public void deploy(Collection<String> environments, IBranch branch) {
         if (StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
+            Logger.info("[PrometheusService] no deployment because PROMETHEUS is not set");
             return;
         }
         var dao = HestiaWebapp.config.alertGroupDAO(branch);
@@ -32,7 +33,11 @@ public class PrometheusService {
         var yaml = new AlertRulesYamlBuilder(groups).build();
         try {
             validate(yaml);
-            write(HestiaWebapp.config.getAlertRulesFile().toPath(), yaml);
+            var file = HestiaWebapp.config.getAlertRulesFile();
+            write(file.toPath(), yaml);
+            if (file.isFile()) {
+                Logger.info("file written: " + file.getAbsolutePath());
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
