@@ -51,7 +51,7 @@ import spark.Spark;
 
 // TODO Wie kann ich das OTC Log einsehen?
 public class HestiaWebapp extends RouteDefinitions {
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.2.0";
     public static HestiaConfig config;
     public static OtcProcess otcProcess;
     
