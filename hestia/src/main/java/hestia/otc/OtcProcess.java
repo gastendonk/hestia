@@ -56,29 +56,32 @@ public class OtcProcess {
     private void logs() {
         checkpoint1 = false;
         checkpoint2 = false;
-        // Read the output asynchronously in a separate thread.
+        OtcLog.init();
         logReader = new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-//                    log += line + "\n";
-                    if (line.contains("Everything is ready. Begin running and processing data")) {
+                    OtcLog.info(line);
+                    
+                    // Checkpoints prüfen
+                    if (!checkpoint1 && line.contains("Everything is ready. Begin running and processing data")) {
                         checkpoint1 = true; // Erfolg: Der otc ist vollstaendig einsatzbereit!
                     }
-                    if (line.contains("health_check") && line.contains("ready")) {
+                    if (!checkpoint2 && line.contains("health_check") && line.contains("ready")) {
                         checkpoint2 = true; // Erfolg: otc Health-Check-Erweiterung ist aktiv.
                     }
                 }
             } catch (IOException e) {
-                if (!e.getMessage().contains("Stream closed")) {
+                if (e.getMessage() == null || !e.getMessage().contains("Stream closed")) {
                     Logger.error(e, "Error loading otelcol-contrib log");
                 }
             }
         });
-        logReader.setDaemon(true); // Start the thread as a daemon so that it does not prevent the JVM from shutting down.
+        logReader.setName("OTC-LogReader");
+        logReader.setDaemon(true);
         logReader.start();
     }
-    
+
     public String getLog() {
         return log;
     }
