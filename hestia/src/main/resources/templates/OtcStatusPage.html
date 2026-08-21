@@ -32,15 +32,12 @@
             {{if customer}}
                 <a href="/master/deploy?r=o" class="btn btn-default br">Deploy</a>
             {{/if}}
+            <a href="/otc/log" class="btn btn-default br">{{N.Log}}</a>
         </p>
-        
+
         <hr>
-        <h2 class="mt2">{{N.Configuration}}</h2>
+        <h2>{{N.Configuration}}</h2>
         <pre>{{config}}</pre>
-        
-        <hr>
-        <h2 class="mt2">{{N.Log}}</h2>
-        <pre class="mb3">{{log}}</pre>
     </div>
 </div>
 
@@ -50,5 +47,11 @@
 }
 .sred {
     color: #c00;
+}
+pre {
+  max-width: 100%;
+  white-space: pre;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
 </style>

@@ -28,6 +28,7 @@ import hestia.otc.DuplicateMTAction;
 import hestia.otc.EditMTPage;
 import hestia.otc.InstallOtelcolContribAction;
 import hestia.otc.MonitoredTargetsPage;
+import hestia.otc.OtcLogPage;
 import hestia.otc.OtcProcess;
 import hestia.otc.OtcService;
 import hestia.otc.OtcStatusPage;
@@ -84,6 +85,7 @@ public class HestiaWebapp extends RouteDefinitions {
         }
 
         get("/otc/status", OtcStatusPage.class);
+        get("/otc/log", OtcLogPage.class);
         form("/otc/options", EditOtcOptsPage.class);
         get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/kill", KillAction.class); // kill or restart OTC
