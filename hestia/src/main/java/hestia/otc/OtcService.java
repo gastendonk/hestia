@@ -1,7 +1,5 @@
 package hestia.otc;
 
-import static hestia.prometheus.alert.rule.AddAlertRulePage.id;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -131,10 +129,10 @@ public class OtcService {
         List<MonitoredTarget> mtlist = dao.load(id);
         int n = 0;
         for (MonitoredTarget mt : mtlist) {
-            if (mt instanceof Site s && !exist(id(s.getName()), allRules)) {
+            if (mt instanceof Site s && !exist(s.getName().replace(" ", "_"), allRules)) {
                 AlertRule rule = new AlertRule();
                 rule.setId(IdGenerator.createId25());
-                rule.setAlert(id(s.getName()));
+                rule.setAlert(s.getName().replace(" ", "_"));
                 rule.setSummary(s.getName() + " " + istDown);
                 rule.setDescription(s.getUrl());
                 rule.setExpr("httpcheck_status{http_url=\"" + s.getUrl() + "\"} == 0");
