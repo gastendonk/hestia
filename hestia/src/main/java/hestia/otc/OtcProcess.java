@@ -61,7 +61,7 @@ public class OtcProcess {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    log += line + "\n";
+//                    log += line + "\n";
                     if (line.contains("Everything is ready. Begin running and processing data")) {
                         checkpoint1 = true; // Erfolg: Der otc ist vollstaendig einsatzbereit!
                     }
