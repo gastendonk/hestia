@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.mt;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.base.StringService;

@@ -1,4 +1,4 @@
-package hestia.otc;
+package hestia.otc.mt;
 
 import hestia.HestiaWebapp;
 import hestia.web.base.HAction;

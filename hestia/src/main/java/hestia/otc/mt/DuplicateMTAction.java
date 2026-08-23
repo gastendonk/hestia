@@ -1,6 +1,7 @@
-package hestia.otc;
+package hestia.otc.mt;
 
 import hestia.HestiaWebapp;
+import hestia.otc.OtcService;
 import hestia.web.base.HAction;
 
 public class DuplicateMTAction extends HAction {

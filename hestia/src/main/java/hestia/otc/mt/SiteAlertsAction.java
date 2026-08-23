@@ -1,8 +1,9 @@
-package hestia.otc;
+package hestia.otc.mt;
 
+import hestia.otc.OtcService;
 import hestia.web.base.HAction;
 
-/** Für jede Site einen Alarm anlegen. */
+/** Fï¿½r jede Site einen Alarm anlegen. */
 public class SiteAlertsAction extends HAction {
 
     @Override
