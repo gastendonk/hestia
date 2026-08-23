@@ -1,19 +1,26 @@
 package hestia.otc;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.IdGenerator;
+import github.soltaufintel.amalia.web.image.IBinaryDataLoader;
 import hestia.HestiaWebapp;
-import hestia.base.Downloader;
 import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
 import hestia.otc.model.MonitoredTarget;
@@ -75,13 +82,13 @@ public class OtcService {
             downloadFile.delete();
             var url = HestiaWebapp.config.getOtelcolContribDownloadUrl();
             Logger.info("deployOtelcolContrib | URL: " + url);
-            Downloader.download(url, Duration.ofMinutes(2), downloadFile);
+            IBinaryDataLoader.download(url, Duration.ofMinutes(2), downloadFile);
             Logger.info("deployOtelcolContrib | download file: " + downloadFile.getAbsolutePath() + ", " + downloadFile.isFile());
 
             // unzip
             Path tempDir = Files.createTempDirectory("extract");
             Logger.debug("deployOtelcolContrib | temp folder: " + tempDir.toFile().getAbsolutePath());
-            Downloader.extractTarGz(downloadFile.toPath(), tempDir);
+            extractTarGz(downloadFile.toPath(), tempDir);
             downloadFile.delete();
 
             // check if expected file is there
@@ -95,13 +102,13 @@ public class OtcService {
                 
                 // install program
                 var otelcolContrib = HestiaWebapp.config.getOtelcolContrib();
-                Downloader.copyFileToFile(target, otelcolContrib);
+                FileService.copyFileToFile(target, otelcolContrib);
                 exists = otelcolContrib.isFile();
                 Logger.info("deployOtelcolContrib | installed file: " + otelcolContrib.getAbsolutePath() +
                         ", " + (exists ? "SUCCESS" : "ERROR: missing file"));
                 if (exists) {
                     target.delete();
-                    Downloader.makeExecutable(otelcolContrib.toPath());
+                    FileService.makeExecutable(otelcolContrib.toPath());
                 }
             } else {
                 Logger.error(msg);
@@ -113,8 +120,33 @@ public class OtcService {
         }
     }
     
+    private static void extractTarGz(Path sourceTarGz, Path targetDir) throws IOException {
+        try (InputStream fileIn = Files.newInputStream(sourceTarGz);
+                BufferedInputStream buffIn = new BufferedInputStream(fileIn);
+                GzipCompressorInputStream gzIn = new GzipCompressorInputStream(buffIn);
+                TarArchiveInputStream tarIn = new TarArchiveInputStream(gzIn)) {
+            TarArchiveEntry entry;
+            while ((entry = tarIn.getNextEntry()) != null) {
+                // Pfadtraversierung verhindern (Zip Slip Vulnerability Schutz)
+                Path targetPath = targetDir.resolve(entry.getName()).normalize();
+                if (!targetPath.startsWith(targetDir.normalize())) {
+                    throw new IOException("Bad entry: " + entry.getName());
+                }
+                if (entry.isDirectory()) {
+                    Files.createDirectories(targetPath);
+                } else {
+                    // Falls Unterordner existieren, diese vorher anlegen
+                    Files.createDirectories(targetPath.getParent());
+
+                    // Datei direkt auf die Festplatte streamen
+                    Files.copy(tarIn, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+        }
+    }
+
     /**
-     * F�r jede Site einen Alarm anlegen.
+     * Fuer jede Site einen Alarm anlegen.
      * @param branch -
      * @param id environment ID
      * @param istDown "ist down"

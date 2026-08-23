@@ -17,7 +17,6 @@ import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
-import hestia.base.Downloader;
 import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
 import hestia.environment.Environment;
@@ -227,7 +226,7 @@ public class ExchangeService {
             var file = new File(base, dn);
             if (file.isFile()) {
                 var target = new File(backupFolder, file.getParentFile().getName() + "/" + file.getName());
-                Downloader.copyFileToFile(file, target);
+                FileService.copyFileToFile(file, target);
                 backupList.add(target);
             }
             FileService.savePlainTextFile(file, json);
