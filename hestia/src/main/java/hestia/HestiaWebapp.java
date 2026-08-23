@@ -53,7 +53,6 @@ import hestia.web.base.HestiaErrorPage;
 import hestia.web.base.HestiaPageInitializer;
 import spark.Spark;
 
-// TODO Wie kann ich das OTC Log einsehen?
 public class HestiaWebapp extends RouteDefinitions {
     public static final String VERSION = "0.2.0";
     public static HestiaConfig config;
@@ -146,30 +145,38 @@ public class HestiaWebapp extends RouteDefinitions {
                 .boot();
         Logger.info("data folder: " + config.getBaseFolder().getAbsolutePath());
         if (config.isDeployOnReceive()) {
-            try {
-                Logger.info("trying to deploy on startup...");
-                if (!config.getOtelcolContrib().isFile()) {
-                    new OtcService().installOtelcolContrib(); // auto-install
-                }
-                IBranch b = () -> "master";
-                DeployAction.deploy(b, config.environmentDAO(b));
-            } catch (Exception e) {
-                Logger.error(e);
-            }
+            deployOnReceipt();
         } else if (!config.isCloud()) {
-            try {
-                if (!config.getOtelcolContrib().isFile()) {
-                    new OtcService().installOtelcolContrib(); // auto-install
-                }
-                if (config.getOtelcolContrib().isFile()) {
-                    otcProcess = new OtcProcess();
-                } else {
-                    Logger.warn("File \"" + config.getOtelcolContrib().getAbsolutePath()
-                            + "\" does not exist. Do not start otcProcess at startup.");
-                }
-            } catch (Exception e) {
-                Logger.error(e);
+            startOTC();
+        }
+    }
+
+    private static void deployOnReceipt() {
+        try {
+            Logger.info("trying to deploy on startup...");
+            if (!config.getOtelcolContrib().isFile()) {
+                new OtcService().installOtelcolContrib(); // auto-install
             }
+            IBranch b = () -> "master";
+            DeployAction.deploy(b, config.environmentDAO(b));
+        } catch (Exception e) {
+            Logger.error(e);
+        }
+    }
+
+    private static void startOTC() {
+        try {
+            if (!config.getOtelcolContrib().isFile()) {
+                new OtcService().installOtelcolContrib(); // auto-install
+            }
+            if (config.getOtelcolContrib().isFile()) {
+                otcProcess = new OtcProcess();
+            } else {
+                Logger.warn("File \"" + config.getOtelcolContrib().getAbsolutePath()
+                        + "\" does not exist. Do not start otcProcess at startup.");
+            }
+        } catch (Exception e) {
+            Logger.error(e);
         }
     }
 }
