@@ -10,6 +10,7 @@ import github.soltaufintel.amalia.web.route.RouteDefinitions;
 import github.soltaufintel.amalia.web.table.TableSortAction;
 import hestia.base.EnvVarAppConfig;
 import hestia.base.IBranch;
+import hestia.base.IConfig;
 import hestia.config.HestiaConfig;
 import hestia.environment.AddEnvironmentPage;
 import hestia.environment.DeleteEnvironmentAction;
@@ -139,7 +140,7 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withTemplatesFolders(HestiaWebapp.class, "/templates")
                 .withErrorPage(HestiaErrorPage.class, HestiaError404Page.class)
                 .withPageInitializer(new HestiaPageInitializer())
-                .withInitializer(c -> config = new HestiaConfig())
+                .withInitializer(c -> config = new HestiaConfig((IConfig) c))
                 .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();

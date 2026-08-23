@@ -9,7 +9,6 @@ import java.util.Map;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.StringService;
-import hestia.base.EnvVarAppConfig;
 import hestia.base.IBranch;
 import hestia.base.IConfig;
 import hestia.environment.EnvironmentDAO;
@@ -23,7 +22,7 @@ import hestia.prometheus.alert.rule.AlertRuleDAO;
 public class HestiaConfig {
     /** built-in default version */
     public static final String OTELCOLVERSION = "0.137.0";
-    public static IConfig configAccess = new EnvVarAppConfig();
+    private IConfig config;
     private final Map<String, IRepository> repositories = new HashMap<>();
     private final String title;
     private final String repo;
@@ -49,44 +48,37 @@ public class HestiaConfig {
     private final String promtool;
     private final boolean deployOnReceive;
     
-    public HestiaConfig() {
-        title = get("TITLE", "Hestia");
-        repo = get("REPO");
-        baseFolder = calculateBaseFolder(repo);
-        cloud = get("CLOUD");
+    public HestiaConfig(IConfig appConfig) {
+        this.config = appConfig;
+        title = config.get("TITLE", "Hestia");
+        repo = config.get("REPO");
+        baseFolder = calculateBaseFolder(repo, config);
+        cloud = config.get("CLOUD");
         otelcolContribDownloadUrl = readOtelcolContribDownloadUrl();
-        otelcolContrib = new File(get("OTELCOL", "/work/otelcol-contrib-" + get("OTELCOLVERSION", OTELCOLVERSION)));
-        run = "1".equals(get("RUN", "1"));
-        prometheusHost = get("PROMETHEUS");     // http://prometheus:9090
-        alertmanagerHost = get("ALERTMANAGER"); // http://alertmanager:9093
-        language = get("LANGUAGE", "en");
-        customer = !"0".equals(get("CUSTOMER", "1"));
-        customers = Arrays.asList(get("CUSTOMERS", "").split(","));
+        otelcolContrib = new File(config.get("OTELCOL", "/work/otelcol-contrib-" + config.get("OTELCOLVERSION", OTELCOLVERSION)));
+        run = "1".equals(config.get("RUN", "1"));
+        prometheusHost = config.get("PROMETHEUS");     // http://prometheus:9090
+        alertmanagerHost = config.get("ALERTMANAGER"); // http://alertmanager:9093
+        language = config.get("LANGUAGE", "en");
+        customer = !"0".equals(config.get("CUSTOMER", "1"));
+        customers = Arrays.asList(config.get("CUSTOMERS", "").split(","));
         customers.sort((a, b) -> a.compareToIgnoreCase(b));
-        customerKey = get("CUSTOMERKEY");
-        promtool = get("PROMTOOL");
-        deployOnReceive = "1".equals(get("DEPLOY_ON_RECEIPT"));
+        customerKey = config.get("CUSTOMERKEY");
+        promtool = config.get("PROMTOOL");
+        deployOnReceive = "1".equals(config.get("DEPLOY_ON_RECEIPT"));
         
         // /work: working directory, exchange files with other containers
-        alertRulesFile = new File(get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
-        configYaml = new File(get("CONFIGYAML", "/work/config.yaml"));
-        configYamlForValidate = new File(get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
+        alertRulesFile = new File(config.get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
+        configYaml = new File(config.get("CONFIGYAML", "/work/config.yaml"));
+        configYamlForValidate = new File(config.get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
     }
     
-    private static String get(String key, String defaultValue) {
-        return configAccess.get(key, defaultValue);
-    }
-
-    private static String get(String key) {
-        return configAccess.get(key);
-    }
-
-    private static String readOtelcolContribDownloadUrl() {
-        String url = get("OTELCOLURL", "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{version}/otelcol-contrib_{version}_linux_amd64.tar.gz");
+    public String readOtelcolContribDownloadUrl() {
+        String url = config.get("OTELCOLURL", "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{version}/otelcol-contrib_{version}_linux_amd64.tar.gz");
         if (StringService.isNullOrEmpty(url)) {
             throw new IllegalStateException("Please set env var OTELCOLURL.");
         }
-        String version = get("OTELCOLVERSION", OTELCOLVERSION);
+        String version = config.get("OTELCOLVERSION", OTELCOLVERSION);
         if (StringService.isNullOrEmpty(version)) {
             throw new IllegalStateException("Please set env var OTELCOLVERSION.");
         } 
@@ -207,24 +199,24 @@ public class HestiaConfig {
             String branchName = branch.getBranch();
             IRepository ret = repositories.get(branchName);
             if (ret == null) {
-                var user = get("REPOUSER");
+                var user = config.get("REPOUSER");
                 check(user);
-                ret = new GitRepository(repo, user, get("REPOMAIL"), get("REPOPASSWORD"), getBaseFolder(), branchName);
+                ret = new GitRepository(repo, user, config.get("REPOMAIL"), config.get("REPOPASSWORD"), getBaseFolder(), branchName);
                 repositories.put(branchName, ret);
             }
             return ret;
         }
     }
 
-    private static File calculateBaseFolder(String repo) {
+    private static File calculateBaseFolder(String repo, IConfig config) {
         String folder;
         if (StringService.isNullOrEmpty(repo)) {
-            folder = get("DATAFOLDER");
+            folder = config.get("DATAFOLDER");
             if (StringService.isNullOrEmpty(folder)) {
                 throw new IllegalStateException("Please set env var DATAFOLDER (or REPO).");
             }
         } else {
-            folder = get("REPOFOLDER");
+            folder = config.get("REPOFOLDER");
             check(folder);
         }
         return new File(folder);

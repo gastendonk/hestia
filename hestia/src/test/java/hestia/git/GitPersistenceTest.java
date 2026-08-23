@@ -11,6 +11,7 @@ import github.soltaufintel.amalia.base.IdGenerator;
 import github.soltaufintel.amalia.git.Repository;
 import github.soltaufintel.amalia.git.RepositoryDefinition;
 import hestia.HestiaWebapp;
+import hestia.base.IConfig;
 import hestia.config.HestiaConfig;
 import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
@@ -23,7 +24,7 @@ public class GitPersistenceTest {
     // Dann testen: pull, add, commit, push
     @Test
     public void solo() throws Exception {
-        // ICH WILL DEN TEST ORDNER SEHEN KÖNNEN!
+        // ICH WILL DEN TEST ORDNER SEHEN Kï¿½NNEN!
         File mainTempFolder = new File(BASEDIR + "/1_solo");
         FileService.deleteFolder(mainTempFolder);
         mainTempFolder.mkdirs();
@@ -95,7 +96,7 @@ public class GitPersistenceTest {
 
     @Test
     public void dao() throws Exception {
-        // ICH WILL DEN TEST ORDNER SEHEN KÖNNEN!
+        // ICH WILL DEN TEST ORDNER SEHEN Kï¿½NNEN!
         File mainTempFolder = new File(BASEDIR + "/2_dao");
         FileService.deleteFolder(mainTempFolder);
         mainTempFolder.mkdirs();
@@ -126,7 +127,7 @@ public class GitPersistenceTest {
     
     @Test
     public void config() throws Exception {
-        // ICH WILL DEN TEST ORDNER SEHEN KÖNNEN!
+        // ICH WILL DEN TEST ORDNER SEHEN Kï¿½NNEN!
         File mainTempFolder = new File(BASEDIR + "/3_config");
         FileService.deleteFolder(mainTempFolder);
         mainTempFolder.mkdirs();
@@ -163,16 +164,16 @@ public class GitPersistenceTest {
     }
     
     private void setup(File remoteDir, File folder) {
-        HestiaConfig.configAccess = (key, dv) -> {
+        IConfig configAccess = (key, defaultValue) -> {
             return switch (key) {
             case "REPO" -> remoteDir.toURI().toString();
             case "REPOFOLDER" -> folder.getAbsolutePath();
             case "REPOUSER" -> "me";
             case "REPOMAIL" -> mail;
             case "REPOPASSWORD" -> "";
-            default -> dv;
+            default -> defaultValue;
             };
         };
-        HestiaWebapp.config = new HestiaConfig();
+        HestiaWebapp.config = new HestiaConfig(configAccess);
     }
 }
