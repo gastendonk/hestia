@@ -44,6 +44,7 @@ import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
 import hestia.prometheus.alert.rule.EditAlertRulePage;
 import hestia.prometheus.queryalerts.DoSilencePage;
 import hestia.prometheus.queryalerts.QueryalertsAndSilencesPage;
+import hestia.prometheus.silences.DeleteSilenceAction;
 import hestia.web.DeployAction;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
@@ -94,6 +95,7 @@ public class HestiaWebapp extends RouteDefinitions {
         
         get("/qas", QueryalertsAndSilencesPage.class);
         form("/qas/silence/:alertname", DoSilencePage.class);
+        get("/qas/expire-silence/:id", DeleteSilenceAction.class);
 
         form("/tablesort/:id/:col", TableSortAction.class);
         Spark.get("/config/customerkey", (req, res) -> HestiaWebapp.config.getCustomerKey());

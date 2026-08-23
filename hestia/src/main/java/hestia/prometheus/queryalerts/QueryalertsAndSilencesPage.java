@@ -50,6 +50,7 @@ public class QueryalertsAndSilencesPage extends HPage {
         var list = list("silences");
         for (Silence s : silences) {
             var m = list.add();
+            m.put("id", esc(s.getId()));
             m.put("c", esc(s.getCreatedBy()));
             m.put("co", esc(s.getComment()));
             m.put("m", esc(s.getMatchersString()));
@@ -62,7 +63,9 @@ public class QueryalertsAndSilencesPage extends HPage {
                 Col.si("Comment", "co"),
                 Col.si("State", "s"),
                 Col.si("End", "end"),
-                Col.si("Matcher", "m")
+                Col.si("Matcher", "m"),
+                new Col("", "<a href=\"/qas/expire-silence/{{i.id}}\" class=\"btn btn-xs btn-danger\" onclick=\"return confirm('{{N.Delete}}?');\""
+                        + " title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>")
                 );
         put("table2", new TableComponent("wauto", cols, model, "silences"));
     }
