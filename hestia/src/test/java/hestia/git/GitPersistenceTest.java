@@ -35,27 +35,7 @@ public class GitPersistenceTest {
 
         // LOCAL GIT REPO
         File localDir = new File(mainTempFolder, "2-local-dir");
-        var rd = new RepositoryDefinition() {
-            @Override
-            public String getUser() {
-                return "me";
-            }
-            
-            @Override
-            public String getPassword() {
-                return "";
-            }
-            
-            @Override
-            public String getUrl() {
-                return remoteDir.toURI().toString();
-            }
-            
-            @Override
-            public File getLocalFolder() {
-                return localDir;
-            }
-        };
+        var rd = rd(remoteDir, localDir);
         var repo = new Repository(rd);
         repo.pull();
         
@@ -67,31 +47,15 @@ public class GitPersistenceTest {
         
         // ---- VERIFY ----
         final var localDir2 = new File(mainTempFolder, "3-local-dir-verify");
-        var rd2 = new RepositoryDefinition() {
-            @Override
-            public String getUser() {
-                return "me";
-            }
-
-            @Override
-            public String getPassword() {
-                return "";
-            }
-
-            @Override
-            public String getUrl() {
-                return remoteDir.toURI().toString();
-            }
-
-            @Override
-            public File getLocalFolder() {
-                return localDir2;
-            }
-        };
+        var rd2 = rd(remoteDir, localDir2);
         repo = new Repository(rd2);
         repo.pull();
         String c = FileService.loadPlainTextFile(new File(localDir2, "a/b/c.txt"));
         Assert.assertEquals("my content", c);
+    }
+    
+    private RepositoryDefinition rd(File dir, File localDir) {
+        return new RepositoryDefinitionImpl(dir.toURI().toString(), "me", "", localDir);
     }
 
     @Test

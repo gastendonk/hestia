@@ -18,27 +18,7 @@ public class GitRepository implements IRepository {
     
     public GitRepository(String url, String user, String mail, String password, File baseFolder, String branch) {
         this.mail = mail;
-        rd = new RepositoryDefinition() {
-            @Override
-            public String getUser() {
-                return user;
-            }
-
-            @Override
-            public String getPassword() {
-                return password;
-            }
-
-            @Override
-            public String getUrl() {
-                return url;
-            }
-
-            @Override
-            public File getLocalFolder() {
-                return new File(baseFolder, branch);
-            }
-        };
+        rd = new RepositoryDefinitionImpl(url, user, password, new File(baseFolder, branch));
         repo = new Repository(rd);
         repo.switchToBranch(branch);
     }
@@ -125,27 +105,8 @@ public class GitRepository implements IRepository {
             File folder = Files.createTempDirectory("checkout_" + tag).toFile();
             FileService.deleteFolder(folder);
             folder.getParentFile().mkdirs();
-            var repo = new Repository(new RepositoryDefinition() {
-                @Override
-                public String getUser() {
-                    return rd.getUser();
-                }
-                
-                @Override
-                public String getPassword() {
-                    return rd.getPassword();
-                }
-                
-                @Override
-                public String getUrl() {
-                    return rd.getUrl();
-                }
-                
-                @Override
-                public File getLocalFolder() {
-                    return folder;
-                }
-            });
+            var withOtherFolder = new RepositoryDefinitionImpl(rd.getUrl(), rd.getUser(), rd.getPassword(), folder);
+            var repo = new Repository(withOtherFolder);
             repo.switchToBranch(branch);
             repo.pull();
             repo.selectCommit(tag);
