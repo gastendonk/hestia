@@ -1,5 +1,6 @@
 package hestia.prometheus.alert.rule;
 
+import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.persist.Identifiable;
 
 public class AlertRule implements Identifiable {
@@ -75,5 +76,18 @@ public class AlertRule implements Identifiable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+    
+    public AlertRule copy() {
+        AlertRule n = new AlertRule();
+        n.setId(IdGenerator.createId25());
+        n.setAlert(alert);
+        n.setExpr(expr);
+        n.setDurationFor(durationFor);
+        n.setKeepFiringFor(keepFiringFor);
+        n.setSummary(summary);
+        n.setDescription(description);
+        n.setActive(active);
+        return n;
     }
 }

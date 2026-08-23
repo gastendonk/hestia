@@ -3,6 +3,7 @@ package hestia.prometheus.alert;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.persist.Identifiable;
 import hestia.prometheus.alert.rule.AlertRule;
 
@@ -48,5 +49,15 @@ public class AlertGroup implements Identifiable {
 
     public List<AlertRule> getRules() {
         return rules;
+    }
+
+    public AlertGroup copy() {
+        AlertGroup n = new AlertGroup();
+        n.setId(IdGenerator.createId25());
+        n.setName(name);
+        n.setInterval(interval);
+        n.setLimit(limit);
+        rules.forEach(r -> r.copy());
+        return n;
     }
 }
