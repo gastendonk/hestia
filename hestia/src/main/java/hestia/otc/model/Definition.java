@@ -1,5 +1,7 @@
 package hestia.otc.model;
 
+import github.soltaufintel.amalia.base.IdGenerator;
+
 /**
  * Freestyle definition for the config.yaml
  */
@@ -25,5 +27,15 @@ public class Definition extends AbstractMonitoredTarget {
             }
         }
         return "";
+    }
+
+    @Override
+    public MonitoredTarget copy() {
+        var n = new Definition();
+        n.setDefinition(getDefinition());
+        n.setName(getName());
+        n.setId(IdGenerator.createId25());
+        n.setActive(isActive());
+        return n;
     }
 }

@@ -1,5 +1,7 @@
 package hestia.otc.model;
 
+import github.soltaufintel.amalia.base.IdGenerator;
+
 public class Database extends AbstractMonitoredTarget {
     private DatabaseType type = DatabaseType.POSTGRES;
     private String host;
@@ -46,5 +48,17 @@ public class Database extends AbstractMonitoredTarget {
     @Override
     public String getType2() {
         return super.getType2() + "/" + type.name();
+    }
+
+    @Override
+    public MonitoredTarget copy() {
+        var n = new Database();
+        n.setHost(getHost());
+        n.setName(getName());
+        n.setUser(getUser());
+        n.setPassword(getPassword());
+        n.setId(IdGenerator.createId25());
+        n.setActive(isActive());
+        return n;
     }
 }

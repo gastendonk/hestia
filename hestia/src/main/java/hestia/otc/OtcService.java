@@ -16,11 +16,8 @@ import hestia.HestiaWebapp;
 import hestia.base.Downloader;
 import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
-import hestia.otc.model.Database;
-import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
-import hestia.otc.model.Server;
 import hestia.otc.model.Site;
 import hestia.otc.opts.OtcOptsDAO;
 import hestia.prometheus.alert.AlertGroup;
@@ -180,47 +177,9 @@ public class OtcService {
     
     public String duplicate(IBranch branch, String environmentId, String mtId) {
         var dao = HestiaWebapp.config.mtDAO(branch);
-        MonitoredTarget m = dao.loadOne(environmentId, mtId);
-        String idNeu = "_";
-        if (m instanceof Server s) {
-            var n = new Server();
-            n.setHost(s.getHost());
-            n.setName(s.getName());
-            n.setPath(s.getPath());
-            n.setType(s.getType());
-            n.setId(IdGenerator.createId25());
-            n.setActive(s.isActive());
-            dao.insert(environmentId, n);
-            idNeu = n.getId();
-        } else if (m instanceof Site s) {
-            var n = new Site();
-            n.setName(s.getName());
-            n.setUrl(s.getUrl());
-            n.setId(IdGenerator.createId25());
-            n.setActive(s.isActive());
-            dao.insert(environmentId, n);
-            idNeu = n.getId();
-        } else if (m instanceof Database s) {
-            var n = new Database();
-            n.setHost(s.getHost());
-            n.setName(s.getName());
-            n.setUser(s.getUser());
-            n.setPassword(s.getPassword());
-            n.setId(IdGenerator.createId25());
-            n.setActive(s.isActive());
-            dao.insert(environmentId, n);
-            idNeu = n.getId();
-        } else if (m instanceof Definition s) {
-            var n = new Definition();
-            n.setDefinition(s.getDefinition());
-            n.setName(s.getName());
-            n.setId(IdGenerator.createId25());
-            n.setActive(s.isActive());
-            dao.insert(environmentId, n);
-            idNeu = n.getId();
-        } else {
-            throw new UnsupportedOperationException(m.getClass().getName());
-        }
-        return idNeu;
+        var mt = dao.loadOne(environmentId, mtId);
+        var neu = mt.copy();
+        dao.insert(environmentId, neu);
+        return neu.getId();
     }
 }

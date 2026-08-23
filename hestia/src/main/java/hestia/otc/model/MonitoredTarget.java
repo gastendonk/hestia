@@ -22,4 +22,6 @@ public interface MonitoredTarget extends Identifiable {
     
     List<Class<? extends MonitoredTarget>> CLASSES = List.of(Database.class, Server.class, Site.class,
             Definition.class);
+    
+    MonitoredTarget copy();
 }

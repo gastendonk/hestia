@@ -1,5 +1,7 @@
 package hestia.otc.model;
 
+import github.soltaufintel.amalia.base.IdGenerator;
+
 // node_exporter
 public class Server extends AbstractMonitoredTarget {
     private ServerType type = ServerType.LINUX;
@@ -38,5 +40,17 @@ public class Server extends AbstractMonitoredTarget {
     @Override
     public String getType2() {
         return super.getType2() + "/" + type.name();
+    }
+
+    @Override
+    public MonitoredTarget copy() {
+        var n = new Server();
+        n.setHost(getHost());
+        n.setName(getName());
+        n.setPath(getPath());
+        n.setType(getType());
+        n.setId(IdGenerator.createId25());
+        n.setActive(isActive());
+        return n;
     }
 }
