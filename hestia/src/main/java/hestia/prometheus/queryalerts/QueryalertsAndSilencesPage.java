@@ -1,7 +1,10 @@
 package hestia.prometheus.queryalerts;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
@@ -17,8 +20,20 @@ public class QueryalertsAndSilencesPage extends HPage {
     @Override
     protected void execute() {
         HestiaConfig c = HestiaWebapp.config;
-        List<PrometheusResult> queryalerts = new PrometheusQueryAlertsService(c.getPrometheusHost()).queryAlerts();
-        List<Silence> silences = new PrometheusSilencesService(c.getAlertmanagerHost()).getActiveSilences();
+        List<PrometheusResult> queryalerts;
+        List<Silence> silences;
+        try {
+            queryalerts = new PrometheusQueryAlertsService(c.getPrometheusHost()).queryAlerts();
+        } catch (Exception e) {
+            Logger.error(e.getMessage());
+            queryalerts = new ArrayList<>();
+        }
+        try {
+            silences = new PrometheusSilencesService(c.getAlertmanagerHost()).getActiveSilences();
+        } catch (Exception e) {
+            Logger.error(e.getMessage());
+            silences = new ArrayList<>();
+        }
         
         header(n("QueryAlertsandSilences"));
         queryalerts(queryalerts);
