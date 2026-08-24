@@ -132,7 +132,7 @@ public class ConfigYamlBuilder {
         }
         if (!ret.isEmpty()) {
             ret = "  httpcheck:\n" //
-                    + "    collection_interval: 5m\n" //
+                    + "    collection_interval: 30s\n" //
                     + "    targets:\n" //
                     + ret;
             receivers.add("httpcheck");
