@@ -19,17 +19,29 @@
                     <a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/add" class="btn btn-sm btn-primary">{{N.AddRule}}</a>
                 {{/if}}
             </h2>
-            <ul>
-	            {{each r in g.rules}}
-	                <li>
-	                    <a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
-	                       {{if not r.active}} style="text-decoration: line-through;"{{/if}}>{{r.alert}}</a>
-	                    <i>{{r.summary}}</i>
-	                </li>
-	            {{else}}
-	                <li>{{N.none}}</li>
-	            {{/each}}
-            </ul>
+            <table class="table table-striped table-hover wauto ntabelle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th><i>{{N.Summary}}</i></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+		            {{each r in g.rules}}
+	                    <tr>
+	                       <td><a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
+                                {{if not r.active}} style="text-decoration: line-through;"{{/if}}>{{r.alert}}</a></td>
+	                       <td><i>{{r.summary}}</i></td>
+	                       <td><a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/duplicate"
+	                           class="btn btn-xs btn-default" title="{{N.Duplicate}}"><i class="fa fa-copy"></i></a></td>
+	                    </tr>
+	                {{/each}}
+                </tbody>
+            </table>
+            {{if not g.rules}}
+	           <li>{{N.none}}</li>
+	        {{/if}}
         {{else if not customer}}
             <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-primary">{{N.NewGroup}}</a>
         {{/each}}

@@ -42,6 +42,7 @@ import hestia.prometheus.alert.EditAlertGroupPage;
 import hestia.prometheus.alert.ShowAlertRulesFilePage;
 import hestia.prometheus.alert.rule.AddAlertRulePage;
 import hestia.prometheus.alert.rule.DeleteAlertRuleAction;
+import hestia.prometheus.alert.rule.DuplicateAlertRuleAction;
 import hestia.prometheus.alert.rule.EditAlertRulePage;
 import hestia.prometheus.queryalerts.DoSilencePage;
 import hestia.prometheus.queryalerts.QueryalertsAndSilencesPage;
@@ -129,6 +130,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/alert-group/:env/:id/delete", DeleteAlertGroupAction.class);
         form("/:branch/alert-rule/:env/:g/add", AddAlertRulePage.class);
         form("/:branch/alert-rule/:env/:g/:id/edit", EditAlertRulePage.class);
+        get("/:branch/alert-rule/:env/:g/:id/duplicate", DuplicateAlertRuleAction.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         get("/alert-rules-file", ShowAlertRulesFilePage.class);
     }
