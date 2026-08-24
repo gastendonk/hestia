@@ -159,21 +159,32 @@ public class OtcService {
         AlertGroup g = group(branch, id, allRules);
         
         List<MonitoredTarget> mtlist = dao.load(id);
-        int n = 0;
+        int created = 0, updated = 0;
         for (MonitoredTarget mt : mtlist) {
-            if (mt instanceof Site s && !exist(s.getName().replace(" ", "_"), allRules)) {
-                AlertRule rule = new AlertRule();
-                rule.setId(IdGenerator.createId25());
-                rule.setAlert(s.getName().replace(" ", "_"));
-                rule.setSummary(s.getName() + " " + istDown);
-                rule.setDescription(s.getUrl());
-                rule.setExpr("(sum(httpcheck_status{http_status_class=\"2xx\", http_url=\""+ s.getUrl() + "\"}) or vector(0)) == 0");
-                rule.setDurationFor("");
-                ruleDAO.insert(id, g.getId(), rule);
-                n++;
+            if (mt instanceof Site s) {
+                String name = s.getName().replace(" ", "_");
+                AlertRule rule = find(name, allRules);
+                boolean found = (rule != null);
+                if (!found) {
+                    rule = new AlertRule();
+                    rule.setId(IdGenerator.createId25());
+                    rule.setAlert(name);
+                    rule.setDescription(s.getUrl());
+                    rule.setDurationFor("");
+                    rule.setSummary(s.getName() + " " + istDown);
+                }
+                rule.setExpr("(sum(httpcheck_status{http_status_class=\"2xx\", http_url=\"" + s.getUrl()
+                        + "\"}) or vector(0)) == 0");
+                if (found) {
+                    ruleDAO.update(id, g.getId(), rule);
+                    updated++;
+                } else {
+                    ruleDAO.insert(id, g.getId(), rule);
+                    created++;
+                }
             }
         }
-        Logger.info("alert rules created: " + n);
+        Logger.info("alert rules created: " + created + ", updated: " + updated);
     }
     
     private AlertGroup group(IBranch branch, String id, List<AlertRule> allRules) {
@@ -198,13 +209,13 @@ public class OtcService {
         }
     }
 
-    private boolean exist(String name, List<AlertRule> rules) {
+    private AlertRule find(String name, List<AlertRule> rules) {
         for (AlertRule r : rules) {
             if (r.getAlert().equals(name)) {
-                return true;
+                return r;
             }
         }
-        return false;
+        return null;
     }
     
     public String duplicate(IBranch branch, String environmentId, String mtId) {
