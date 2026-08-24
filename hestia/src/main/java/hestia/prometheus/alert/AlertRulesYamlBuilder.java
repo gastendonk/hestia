@@ -36,26 +36,28 @@ public class AlertRulesYamlBuilder {
     private String rules(List<AlertRule> rules) {
         String ret = "  rules:\n";
         for (AlertRule r : rules) {
-            ret += "  - alert: " + r.getAlert() + "\n";
-            ret += "    expr: " + r.getExpr() + "\n";
-            String durationFor = r.getDurationFor();
-            if (StringService.isNullOrEmpty(durationFor)) {
-                durationFor = "2m"; // TODO global o.ä. definieren
-            }
-            ret += "    for: " + durationFor + "\n";
-            var s = !StringService.isNullOrEmpty(r.getSummary());
-            var d = !StringService.isNullOrEmpty(r.getDescription());
-            if (s || d) {
-                ret += "    annotations:\n";
-                if (s) {
-                    ret += "      summary: " + r.getSummary() + "\n";
+            if (r.isActive()) {
+                ret += "  - alert: " + r.getAlert() + "\n";
+                ret += "    expr: " + r.getExpr() + "\n";
+                String durationFor = r.getDurationFor();
+                if (StringService.isNullOrEmpty(durationFor)) {
+                    durationFor = "2m"; // TODO global o.ä. definieren
                 }
-                if (d) {
-                    ret += "      description: " + r.getDescription() + "\n";
+                ret += "    for: " + durationFor + "\n";
+                var s = !StringService.isNullOrEmpty(r.getSummary());
+                var d = !StringService.isNullOrEmpty(r.getDescription());
+                if (s || d) {
+                    ret += "    annotations:\n";
+                    if (s) {
+                        ret += "      summary: " + r.getSummary() + "\n";
+                    }
+                    if (d) {
+                        ret += "      description: " + r.getDescription() + "\n";
+                    }
                 }
-            }
-            if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
-                ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
+                if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
+                    ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
+                }
             }
         }
         return ret;
