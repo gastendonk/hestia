@@ -1,5 +1,6 @@
 package hestia.prometheus.alert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hestia.prometheus.alert.rule.AlertRule;
@@ -12,13 +13,14 @@ public class AlertsPage extends HPage {
         String id = ctx.pathParam("env");
 
         var env = environmentDAO().loadOne(id);
-        List<AlertGroup> groups = alertGroupDAO().load(id);
+        List<AlertGroup> groups = new ArrayList<>(alertGroupDAO().load(id));
         
         header(n("alertRules"));
         cenv(env);
         put("env", esc(id));
         var list = list("groups");
         var first = true;
+        groups.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
         for (AlertGroup g : groups) {
             var m = list.add();
             m.put("id", esc(g.getId()));
@@ -26,6 +28,7 @@ public class AlertsPage extends HPage {
             m.put("first", first);
             first = false;
             var list2 = m.list("rules");
+            g.getRules().sort((a, b) -> a.getAlert().compareToIgnoreCase(b.getAlert()));
             for (AlertRule r : g.getRules()) {
                 var m2 = list2.add();
                 m2.put("id", esc(r.getId()));
