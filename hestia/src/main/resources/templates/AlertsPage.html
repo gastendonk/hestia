@@ -13,7 +13,8 @@
                     <a href="/{{branch}}/alert-group/{{env}}/{{g.id}}/delete" class="btn btn-xs btn-danger" title="{{N.Delete}}"
                         onclick="return confirm('{{N.Delete}}?')"><i class="fa fa-trash-o"></i></a>
                     {{if g.first}}
-                        <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-xs btn-default">{{N.NewGroup}}</a>
+                        <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-xs btn-default"
+                            title="{{N.NewGroup}}"><i class="fa fa-file-o"></i></a>
                     {{/if}}
                     <a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/add" class="btn btn-sm btn-primary">{{N.AddRule}}</a>
                 {{/if}}
