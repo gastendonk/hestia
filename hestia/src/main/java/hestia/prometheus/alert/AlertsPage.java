@@ -9,13 +9,14 @@ public class AlertsPage extends HPage {
 
     @Override
     protected void execute() {
-        String env = ctx.pathParam("env");
+        String id = ctx.pathParam("env");
 
-        var environment = environmentDAO().loadOne(env);
-        List<AlertGroup> groups = alertGroupDAO().load(env);
+        var env = environmentDAO().loadOne(id);
+        List<AlertGroup> groups = alertGroupDAO().load(id);
         
-        header(n("alertsFor") + " " + environment.getName());
-        put("env", esc(env));
+        header(n("alertRules"));
+        cenv(env);
+        put("env", esc(id));
         var list = list("groups");
         var first = true;
         for (AlertGroup g : groups) {

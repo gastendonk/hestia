@@ -6,6 +6,7 @@ import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
+import hestia.environment.Environment;
 import hestia.otc.model.MonitoredTarget;
 import hestia.web.base.HPage;
 
@@ -15,9 +16,11 @@ public class MonitoredTargetsPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id");
         
+        Environment env = environmentDAO().loadOne(id);
         List<MonitoredTarget> mtlist = mtDAO().load(id);
         
         header(n("MonitoredTargets"));
+        cenv(env);
         put("id", esc(id));
         var list = list("list");
         for (MonitoredTarget mt : mtlist) {

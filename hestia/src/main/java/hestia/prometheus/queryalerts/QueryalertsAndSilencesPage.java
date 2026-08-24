@@ -16,6 +16,7 @@ import hestia.prometheus.silences.Silence;
 import hestia.web.base.HPage;
 
 public class QueryalertsAndSilencesPage extends HPage {
+    // TODO extend silence
 
     @Override
     protected void execute() {

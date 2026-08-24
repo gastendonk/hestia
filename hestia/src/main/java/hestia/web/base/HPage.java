@@ -3,6 +3,7 @@ package hestia.web.base;
 import github.soltaufintel.amalia.web.action.Page;
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
+import hestia.environment.Environment;
 import hestia.environment.EnvironmentDAO;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.prometheus.alert.AlertGroupDAO;
@@ -41,5 +42,9 @@ public abstract class HPage extends Page {
 
     protected void backToStartpage() {
         ctx.redirect("/" + b().getBranch());
+    }
+    
+    protected final void cenv(Environment env) {
+        put("cenv", esc((HestiaWebapp.config.isCustomer() ? "" : env.getCustomer() + " ") + env.getName()));
     }
 }
