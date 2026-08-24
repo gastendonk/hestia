@@ -167,7 +167,7 @@ public class OtcService {
                 rule.setAlert(s.getName().replace(" ", "_"));
                 rule.setSummary(s.getName() + " " + istDown);
                 rule.setDescription(s.getUrl());
-                rule.setExpr("httpcheck_status{http_url=\"" + s.getUrl() + "\"} == 0");
+                rule.setExpr("(sum(httpcheck_status{http_status_class=\"2xx\", http_url=\""+ s.getUrl() + "\"}) or vector(0)) == 0");
                 rule.setDurationFor("");
                 ruleDAO.insert(id, g.getId(), rule);
                 n++;
