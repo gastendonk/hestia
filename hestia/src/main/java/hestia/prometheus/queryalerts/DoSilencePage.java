@@ -39,7 +39,6 @@ public class DoSilencePage extends HPage {
             }
         } else {
             header(n("DoSilence"));
-            put("endLabel", "End");
             put("end", LocalDateTime.now().plusHours(1).format(DateTimeFormatter.ofPattern("")));
         }
     }

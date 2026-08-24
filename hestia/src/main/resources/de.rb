@@ -86,3 +86,4 @@ showAlertRulesFile=Alarmregeln-Datei
 AlertsForSites=Alarmregeln für alle Sites anlegen
 istDown=ist down
 alertRules=Alarmregeln
+endLabel=Ende [Stunden]
