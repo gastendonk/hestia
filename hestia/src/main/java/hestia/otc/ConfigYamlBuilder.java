@@ -21,7 +21,7 @@ public class ConfigYamlBuilder {
     private final List<String> exporters = new ArrayList<>();
     private final List<MonitoredTarget> monitoredTargets;
     private final OtcOpts o;
-    private String tracesExporters = "";
+    private List<String> tracesExporters = new ArrayList<>();
     
     public ConfigYamlBuilder(List<MonitoredTarget> monitoredTargets, OtcOpts o) {
         this.monitoredTargets = new ArrayList<>(monitoredTargets);
@@ -209,7 +209,10 @@ public class ConfigYamlBuilder {
         }
         if (!StringService.isNullOrEmpty(o.getTempo())) { // write traces to Tempo
             ret += "  otlp/tempo:\n    endpoint: \"" + o.getTempo() + "\"\n    tls: { insecure: true }\n";
-            tracesExporters = "otlp/tempo, ";
+            tracesExporters.add("otlp/tempo");
+        }
+        if (o.isDebug()) {
+            tracesExporters.add("debug"); // debug soll hier später in der Liste stehen
         }
         if (!StringService.isNullOrEmpty(o.getLoki())) { // write logs to Loki
             ret += "  otlphttp/loki:\n" + "    endpoint: \"" + o.getLoki() + "\"\n";
@@ -277,7 +280,7 @@ public class ConfigYamlBuilder {
                 .replace("{{m_exporters}}", exporters.stream().collect(Collectors.joining(", ")));
         if (!StringService.isNullOrEmpty(o.getTempo())) {
             ret += "    traces:\n      receivers:  [otlp]\n      processors: [batch]\n      exporters:  ["
-                    + tracesExporters + "debug]\n";
+                    + tracesExporters.stream().collect(Collectors.joining(", ")) + "]\n";
         }
         if (!StringService.isNullOrEmpty(o.getLoki())) {
             ret += "    logs:\n      receivers:  [otlp]\n      processors: [batch]\n      exporters:  [otlphttp/loki]\n";

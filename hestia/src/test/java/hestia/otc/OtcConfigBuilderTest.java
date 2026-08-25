@@ -210,6 +210,7 @@ public class OtcConfigBuilderTest {
         OtcOpts o = new OtcOpts();
         o.setOtc("http://cloud");
         o.setDebug(false);
+        o.setTempo("tempo:4317");
 
         String out = new ConfigYamlBuilder(List.of(), o).build();
 
@@ -243,6 +244,9 @@ public class OtcConfigBuilderTest {
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
 
                 exporters:
+                  otlp/tempo:
+                    endpoint: "tempo:4317"
+                    tls: { insecure: true }
                   otlphttp/otc:
                     endpoint: "http://cloud"
                     compression: gzip
@@ -267,6 +271,10 @@ public class OtcConfigBuilderTest {
                         - otlp
                       processors: [attributes, transform/make_labels, batch]
                       exporters:  [otlphttp/otc]
+                    traces:
+                      receivers:  [otlp]
+                      processors: [batch]
+                      exporters:  [otlp/tempo]
                                 """;
         Assert.assertEquals(expectation, out);
     }
