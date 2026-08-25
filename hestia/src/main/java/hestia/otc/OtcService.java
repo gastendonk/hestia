@@ -58,7 +58,6 @@ public class OtcService {
     }
 
     private void validate(String yaml) {
-Logger.info("validate: " + yaml); // XXX DEBUG
         File configFile = HestiaWebapp.config.getConfigYamlForValidate(); // TODO Wieso nicht ein tempfile? vgl. PrometheusService
         FileService.savePlainTextFile(configFile, yaml);
         try {
@@ -72,8 +71,7 @@ Logger.info("validate: " + yaml); // XXX DEBUG
                 throw new RuntimeException("Validate error:\n" + out);
             }
         } finally {
-            Logger.info(configFile.getAbsolutePath());
-//  FIXME          configFile.delete();
+            configFile.delete();
         }
     }
     
