@@ -24,7 +24,7 @@
                     <tr>
                         <th>ID</th>
                         <th><i>{{N.Summary}}</i></th>
-                        <th></th>
+                        {{if not customer}}<th></th>{{/if}}
                     </tr>
                 </thead>
                 <tbody>
@@ -33,8 +33,10 @@
 	                       <td><a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/edit"
                                 {{if not r.active}} style="text-decoration: line-through;"{{/if}}>{{r.alert}}</a></td>
 	                       <td><i>{{r.summary}}</i></td>
-	                       <td><a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/duplicate"
-	                           class="btn btn-xs btn-default" title="{{N.Duplicate}}"><i class="fa fa-copy"></i></a></td>
+	                       {{if not customer}}
+		                       <td><a href="/{{branch}}/alert-rule/{{env}}/{{g.id}}/{{r.id}}/duplicate"
+		                           class="btn btn-xs btn-default" title="{{N.Duplicate}}"><i class="fa fa-copy"></i></a></td>
+	                       {{/if}}
 	                    </tr>
 	                {{/each}}
                 </tbody>
