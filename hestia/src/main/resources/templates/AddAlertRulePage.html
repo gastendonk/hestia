@@ -32,6 +32,24 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="channel" class="col-lg-1 control-label">{{N.Channel}}</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" id="channel" name="channel">
+                            {{each a in channels}}
+                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <label for="channel2" class="col-lg-1 control-label">{{N.EscalationChannel}}</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" id="channel2" name="channel2">
+                            {{each a in channels2}}
+                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="durationFor" class="col-lg-1 control-label">for</label>
                     <div class="col-lg-1">
                         <input type="text" class="form-control" id="durationFor" name="durationFor">

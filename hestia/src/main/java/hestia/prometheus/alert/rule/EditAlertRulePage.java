@@ -34,6 +34,9 @@ public class EditAlertRulePage extends HPage {
         put("durationFor", esc(rule.getDurationFor()));
         put("keepFiringFor", esc(rule.getKeepFiringFor()));
         put("active", rule.isActive());
+        var channels = HestiaWebapp.config.getChannels();
+        combobox("channels", channels, rule.getChannel(), true);
+        combobox("channels2", channels, rule.getEscalationChannel(), true);
     }
 
     private void save(String env, String groupId, AlertRule rule, AlertRuleDAO dao) {
@@ -49,6 +52,8 @@ public class EditAlertRulePage extends HPage {
         rule.setSummary(ctx.formParam("summary").trim());
         rule.setDescription(ctx.formParam("description"));
         rule.setExpr(ctx.formParam("expr"));
+        rule.setChannel(ctx.formParam("channel"));
+        rule.setEscalationChannel(ctx.formParam("channel2"));
         rule.setDurationFor(ctx.formParam("durationFor"));
         rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
         rule.setActive("on".equals(ctx.formParam("active")));

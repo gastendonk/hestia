@@ -58,6 +58,11 @@ public class AlertRulesYamlBuilder {
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
+                if (!StringService.isNullOrEmpty(r.getChannel())) {
+                    // TODO labels -> channel, escalation
+                    if (!StringService.isNullOrEmpty(r.getEscalationChannel())) {
+                    }
+                }
             }
         }
         return ret;

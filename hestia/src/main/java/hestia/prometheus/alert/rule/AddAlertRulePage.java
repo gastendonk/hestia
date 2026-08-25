@@ -26,6 +26,8 @@ public class AddAlertRulePage extends HPage {
             rule.setSummary(ctx.formParam("summary").trim());
             rule.setDescription(ctx.formParam("description"));
             rule.setExpr(ctx.formParam("expr"));
+            rule.setChannel(ctx.formParam("channel"));
+            rule.setEscalationChannel(ctx.formParam("channel2"));
             rule.setDurationFor(ctx.formParam("durationFor"));
             rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
             alertRuleDAO().insert(env, groupId, rule);
@@ -35,6 +37,9 @@ public class AddAlertRulePage extends HPage {
             header(n("AddRule"));
             put("env", esc(env));
             put("alertHint", "camelCase oder snake_case, keine Leerzeichen");
+            var channels = HestiaWebapp.config.getChannels();
+            combobox("channels", channels, "", true);
+            combobox("channels2", channels, "", true);
         }
     }
 

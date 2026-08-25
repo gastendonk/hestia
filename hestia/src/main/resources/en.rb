@@ -87,3 +87,5 @@ AlertsForSites=Create alert rules for all sites
 istDown=is down
 alertRules=Alert rules
 endLabel=End [hours]
+Channel=Channel
+EscalationChannel=Escalation

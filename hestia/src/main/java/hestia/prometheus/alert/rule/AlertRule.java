@@ -12,6 +12,8 @@ public class AlertRule implements Identifiable {
     private String summary;
     private String description;
     private boolean active = true;
+    private String channel;
+    private String escalationChannel;
 
     @Override
     public String getId() {
@@ -88,6 +90,24 @@ public class AlertRule implements Identifiable {
         n.setSummary(summary);
         n.setDescription(description);
         n.setActive(active);
+        n.setChannel(channel);
+        n.setEscalationChannel(escalationChannel);
         return n;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getEscalationChannel() {
+        return escalationChannel;
+    }
+
+    public void setEscalationChannel(String escalationChannel) {
+        this.escalationChannel = escalationChannel;
     }
 }

@@ -1,6 +1,7 @@
 package hestia.config;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,7 @@ public class HestiaConfig {
     private final String customerKey;
     private final String promtool;
     private final boolean deployOnReceive;
+    private final List<String> channels = new ArrayList<>();
     
     public HestiaConfig(IConfig appConfig) {
         this.config = appConfig;
@@ -66,6 +68,12 @@ public class HestiaConfig {
         customerKey = config.get("CUSTOMERKEY");
         promtool = config.get("PROMTOOL");
         deployOnReceive = "1".equals(config.get("DEPLOY_ON_RECEIPT"));
+        for (String ch : config.get("CHANNELS", "").split(",")) {
+            channels.add(ch.trim());
+        }
+        if (channels.isEmpty()) {
+            channels.add("default"); // Sicherstellen, dass es stets mindestens einen Channel gibt.
+        }
         
         // /work: working directory, exchange files with other containers
         alertRulesFile = new File(config.get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
@@ -171,6 +179,10 @@ public class HestiaConfig {
         return deployOnReceive;
     }
     
+    public List<String> getChannels() {
+        return channels;
+    }
+
     public EnvironmentDAO environmentDAO(IBranch branch) {
         return new EnvironmentDAO(getRepository(branch));
     }

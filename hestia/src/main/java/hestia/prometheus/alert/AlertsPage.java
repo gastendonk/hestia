@@ -35,6 +35,8 @@ public class AlertsPage extends HPage {
                 m2.put("alert", esc(r.getAlert()));
                 m2.put("summary", esc(r.getSummary()));
                 m2.put("active", r.isActive());
+                m2.put("channel", esc(r.getChannel()));
+                m2.put("channel2", esc(r.getEscalationChannel()));
             }
         }
     }
