@@ -205,10 +205,7 @@ public class ConfigYamlBuilder {
             exporters.add("prometheusremotewrite");
         }
         if (o.isDebug()) {
-            exporters.add("debug");
-        }
-        if (exporters.isEmpty()) {
-            throw new RuntimeException("exporters must not be empty");
+            exporters.add("debug"); // debug soll unter service am Anfang stehen, aber unter exporters am Ende
         }
         if (!StringService.isNullOrEmpty(o.getTempo())) { // write traces to Tempo
             ret += "  otlp/tempo:\n    endpoint: \"" + o.getTempo() + "\"\n    tls: { insecure: true }\n";
@@ -239,6 +236,9 @@ public class ConfigYamlBuilder {
         }
         if (o.isDebug()) {
             ret += "  debug:\n    verbosity: detailed\n";
+        }
+        if (exporters.isEmpty()) {
+            throw new RuntimeException("exporters must not be empty");
         }
         return ret + "\n";
     }

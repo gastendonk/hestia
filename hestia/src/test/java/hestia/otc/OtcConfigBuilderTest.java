@@ -52,7 +52,7 @@ public class OtcConfigBuilderTest {
                       oracledb.consistent_gets: { enabled: true }
                       oracledb.db_block_gets: { enabled: true }
                   httpcheck:
-                    collection_interval: 5m
+                    collection_interval: 30s
                     targets:
                       - endpoint: "http://server"
 
@@ -201,6 +201,72 @@ public class OtcConfigBuilderTest {
                         - otlp
                       processors: [attributes, transform/make_labels, batch]
                       exporters:  [debug, otlphttp/otc]
+                                """;
+        Assert.assertEquals(expectation, out);
+    }
+    
+    @Test
+    public void debugOff() {
+        OtcOpts o = new OtcOpts();
+        o.setOtc("http://cloud");
+        o.setDebug(false);
+
+        String out = new ConfigYamlBuilder(List.of(), o).build();
+
+        String expectation = """
+                receivers:
+                  otlp:
+                      protocols:
+                        grpc: { endpoint: "0.0.0.0:4317" }
+                        http: { endpoint: "0.0.0.0:4318" }
+                
+                processors:
+                  batch: {}
+                  attributes:
+                    actions:
+                      - key: customer
+                        value: "unspecified"
+                        action: insert
+                      - key: process.command_line
+                        action: delete
+                      - key: process.pid
+                        action: delete
+                      - key: process.executable.path
+                        action: delete
+                      - key: host.name
+                        action: delete
+                  transform/make_labels:
+                    metric_statements:
+                      - context: datapoint
+                        statements:
+                          - set(attributes["database"], resource.attributes["postgresql.database.name"])
+                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
+
+                exporters:
+                  otlphttp/otc:
+                    endpoint: "http://cloud"
+                    compression: gzip
+                    sending_queue:
+                      enabled: true
+                      num_consumers: 4
+                      queue_size: 8192
+                    retry_on_failure:
+                      enabled: true
+                      initial_interval: 1s
+                      max_interval: 30s
+                      max_elapsed_time: 5m
+
+                extensions:
+                  health_check:
+
+                service:
+                  extensions: [health_check]
+                  pipelines:
+                    metrics:
+                      receivers:
+                        - otlp
+                      processors: [attributes, transform/make_labels, batch]
+                      exporters:  [otlphttp/otc]
                                 """;
         Assert.assertEquals(expectation, out);
     }
