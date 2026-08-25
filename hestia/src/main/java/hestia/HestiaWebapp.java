@@ -56,7 +56,7 @@ import hestia.web.base.HestiaPageInitializer;
 import spark.Spark;
 
 public class HestiaWebapp extends RouteDefinitions {
-    public static final String VERSION = "0.2.0";
+    public static final String VERSION = "0.3.0";
     public static HestiaConfig config;
     public static OtcProcess otcProcess;
     
