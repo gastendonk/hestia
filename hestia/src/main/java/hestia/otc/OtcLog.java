@@ -88,6 +88,7 @@ public class OtcLog {
     }
 
     public static String load() {
-        return FileService.loadPlainTextFile(file);
+        // TODO amalia: wenn in loadBinaryFile file null ist soll null geliefert werden
+        return file == null ? "N/A" : FileService.loadPlainTextFile(file);
     }
 }
