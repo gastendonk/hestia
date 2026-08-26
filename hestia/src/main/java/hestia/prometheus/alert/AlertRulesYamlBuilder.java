@@ -59,11 +59,18 @@ public class AlertRulesYamlBuilder {
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
+/*
                 if (!StringService.isNullOrEmpty(r.getChannel())) {
-                    // TODO labels -> channel, escalation
-                    if (!StringService.isNullOrEmpty(r.getEscalationChannel())) {
-                    }
+                    ret += "    labels:\n";
+                    ret += "      channel: \"" + r.getChannel() + "\"\n";
                 }
+                if (!StringService.isNullOrEmpty(r.getEscalationChannel())) {
+                    if (StringService.isNullOrEmpty(r.getChannel())) {
+                        ret += "    labels:\n";
+                    }
+                    ret += "      channel: \"" + r.getEscalationChannel() + "\"\n"; // TODO "channel" ??!
+                }
+*/
             }
         }
         return ret;
