@@ -46,8 +46,8 @@ public class AlertRulesYamlBuilder {
                 ret += "    for: " + durationFor + "\n";
                 var s = !StringService.isNullOrEmpty(r.getSummary());
                 var d = !StringService.isNullOrEmpty(r.getDescription());
+                ret += "    annotations:\n";
                 if (s || d) {
-                    ret += "    annotations:\n";
                     if (s) {
                         ret += "      summary: " + r.getSummary() + "\n";
                     }
@@ -55,11 +55,10 @@ public class AlertRulesYamlBuilder {
                         ret += "      description: " + r.getDescription() + "\n";
                     }
                 }
+                ret += "      runbook_url: http://docker11:3080/qas\n"; // XXX experimentell
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
-                ret += "    annotations:\n";
-                ret += "      runbook_url: http://docker11:3080/qas\n"; // XXX experimentell
                 if (!StringService.isNullOrEmpty(r.getChannel())) {
                     // TODO labels -> channel, escalation
                     if (!StringService.isNullOrEmpty(r.getEscalationChannel())) {
