@@ -22,7 +22,7 @@ import hestia.prometheus.alert.rule.AlertRuleDAO;
 
 public class HestiaConfig {
     /** built-in default version */
-    public static final String OTELCOLVERSION = "0.137.0";
+    public static final String OTELCOLVERSION = "0.159.0";
     private IConfig config;
     private final Map<String, IRepository> repositories = new HashMap<>();
     private final String title;
