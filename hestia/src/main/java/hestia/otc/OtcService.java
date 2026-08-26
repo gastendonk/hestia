@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.FileService;
@@ -71,7 +72,9 @@ public class OtcService {
                 throw new RuntimeException("Validate error:\n" + out);
             }
         } finally {
-            configFile.delete();
+            if (Logger.getLevel() != Level.DEBUG) {
+                configFile.delete();
+            }
         }
     }
     

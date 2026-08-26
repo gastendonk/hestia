@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
+import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.base.StringService;
@@ -52,6 +53,7 @@ public class PrometheusService {
             return;
         }
         var tempFile = Files.createTempFile("validate-alerts", ".yml");
+        Logger.debug(yaml);
         write(tempFile, yaml);
         try {
             var sc = new ShellScriptExecutor();
@@ -66,7 +68,9 @@ public class PrometheusService {
                 throw new RuntimeException("Alert rules validation failed!\n" + log.replace(dn, "alert-rules.yml"));
             }
         } finally {
-            tempFile.toFile().delete();
+            if (Logger.getLevel() != Level.DEBUG) {
+                tempFile.toFile().delete();
+            }
         }
     }
     
