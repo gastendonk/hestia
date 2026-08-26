@@ -25,7 +25,7 @@ public class Site extends AbstractMonitoredTarget {
         n.setName(getName());
         n.setUrl(getUrl());
         n.setId(IdGenerator.createId25());
-        n.setActive(isActive());
+        n.setActive(true);
         return n;
     }
 }

@@ -35,7 +35,7 @@ public class Definition extends AbstractMonitoredTarget {
         n.setDefinition(getDefinition());
         n.setName(getName());
         n.setId(IdGenerator.createId25());
-        n.setActive(isActive());
+        n.setActive(true);
         return n;
     }
 }

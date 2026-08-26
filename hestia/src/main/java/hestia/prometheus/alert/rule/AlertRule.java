@@ -89,7 +89,7 @@ public class AlertRule implements Identifiable {
         n.setKeepFiringFor(keepFiringFor);
         n.setSummary(summary);
         n.setDescription(description);
-        n.setActive(active);
+        n.setActive(true);
         n.setChannel(channel);
         n.setEscalationChannel(escalationChannel);
         return n;

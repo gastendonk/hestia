@@ -58,7 +58,7 @@ public class Database extends AbstractMonitoredTarget {
         n.setUser(getUser());
         n.setPassword(getPassword());
         n.setId(IdGenerator.createId25());
-        n.setActive(isActive());
+        n.setActive(true);
         return n;
     }
 }

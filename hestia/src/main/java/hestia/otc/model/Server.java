@@ -50,7 +50,7 @@ public class Server extends AbstractMonitoredTarget {
         n.setPath(getPath());
         n.setType(getType());
         n.setId(IdGenerator.createId25());
-        n.setActive(isActive());
+        n.setActive(true);
         return n;
     }
 }
