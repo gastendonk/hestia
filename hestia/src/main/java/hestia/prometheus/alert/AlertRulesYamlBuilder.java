@@ -55,11 +55,10 @@ public class AlertRulesYamlBuilder {
                         ret += "      description: " + r.getDescription() + "\n";
                     }
                 }
-                ret += "      runbook_url: http://docker11:3080/qas\n"; // XXX experimentell
+                ret += "      runbook_url: http://docker11:3080/qas\n";
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
-/*
                 if (!StringService.isNullOrEmpty(r.getChannel())) {
                     ret += "    labels:\n";
                     ret += "      channel: \"" + r.getChannel() + "\"\n";
@@ -68,9 +67,8 @@ public class AlertRulesYamlBuilder {
                     if (StringService.isNullOrEmpty(r.getChannel())) {
                         ret += "    labels:\n";
                     }
-                    ret += "      channel: \"" + r.getEscalationChannel() + "\"\n"; // TODO "channel" ??!
+                    ret += "      escalation_channel: \"" + r.getEscalationChannel() + "\"\n";
                 }
-*/
             }
         }
         return ret;
