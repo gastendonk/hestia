@@ -179,6 +179,12 @@ public class ConfigYamlBuilder {
                         action: delete
                       - key: host.name
                         action: delete
+                  transform/remove_scope_labels:
+                    metric_statements:
+                      - context: datapoint
+                        statements:
+                          - delete_key(attributes, "otel_scope_name")
+                          - delete_key(attributes, "otel_scope_version")
                   transform/make_labels:
                     metric_statements:
                       - context: datapoint
@@ -271,7 +277,7 @@ public class ConfigYamlBuilder {
                   pipelines:
                     metrics:
                       receivers:{{m_receivers}}
-                      processors: [attributes, transform/make_labels, batch]
+                      processors: [attributes, transform/remove_scope_labels, transform/make_labels, batch]
                       exporters:  [{{m_exporters}}]
                                 """ //
                 .replace("{{m_receivers}}",
