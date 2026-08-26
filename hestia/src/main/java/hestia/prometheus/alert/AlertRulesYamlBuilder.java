@@ -58,6 +58,7 @@ public class AlertRulesYamlBuilder {
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
+                ret += "    runbook_url: http://docker11:3080/qas"; // XXX experimentell
                 if (!StringService.isNullOrEmpty(r.getChannel())) {
                     // TODO labels -> channel, escalation
                     if (!StringService.isNullOrEmpty(r.getEscalationChannel())) {
