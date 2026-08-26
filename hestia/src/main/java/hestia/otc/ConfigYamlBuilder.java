@@ -206,8 +206,8 @@ public class ConfigYamlBuilder {
             exporters.add("prometheus");
         }
         if (!StringService.isNullOrEmpty(o.getPrometheusremotewrite())) { // write metrics to Prometheus
-            ret += "  prometheusremotewrite:\n    endpoint: \"" + o.getPrometheusremotewrite() + "\"\n";
-            exporters.add("prometheusremotewrite");
+            ret += "  prometheus_remote_write:\n    endpoint: \"" + o.getPrometheusremotewrite() + "\"\n";
+            exporters.add("prometheus_remote_write");
         }
         if (o.isDebug()) {
             exporters.add("debug"); // debug soll unter service am Anfang stehen, aber unter exporters am Ende

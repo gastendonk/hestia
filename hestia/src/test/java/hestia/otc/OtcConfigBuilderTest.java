@@ -79,7 +79,7 @@ public class OtcConfigBuilderTest {
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
 
                 exporters:
-                  prometheusremotewrite:
+                  prometheus_remote_write:
                     endpoint: "http://prometheus:9090"
                   otlp/tempo:
                     endpoint: "tempo:4317"
