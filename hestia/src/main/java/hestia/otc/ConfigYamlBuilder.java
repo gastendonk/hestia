@@ -101,7 +101,6 @@ public class ConfigYamlBuilder {
 
     private String postgres() {
         String ret = "";
-        boolean first = true;
         for (MonitoredTarget mt : monitoredTargets) {
             if (mt instanceof Database db && db.getType() == DatabaseType.POSTGRES) {
                 ret += "  postgresql/" + db.getName() + ":\n" //
@@ -109,14 +108,11 @@ public class ConfigYamlBuilder {
                         + "    endpoint: " + db.getHost() + "\n" //
                         + "    username: " + db.getUser() + "\n" //
                         + "    password: " + db.getPassword() + "\n" //
-                        + "    tls: { insecure: true }\n";
-                if (first) {
-                    first = false;
-                    ret += "    resource_attributes: &postgres_attrs\n" //
-                            + "      postgresql.database.name: { enabled: true }\n\n";
-                } else {
-                    ret += "    resource_attributes: *postgres_attrs\n\n";
-                }
+                        + "    tls: { insecure: true }\n" //
+                        + "    resource_attributes:\n" //
+                        + "      postgresql.database.name: { enabled: true }\n\n";
+                // Do not use & * references here! Each database must have its own options.
+                
                 receivers.add("postgresql/" + db.getName());
             }
         }
