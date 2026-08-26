@@ -46,7 +46,7 @@
                 </tbody>
             </table>
             {{if not g.rules}}
-	           <li>{{N.none}}</li>
+	           <p>{{N.none}}</p>
 	        {{/if}}
         {{else if not customer}}
             <a href="/{{branch}}/alert-group/{{env}}/add" class="btn btn-primary">{{N.NewGroup}}</a>
