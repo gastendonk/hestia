@@ -184,6 +184,7 @@ public class ConfigYamlBuilder {
                       - context: datapoint
                         statements:
                           - set(attributes["database"], resource.attributes["postgresql.database.name"])
+                          - set(attributes["port"], resource.attributes["net.peer.port"]) where resource.attributes["net.peer.port"] != nil
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
 
                                 """
