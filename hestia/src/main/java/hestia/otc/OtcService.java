@@ -24,6 +24,8 @@ import github.soltaufintel.amalia.web.image.IBinaryDataLoader;
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.base.ShellScriptExecutor;
+import hestia.otc.model.Database;
+import hestia.otc.model.DatabaseType;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.Site;
@@ -160,7 +162,7 @@ public class OtcService {
         AlertRuleDAO ruleDAO = HestiaWebapp.config.alertRuleDAO(branch);
 
         List<AlertRule> allRules = new ArrayList<>();
-        AlertGroup g = group(branch, id, allRules);
+        AlertGroup g = group("Sites", branch, id, allRules);
         
         List<MonitoredTarget> mtlist = dao.load(id);
         int created = 0, updated = 0;
@@ -188,16 +190,57 @@ public class OtcService {
                 }
             }
         }
-        Logger.info("alert rules created: " + created + ", updated: " + updated);
+        Logger.info("[siteAlerts] alert rules created: " + created + ", updated: " + updated);
+    }
+
+    /**
+     * Fuer jede Oracle DB einen Alarm anlegen.
+     * @param branch -
+     * @param id environment ID
+     * @param istDown "ist down"
+     */
+    public void oracleAlerts(IBranch branch, String id, String istDown) {
+        MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
+        AlertRuleDAO ruleDAO = HestiaWebapp.config.alertRuleDAO(branch);
+
+        List<AlertRule> allRules = new ArrayList<>();
+        AlertGroup g = group("Oracle", branch, id, allRules);
+        
+        List<MonitoredTarget> mtlist = dao.load(id);
+        int created = 0, updated = 0;
+        for (MonitoredTarget mt : mtlist) {
+            if (mt instanceof Database s && s.getType() == DatabaseType.ORACLE) {
+                String name = s.getName().replace(" ", "_");
+                AlertRule rule = find(name, allRules);
+                boolean found = (rule != null);
+                if (!found) {
+                    rule = new AlertRule();
+                    rule.setId(IdGenerator.createId25());
+                    rule.setAlert(name);
+                    rule.setDescription("Host: " + s.getHost());
+                    rule.setDurationFor("");
+                    rule.setSummary("Oracle DB " + s.getName() + " " + istDown);
+                }
+                rule.setExpr("absent(oracledb_user_commits_total{instance=\"" + s.getHost() + "/" + s.getName() + "\"})");
+                if (found) {
+                    ruleDAO.update(id, g.getId(), rule);
+                    updated++;
+                } else {
+                    ruleDAO.insert(id, g.getId(), rule);
+                    created++;
+                }
+            }
+        }
+        Logger.info("[oracleAlerts] alert rules created: " + created + ", updated: " + updated);
     }
     
-    private AlertGroup group(IBranch branch, String id, List<AlertRule> allRules) {
+    private AlertGroup group(String name, IBranch branch, String id, List<AlertRule> allRules) {
         AlertGroupDAO alertGroupDAO = HestiaWebapp.config.alertGroupDAO(branch);
         List<AlertGroup> groups = alertGroupDAO.load(id);
         if (groups.isEmpty()) {
             AlertGroup g = new AlertGroup();
             g.setId(IdGenerator.createId25());
-            g.setName("Sites");
+            g.setName(name);
             alertGroupDAO.insert(id, g);
             return g;
         } else {
@@ -205,7 +248,7 @@ public class OtcService {
                 allRules.addAll(i.getRules());
             }
             for (AlertGroup i : groups) {
-                if (i.getName().toLowerCase().contains("sites")) {
+                if (i.getName().toLowerCase().contains(name.toLowerCase())) {
                     return i;
                 }
             }
@@ -221,7 +264,7 @@ public class OtcService {
         }
         return null;
     }
-    
+
     public String duplicate(IBranch branch, String environmentId, String mtId) {
         var dao = HestiaWebapp.config.mtDAO(branch);
         var mt = dao.loadOne(environmentId, mtId);

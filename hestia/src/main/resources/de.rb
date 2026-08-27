@@ -84,6 +84,7 @@ Configuration=Konfiguration
 Log=Protokoll
 showAlertRulesFile=Alarmregeln-Datei
 AlertsForSites=Alarmregeln für alle Sites anlegen
+AlertsForOracle=Alarmregeln für alle Oracle DB anlegen
 istDown=ist down
 alertRules=Alarmregeln
 endLabel=Ende [Stunden]
