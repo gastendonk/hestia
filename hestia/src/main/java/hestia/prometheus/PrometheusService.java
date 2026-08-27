@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -96,36 +95,51 @@ public class PrometheusService {
     }
     
     private List<ErrorContext> extractContext(String validatorOutput, String yaml) {
-        // 1. Eindeutige Zeilennummern extrahieren
         Set<Integer> lineNumbers = LINE_NUMBER_PATTERN.matcher(validatorOutput)
                 .results()
                 .map(match -> Integer.parseInt(match.group(1)))
                 .collect(Collectors.toSet());
+
         String[] yamlLines = yaml.split("\\r?\\n");
         List<ErrorContext> contexts = new ArrayList<>();
 
-        // 2. Fuer jede gefundene Zeilennummer den Kontext rueckwaerts ermitteln
         for (int targetLine : lineNumbers.stream().sorted().toList()) {
-            int targetIndex = targetLine - 1; // 1-basiert zu 0-basiertem Index
+            int targetIndex = targetLine - 1;
 
             if (targetIndex < 0 || targetIndex >= yamlLines.length) {
-                continue; // Zeilennummer ausserhalb des Bereichs ignorieren
+                continue;
             }
 
-            List<LineEntry> extracted = new ArrayList<>();
+            // 1. Start-Zeile finden: Rückwärts suchen bis zur Zeile, die mit "-" beginnt
+            int startIndex = targetIndex;
+            while (startIndex > 0 && !yamlLines[startIndex].trim().startsWith("-")) {
+                startIndex--;
+            }
 
-            // Rückwaerts suchen von der Fehlerzeile bis zur Zeile, die mit "-" beginnt
-            for (int i = targetIndex; i >= 0; i--) {
-                String currentContent = yamlLines[i];
-                extracted.add(new LineEntry(i + 1, currentContent));
-
-                if (currentContent.trim().startsWith("-")) {
-                    break; // Stop sobald der Listeneintrag ("-") erreicht wurde
+            // 2. Ende-Zeile finden: Vorwärts lesen ab startIndex + 1, bis der nächste Listeneintrag ("-") kommt
+            int endIndex = startIndex;
+            while (endIndex + 1 < yamlLines.length) {
+                String nextLine = yamlLines[endIndex + 1];
+                
+                // Stoppen, wenn die nächste Zeile ein neuer Listeneintrag ist
+                if (nextLine.trim().startsWith("-")) {
+                    break;
                 }
+                
+                // Optional: Stoppen, wenn wir die Einrückungsebene komplett verlassen (z.B. nächste Gruppe)
+                if (!nextLine.isBlank() && Character.isLetter(nextLine.charAt(0))) {
+                    break;
+                }
+                
+                endIndex++;
             }
 
-            // Reihenfolge wieder richtig herum (von der Start-Zeile bis zur Fehler-Zeile) drehen
-            Collections.reverse(extracted);
+            // 3. Zeilen von startIndex bis endIndex einsammeln
+            List<LineEntry> extracted = new ArrayList<>();
+            for (int i = startIndex; i <= endIndex; i++) {
+                extracted.add(new LineEntry(i + 1, yamlLines[i]));
+            }
+
             contexts.add(new ErrorContext(targetLine, extracted));
         }
         return contexts;
