@@ -56,12 +56,12 @@ public class OtcProcess {
     private void logs() {
         checkpoint1 = false;
         checkpoint2 = false;
-//        OtcLog.init();
+        OtcLog.init();
         logReader = new Thread(() -> {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-//                    OtcLog.info(line);
+                    OtcLog.info(line);
                     
                     // Checkpoints prüfen
                     if (!checkpoint1 && line.contains("Everything is ready. Begin running and processing data")) {
