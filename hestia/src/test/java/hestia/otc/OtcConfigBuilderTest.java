@@ -71,12 +71,21 @@ public class OtcConfigBuilderTest {
                         action: delete
                       - key: host.name
                         action: delete
+                  transform/remove_scope_labels:
+                    metric_statements:
+                      - context: datapoint
+                        statements:
+                          - delete_key(attributes, "otel_scope_name")
+                          - delete_key(attributes, "otel_scope_version")
                   transform/make_labels:
                     metric_statements:
                       - context: datapoint
                         statements:
-                          - set(attributes["database"], resource.attributes["postgresql.database.name"])
-                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
+                          - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
+                          - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
+                          - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
+                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
+                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
                   prometheus_remote_write:
@@ -101,8 +110,8 @@ public class OtcConfigBuilderTest {
                         - prometheus
                         - oracledb/DLHTEST
                         - httpcheck
-                      processors: [attributes, transform/make_labels, batch]
-                      exporters:  [prometheusremotewrite, debug]
+                      processors: [attributes, transform/remove_scope_labels, transform/make_labels, batch]
+                      exporters:  [prometheus_remote_write, debug]
                     traces:
                       receivers:  [otlp]
                       processors: [batch]
@@ -167,12 +176,21 @@ public class OtcConfigBuilderTest {
                         action: delete
                       - key: host.name
                         action: delete
+                  transform/remove_scope_labels:
+                    metric_statements:
+                      - context: datapoint
+                        statements:
+                          - delete_key(attributes, "otel_scope_name")
+                          - delete_key(attributes, "otel_scope_version")
                   transform/make_labels:
                     metric_statements:
                       - context: datapoint
                         statements:
-                          - set(attributes["database"], resource.attributes["postgresql.database.name"])
-                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
+                          - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
+                          - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
+                          - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
+                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
+                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
                   otlphttp/otc:
@@ -199,7 +217,7 @@ public class OtcConfigBuilderTest {
                     metrics:
                       receivers:
                         - otlp
-                      processors: [attributes, transform/make_labels, batch]
+                      processors: [attributes, transform/remove_scope_labels, transform/make_labels, batch]
                       exporters:  [debug, otlphttp/otc]
                                 """;
         Assert.assertEquals(expectation, out);
@@ -236,12 +254,21 @@ public class OtcConfigBuilderTest {
                         action: delete
                       - key: host.name
                         action: delete
+                  transform/remove_scope_labels:
+                    metric_statements:
+                      - context: datapoint
+                        statements:
+                          - delete_key(attributes, "otel_scope_name")
+                          - delete_key(attributes, "otel_scope_version")
                   transform/make_labels:
                     metric_statements:
                       - context: datapoint
                         statements:
-                          - set(attributes["database"], resource.attributes["postgresql.database.name"])
-                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"])
+                          - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
+                          - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
+                          - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
+                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
+                          - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
                   otlp/tempo:
@@ -269,7 +296,7 @@ public class OtcConfigBuilderTest {
                     metrics:
                       receivers:
                         - otlp
-                      processors: [attributes, transform/make_labels, batch]
+                      processors: [attributes, transform/remove_scope_labels, transform/make_labels, batch]
                       exporters:  [otlphttp/otc]
                     traces:
                       receivers:  [otlp]
