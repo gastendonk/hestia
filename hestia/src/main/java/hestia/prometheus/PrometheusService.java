@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -29,7 +31,9 @@ public class PrometheusService {
     private static final Pattern LINE_NUMBER_PATTERN = 
             Pattern.compile("alert-rules.*?:\\s*yaml:\\s*line\\s+(\\d+):", Pattern.CASE_INSENSITIVE);
 
-    record ExtractedLine(int lineNumber, String lineContent) {}
+    public record LineEntry(int lineNumber, String content) {}
+
+    public record ErrorContext(int targetLineNumber, List<LineEntry> contextLines) {}
 
     public void deploy(Collection<String> environments, IBranch branch) {
         if (StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
@@ -73,9 +77,11 @@ public class PrometheusService {
                 Logger.info("Alert rules validation ok");
             } else {
                 var msg = log.replace(dn, "alert-rules.yml");
-                var lines = extractFaultyLines(msg, yaml);
+                var lines = extractContext(msg, yaml); // extract faulty lines
                 throw new RuntimeException("Alert rules validation failed!\n" + msg + "\n" +
-                        lines.stream().map(i -> i.lineNumber + ": " + i.lineContent).collect(Collectors.joining("\n")));
+                        lines.stream().map(i -> i.targetLineNumber + ":\n" +
+                        i.contextLines.stream().map(j -> j.content).collect(Collectors.joining("\n"))
+                        ).collect(Collectors.joining("\n")));
             }
         } finally {
             if (Logger.getLevel() != Level.DEBUG) {
@@ -89,22 +95,40 @@ public class PrometheusService {
         Files.writeString(file, yaml, StandardCharsets.UTF_8);
     }
     
-    private List<ExtractedLine> extractFaultyLines(String validatorOutput, String yamlContent) {
-        // 1. Eindeutige Zeilennummern aus der Validator-Ausgabe extrahieren
+    private List<ErrorContext> extractContext(String validatorOutput, String yaml) {
+        // 1. Eindeutige Zeilennummern extrahieren
         Set<Integer> lineNumbers = LINE_NUMBER_PATTERN.matcher(validatorOutput)
                 .results()
-                .map(matchResult -> Integer.parseInt(matchResult.group(1)))
+                .map(match -> Integer.parseInt(match.group(1)))
                 .collect(Collectors.toSet());
+        String[] yamlLines = yaml.split("\\r?\\n");
+        List<ErrorContext> contexts = new ArrayList<>();
 
-        // 2. YAML-Content in Zeilen aufteilen (unterstützt \n und \r\n)
-        String[] yamlLines = yamlContent.split("\\r?\\n");
+        // 2. Fuer jede gefundene Zeilennummer den Kontext rueckwaerts ermitteln
+        for (int targetLine : lineNumbers.stream().sorted().toList()) {
+            int targetIndex = targetLine - 1; // 1-basiert zu 0-basiertem Index
 
-        // 3. Die korrespondierenden Zeilen heraussuchen (1-basiert auf 0-basierten Index umrechnen)
-        return lineNumbers.stream()
-                .sorted()
-                .filter(lineNum -> lineNum >= 1 && lineNum <= yamlLines.length)
-                .map(lineNum -> new ExtractedLine(lineNum, yamlLines[lineNum - 1]))
-                .toList();
+            if (targetIndex < 0 || targetIndex >= yamlLines.length) {
+                continue; // Zeilennummer ausserhalb des Bereichs ignorieren
+            }
+
+            List<LineEntry> extracted = new ArrayList<>();
+
+            // Rückwaerts suchen von der Fehlerzeile bis zur Zeile, die mit "-" beginnt
+            for (int i = targetIndex; i >= 0; i--) {
+                String currentContent = yamlLines[i];
+                extracted.add(new LineEntry(i + 1, currentContent));
+
+                if (currentContent.trim().startsWith("-")) {
+                    break; // Stop sobald der Listeneintrag ("-") erreicht wurde
+                }
+            }
+
+            // Reihenfolge wieder richtig herum (von der Start-Zeile bis zur Fehler-Zeile) drehen
+            Collections.reverse(extracted);
+            contexts.add(new ErrorContext(targetLine, extracted));
+        }
+        return contexts;
     }
     
     public void reloadPrometheus() {
