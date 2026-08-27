@@ -89,3 +89,4 @@ alertRules=Alarmregeln
 endLabel=Ende [Stunden]
 Channel=Kanal
 EscalationChannel=Eskalation
+debugLabel=debug Protokollierung

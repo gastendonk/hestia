@@ -93,13 +93,14 @@ public class IndexPage extends HPage {
         Cols cols = Cols.of( //
                 new Col(n("Environment"), "{{if not i.active}}<span class=\"not-active\">{{/if}}{{i.name}}"
                         + "{{if not i.active}}</span>{{/if}}").sortable("name"), //
-                new Col("", "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
+                new Col("<a href=\"/{{branch}}/environment/add\" class=\"btn btn-xs btn-primary br\">{{N.NewEnvironment}}</a>",
+                        "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
                         + " class=\"fa fa-pencil\"></i></a>"
                         + delete
                         + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default mw1\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
                         + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default mw2\">" + n("Alerts") + " ({{i.nr2}})</a>"
                         ));
-        put("table", new TableComponent("wauto", cols, model, "envs"));
+        put("table", new TableComponent("!wauto table", cols, model, "envs"));
     }
     
     private String getTag() {

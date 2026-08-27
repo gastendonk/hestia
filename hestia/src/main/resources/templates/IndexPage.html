@@ -10,7 +10,7 @@
 	        </p>
         {{else}}
 	        <h2>{{N.Environments}} <span class="badge">{{size envs}}</span></h2>
-	        <p><a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>
+	        {{if not envs}}<p><a href="/{{branch}}/environment/add" class="btn btn-primary br">{{N.NewEnvironment}}</a></p>{{/if}}
 	        {{if envs}}{{table}}{{/if}}
         {{/if}}
         
