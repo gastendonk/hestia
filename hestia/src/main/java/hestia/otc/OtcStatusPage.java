@@ -5,6 +5,7 @@ import hestia.HestiaWebapp;
 import hestia.web.base.HPage;
 
 public class OtcStatusPage extends HPage {
+    // TODO Passwörter maskieren
 
     @Override
     protected void execute() {
