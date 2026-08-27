@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -23,6 +26,10 @@ import hestia.prometheus.alert.AlertRulesYamlBuilder;
  * General service for managing Prometheus and the Prometheus Alertmanager
  */
 public class PrometheusService {
+    private static final Pattern LINE_NUMBER_PATTERN = 
+            Pattern.compile("alert-rules.*?:\\s*yaml:\\s*line\\s+(\\d+):", Pattern.CASE_INSENSITIVE);
+
+    record ExtractedLine(int lineNumber, String lineContent) {}
 
     public void deploy(Collection<String> environments, IBranch branch) {
         if (StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
@@ -65,7 +72,10 @@ public class PrometheusService {
             if (sc.getExitValue() == 0) {
                 Logger.info("Alert rules validation ok");
             } else {
-                throw new RuntimeException("Alert rules validation failed!\n" + log.replace(dn, "alert-rules.yml"));
+                var msg = log.replace(dn, "alert-rules.yml");
+                var lines = extractFaultyLines(msg, yaml);
+                throw new RuntimeException("Alert rules validation failed!\n" + msg + "\n" +
+                        lines.stream().map(i -> i.lineNumber + ": " + i.lineContent).collect(Collectors.joining("\n")));
             }
         } finally {
             if (Logger.getLevel() != Level.DEBUG) {
@@ -78,7 +88,25 @@ public class PrometheusService {
         file.toFile().getParentFile().mkdirs();
         Files.writeString(file, yaml, StandardCharsets.UTF_8);
     }
+    
+    private List<ExtractedLine> extractFaultyLines(String validatorOutput, String yamlContent) {
+        // 1. Eindeutige Zeilennummern aus der Validator-Ausgabe extrahieren
+        Set<Integer> lineNumbers = LINE_NUMBER_PATTERN.matcher(validatorOutput)
+                .results()
+                .map(matchResult -> Integer.parseInt(matchResult.group(1)))
+                .collect(Collectors.toSet());
 
+        // 2. YAML-Content in Zeilen aufteilen (unterstützt \n und \r\n)
+        String[] yamlLines = yamlContent.split("\\r?\\n");
+
+        // 3. Die korrespondierenden Zeilen heraussuchen (1-basiert auf 0-basierten Index umrechnen)
+        return lineNumbers.stream()
+                .sorted()
+                .filter(lineNum -> lineNum >= 1 && lineNum <= yamlLines.length)
+                .map(lineNum -> new ExtractedLine(lineNum, yamlLines[lineNum - 1]))
+                .toList();
+    }
+    
     public void reloadPrometheus() {
         if (!StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())) {
             var url = HestiaWebapp.config.getPrometheusHost() + "/-/reload";
