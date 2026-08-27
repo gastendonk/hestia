@@ -49,13 +49,13 @@ public class AlertRulesYamlBuilder {
                 ret += "    annotations:\n";
                 if (s || d) {
                     if (s) {
-                        ret += "      summary: " + r.getSummary() + "\n";
+                        ret += "      summary: \"" + r.getSummary() + "\"\n";
                     }
                     if (d) {
-                        ret += "      description: " + r.getDescription() + "\n";
+                        ret += "      description: \"" + r.getDescription() + "\"\n";
                     }
                 }
-                ret += "      runbook_url: http://docker11:3080/qas\n";
+                ret += "      runbook_url: \"http://docker11:3080/qas\"\n";
                 if (!StringService.isNullOrEmpty(r.getKeepFiringFor())) {
                     ret += "    keepFiringFor: " + r.getKeepFiringFor() + "\n";
                 }
