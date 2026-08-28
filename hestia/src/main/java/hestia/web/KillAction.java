@@ -20,9 +20,10 @@ public class KillAction extends HAction {
             ProcessHandle.allProcesses() //
                     .filter(ph -> ph.info().command().orElse("").contains("otelcol-contrib")) //
                     .forEach(ph -> {
-                        Logger.info("Säubere verwaisten OTel-Prozess mit PID: " + ph.pid());
+                        Logger.info("Saeubere verwaisten OTel-Prozess mit PID: " + ph.pid());
                         ph.destroyForcibly();
                     });
+            DeployAction.lastDeployed = "";
         } else {
             if (HestiaWebapp.otcProcess == null) {
                 Logger.error("otcProcess is null, can't kill");

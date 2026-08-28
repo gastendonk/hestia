@@ -2,6 +2,7 @@ package hestia.otc;
 
 import github.soltaufintel.amalia.base.FileService;
 import hestia.HestiaWebapp;
+import hestia.web.DeployAction;
 import hestia.web.base.HPage;
 
 public class OtcStatusPage extends HPage {
@@ -32,6 +33,7 @@ public class OtcStatusPage extends HPage {
         put("cp2", otc != null && otc.isCheckpoint2());
         put("cp3", otc != null && checkHealth == 200);
         put("downloadUrl", esc(HestiaWebapp.config.getOtelcolContribDownloadUrl()));
+        put("lastDeployed", esc(DeployAction.lastDeployed));
     }
 
     private void waitForGreen() {

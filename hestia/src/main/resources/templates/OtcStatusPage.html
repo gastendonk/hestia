@@ -21,6 +21,7 @@
         <p>
             Status: <i class="fa fa-circle {{if cp1}}sgreen{{else}}sred{{/if}}"></i>
             {{if pid}} | {{N.otcProcessId}}: {{pid}}{{/if}}
+            | {{lastDeployed}}
             | {{N.HealthCheck}}:
             <i class="fa fa-circle {{if cp2}}sgreen{{else}}sred{{/if}}"></i>
             {{if cp2}}<i class="fa fa-circle {{if cp3}}sgreen{{else}}sred{{/if}}"></i>{{/if}}

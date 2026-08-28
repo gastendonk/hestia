@@ -10,6 +10,7 @@ import org.pmw.tinylog.Logger;
 
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
+import hestia.web.DeployAction;
 
 /**
  * Start and stop otelcol-contrib application
@@ -131,6 +132,7 @@ public class OtcProcess {
     }
 
     public void kill() {
+        DeployAction.lastDeployed = "";
         if (p == null) {
             Logger.error("no process, can't kill");
             return;
