@@ -4,10 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 import org.pmw.tinylog.Logger;
 
+import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
 import hestia.web.DeployAction;
@@ -48,6 +54,12 @@ public class OtcProcess {
                 p = pb.start();
                 Logger.info("OTC process has pid " + p.pid() + ".");
                 logs();
+                if (StringService.isNullOrEmpty(DeployAction.lastDeployed)) {
+                    FileTime fileTime = Files.getLastModifiedTime(configYaml.toPath());
+                    LocalDateTime dateTime = LocalDateTime.ofInstant(fileTime.toInstant(), ZoneId.systemDefault());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+                    DeployAction.lastDeployed = dateTime.format(formatter);
+                }
             } catch (IOException e) {
                 Logger.error(e);
             }
