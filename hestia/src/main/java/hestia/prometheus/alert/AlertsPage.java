@@ -11,13 +11,19 @@ public class AlertsPage extends HPage {
     @Override
     protected void execute() {
         String id = ctx.pathParam("env");
+        boolean templates = "templates".equals(id);
 
         var env = environmentDAO().loadOne(id);
         List<AlertGroup> groups = new ArrayList<>(alertGroupDAO().load(id));
         
-        header(n("alertRules"));
+        if (templates) {
+            header("Alert Rule Templates");
+        } else {
+            header(n("alertRules"));
+        }
         cenv(env);
         put("env", esc(id));
+        put("templates", "templates".equals(id));
         var list = list("groups");
         var first = true;
         groups.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
@@ -37,6 +43,7 @@ public class AlertsPage extends HPage {
                 m2.put("active", r.isActive());
                 m2.put("channel", esc(r.getChannel()));
                 m2.put("channel2", esc(r.getEscalationChannel()));
+                m2.put("mttype", esc(r.getMttype()));
             }
         }
     }

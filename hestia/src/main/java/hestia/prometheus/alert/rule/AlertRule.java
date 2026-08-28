@@ -14,6 +14,8 @@ public class AlertRule implements Identifiable {
     private boolean active = true;
     private String channel;
     private String escalationChannel;
+    /** nur belegt wenn environment ID = "templates" ist */
+    private String mttype;
 
     @Override
     public String getId() {
@@ -109,5 +111,13 @@ public class AlertRule implements Identifiable {
 
     public void setEscalationChannel(String escalationChannel) {
         this.escalationChannel = escalationChannel;
+    }
+
+    public String getMttype() {
+        return mttype;
+    }
+
+    public void setMttype(String mttype) {
+        this.mttype = mttype;
     }
 }

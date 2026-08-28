@@ -1,10 +1,14 @@
 package hestia.prometheus.alert.rule;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.HestiaWebapp;
 import hestia.web.base.HPage;
 
 public class AddAlertRulePage extends HPage {
+    public static final List<String> MTTYPES = List.of("SERVER/LINUX", "DATABASE/ORACLE", "DATABASE/POSTGRES", "SITE");
 
     @Override
     protected void execute() {
@@ -30,14 +34,23 @@ public class AddAlertRulePage extends HPage {
             rule.setEscalationChannel(ctx.formParam("channel2"));
             rule.setDurationFor(ctx.formParam("durationFor"));
             rule.setKeepFiringFor(ctx.formParam("keepFiringFor"));
+            rule.setMttype(ctx.formParam("mttype"));
             alertRuleDAO().insert(env, groupId, rule);
             
             ctx.redirect("/" + ctx.pathParam("branch") + "/alert/" + env);
         } else {
-            header(n("AddRule"));
             put("env", esc(env));
             put("alertHint", "camelCase oder snake_case, keine Leerzeichen");
-            var channels = HestiaWebapp.config.getChannels();
+            combobox("mttypes", MTTYPES, MTTYPES.get(0), false);
+            var channels = new ArrayList<>(HestiaWebapp.config.getChannels());
+            if ("templates".equals(env)) {
+                header(n("AddRule") + " Template");
+                put("templates", true);
+                channels.add("{customer}");
+            } else {
+                header(n("AddRule"));
+                put("templates", false);
+            }
             combobox("channels", channels, "", true);
             combobox("channels2", channels, "", true);
         }

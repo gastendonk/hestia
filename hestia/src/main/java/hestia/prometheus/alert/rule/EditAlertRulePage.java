@@ -1,5 +1,7 @@
 package hestia.prometheus.alert.rule;
 
+import java.util.ArrayList;
+
 import hestia.HestiaWebapp;
 import hestia.web.base.HPage;
 
@@ -22,7 +24,11 @@ public class EditAlertRulePage extends HPage {
     }
 
     private void display(String env, String groupId, AlertRule rule) {
-        header(n("EditRule"));
+        var title = n("EditRule");
+        if ("templates".equals(env)) {
+            title += " (" + rule.getMttype() + " Template)";
+        }
+        header(title);
         put("env", esc(env));
         put("groupId", esc(groupId));
         put("alertHint", "camelCase oder snake_case, keine Leerzeichen");
@@ -34,7 +40,10 @@ public class EditAlertRulePage extends HPage {
         put("durationFor", esc(rule.getDurationFor()));
         put("keepFiringFor", esc(rule.getKeepFiringFor()));
         put("active", rule.isActive());
-        var channels = HestiaWebapp.config.getChannels();
+        var channels = new ArrayList<>(HestiaWebapp.config.getChannels());
+        if ("templates".equals(env)) {
+            channels.add("{customer}");
+        }
         combobox("channels", channels, rule.getChannel(), true);
         combobox("channels2", channels, rule.getEscalationChannel(), true);
     }

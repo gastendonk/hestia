@@ -45,6 +45,7 @@ public abstract class HPage extends Page {
     }
     
     protected final void cenv(Environment env) {
-        put("cenv", esc((HestiaWebapp.config.isCustomer() ? "" : env.getCustomer() + " ") + env.getName()));
+        put("cenv", esc(env == null ? "" : (HestiaWebapp.config.isCustomer() ? "" : env.getCustomer() + " ") + env.getName()));
+        put("hasEnv", env != null);
     }
 }

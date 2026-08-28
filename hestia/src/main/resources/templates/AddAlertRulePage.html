@@ -6,6 +6,18 @@
 
         <form class="form-horizontal" method="post">
             <fieldset>
+                {{if templates}}
+	                <div class="form-group">
+	                    <label for="mttype" class="col-lg-1 control-label">{{N.Type}}</label>
+	                    <div class="col-lg-2">
+	                        <select class="form-control" id="mttype" name="mttype">
+	                            {{each a in mttypes}}
+	                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+	                            {{/each}}
+	                        </select>
+	                    </div>
+	                </div>
+                {{/if}}
                 <div class="form-group">
                     <label for="alert" class="col-lg-1 control-label">ID</label>
                     <div class="col-lg-3">
@@ -68,5 +80,10 @@
                 </div>
             </fieldset>
         </form>
+        {{if templates}}
+	        <p class="mt2">Server+{{N.database}} {{N.Placeholders}}: {name}, {host}
+	            | Site {{N.Placeholders}}: {name}, {url}
+	            | {{N.andAlso}}: {customer}, {environment}</p>
+        {{/if}}
     </div>
 </div>

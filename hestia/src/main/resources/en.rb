@@ -91,3 +91,5 @@ endLabel=End [hours]
 Channel=Channel
 EscalationChannel=Escalation
 debugLabel=debug logging
+Placeholders=placeholders
+andAlso=and also

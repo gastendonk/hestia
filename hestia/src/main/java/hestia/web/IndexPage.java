@@ -93,7 +93,8 @@ public class IndexPage extends HPage {
         Cols cols = Cols.of( //
                 new Col(n("Environment"), "{{if not i.active}}<span class=\"not-active\">{{/if}}{{i.name}}"
                         + "{{if not i.active}}</span>{{/if}}").sortable("name"), //
-                new Col("<a href=\"/{{branch}}/environment/add\" class=\"btn btn-xs btn-primary\">{{N.NewEnvironment}}</a>",
+                new Col("<a href=\"/{{branch}}/environment/add\" class=\"btn btn-xs btn-primary\">{{N.NewEnvironment}}</a>"
+                        + " <a href=\"/{{branch}}/alert/templates\" class=\"btn btn-xs btn-default\">Alert Rule Templates</a>",
                         "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
                         + " class=\"fa fa-pencil\"></i></a>"
                         + delete
