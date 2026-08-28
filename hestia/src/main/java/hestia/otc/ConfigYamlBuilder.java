@@ -13,6 +13,7 @@ import hestia.otc.model.Server;
 import hestia.otc.model.Site;
 import hestia.otc.opts.OtcOpts;
 
+// TODO Ich muss sicherstellen, dass ich das YAML valide erstelle!
 /**
  * Build content of OTel Collector config.yaml file
  */

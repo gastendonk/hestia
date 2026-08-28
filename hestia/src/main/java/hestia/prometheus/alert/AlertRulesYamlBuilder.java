@@ -5,6 +5,7 @@ import java.util.List;
 import github.soltaufintel.amalia.base.StringService;
 import hestia.prometheus.alert.rule.AlertRule;
 
+// TODO Ich muss sicherstellen, dass ich das YAML valide erstelle!
 /**
  * Creates alert-rules.yml file content out of AlertGroup objects
  */
