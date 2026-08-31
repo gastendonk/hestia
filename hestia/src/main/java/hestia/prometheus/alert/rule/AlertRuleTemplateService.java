@@ -31,20 +31,21 @@ public class AlertRuleTemplateService {
         List<AlertGroup> targets = dao.load(environmentId);
         
         for (AlertGroup s : sources) {
-            String name = r(s.getName());
+            String name = r(s.getName()).replace(" ", "_");
             AlertGroup t = findGroup(targets, name);
             if (t == null) {
                 t = new AlertGroup();
                 t.setId(IdGenerator.createId25());
                 t.setName(name);
                 copyRules(s, t, environmentId);
-// XXX                dao.insert(environmentId, t);
+                dao.insert(environmentId, t);
             } else {
                 copyRules(s, t, environmentId);
-// XXX               dao.update(environmentId, t);
+                dao.update(environmentId, t);
             }
         }
         Logger.info("created rules: " + created + ", updated rules: " + updated);
+        // TODO Wäre eigentlich gut, wenn das nur 1 Commit wäre.
     }
     
     private AlertGroup findGroup(List<AlertGroup> list, String name) {
@@ -68,11 +69,9 @@ public class AlertRuleTemplateService {
                         tr.setAlert(id);
                         t.getRules().add(tr);
                         created++;
-Logger.info("created: " + id + " " + tr.getSummary() + " | " + mt.getType2());
                     } else {
                         updateFields(mt, sr, x);
                         updated++;
-Logger.info("updated: " + id + " " + x.getSummary() + " | " + mt.getType2());
                     }
                 }
             }
