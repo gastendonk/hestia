@@ -200,7 +200,7 @@ public abstract class AbstractJsonListDAO<T extends Identifiable> {
      * @param values the complete file content
      * @param commitMessage the commit message
      */
-    private void saveAndCommit(String environmentId, List<T> values, String commitMessage) {
+    public void saveAndCommit(String environmentId, List<T> values, String commitMessage) {
         String path = getPath(environmentId);
         try {
             String json = gson.toJson(values, listType);

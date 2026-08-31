@@ -9,26 +9,25 @@ import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.environment.Environment;
 import hestia.otc.model.MonitoredTarget;
-import hestia.otc.model.MonitoredTargetDAO;
 import hestia.prometheus.alert.AlertGroup;
 import hestia.prometheus.alert.AlertGroupDAO;
 
 public class AlertRuleTemplateService {
     private int created;
     private int updated;
-    private MonitoredTargetDAO mtDAO;
     private Environment env;
     
     public void applyAlertRuleTemplates(IBranch branch, String environmentId) {
         created = 0;
         updated = 0;
         var envDAO = HestiaWebapp.config.environmentDAO(branch);
-        mtDAO = HestiaWebapp.config.mtDAO(branch);
+        var mtDAO = HestiaWebapp.config.mtDAO(branch);
         AlertGroupDAO dao = HestiaWebapp.config.alertGroupDAO(branch);
 
         env = envDAO.loadOne(environmentId);
         List<AlertGroup> sources = dao.load("templates");
         List<AlertGroup> targets = dao.load(environmentId);
+        List<MonitoredTarget> mtlist = mtDAO.load(environmentId);
         
         for (AlertGroup s : sources) {
             String name = r(s.getName()).replace(" ", "_");
@@ -37,15 +36,12 @@ public class AlertRuleTemplateService {
                 t = new AlertGroup();
                 t.setId(IdGenerator.createId25());
                 t.setName(name);
-                copyRules(s, t, environmentId);
-                dao.insert(environmentId, t);
-            } else {
-                copyRules(s, t, environmentId);
-                dao.update(environmentId, t);
+                targets.add(t);
             }
+            copyRules(s, t, mtlist);
         }
+        dao.saveAndCommit(environmentId, targets, "Alert rule templates applied");
         Logger.info("created rules: " + created + ", updated rules: " + updated);
-        // TODO Wäre eigentlich gut, wenn das nur 1 Commit wäre.
     }
     
     private AlertGroup findGroup(List<AlertGroup> list, String name) {
@@ -57,9 +53,9 @@ public class AlertRuleTemplateService {
         return null;
     }
     
-    private void copyRules(AlertGroup s, AlertGroup t, String environmentId) {
+    private void copyRules(AlertGroup s, AlertGroup t, List<MonitoredTarget> mtlist) {
         for (AlertRule sr : s.getRules()) {
-            for (MonitoredTarget mt : mtDAO.load(environmentId)) {
+            for (MonitoredTarget mt : mtlist) {
                 if (mt.equalMTTYPE(sr.getMttype())) {
                     String id = mt.replace(sr.getAlert());
                     AlertRule x = findRule(t.getRules(), id);
