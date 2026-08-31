@@ -38,4 +38,9 @@ public class Definition extends AbstractMonitoredTarget {
         n.setActive(true);
         return n;
     }
+
+    @Override
+    public String replace(String text) {
+        return text.replace("{name}", getName());
+    }
 }

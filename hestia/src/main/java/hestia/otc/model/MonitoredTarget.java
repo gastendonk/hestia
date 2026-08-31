@@ -24,4 +24,6 @@ public interface MonitoredTarget extends Identifiable {
             Definition.class);
     
     MonitoredTarget copy();
+    
+    String replace(String text);
 }

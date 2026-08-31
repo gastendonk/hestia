@@ -96,7 +96,9 @@ public class IndexPage extends HPage {
                 new Col("<a href=\"/{{branch}}/environment/add\" class=\"btn btn-xs btn-primary\">{{N.NewEnvironment}}</a>"
                         + " <a href=\"/{{branch}}/alert/templates\" class=\"btn btn-xs btn-default\">Alert Rule Templates</a>",
                         "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
-                        + " class=\"fa fa-pencil\"></i></a>"
+                                + " class=\"fa fa-pencil\"></i></a>"
+                        + " <a href=\"/{{branch}}/alert/{{i.id}}/apply-templates\" class=\"btn btn-xs btn-default\""
+                                + " title=\"{{N.ApplyTemplates}}...\"><i class=\"fa fa-exclamation\"></i></a>"
                         + delete
                         + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default mw1\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
                         + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default mw2\">" + n("Alerts") + " ({{i.nr2}})</a>"

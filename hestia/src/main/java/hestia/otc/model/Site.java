@@ -28,4 +28,9 @@ public class Site extends AbstractMonitoredTarget {
         n.setActive(true);
         return n;
     }
+
+    @Override
+    public String replace(String text) {
+        return text.replace("{name}", getName()).replace("{url}", url);
+    }
 }

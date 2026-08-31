@@ -93,3 +93,4 @@ EscalationChannel=Eskalation
 debugLabel=debug Protokollierung
 Placeholders=Platzhalter
 andAlso=und außerdem
+ApplyTemplates=Templates anwenden

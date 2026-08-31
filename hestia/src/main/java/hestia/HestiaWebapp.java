@@ -38,6 +38,7 @@ import hestia.otc.mt.SiteAlertsAction;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
+import hestia.prometheus.alert.ApplyTemplatesAction;
 import hestia.prometheus.alert.DeleteAlertGroupAction;
 import hestia.prometheus.alert.EditAlertGroupPage;
 import hestia.prometheus.alert.ShowAlertRulesFilePage;
@@ -57,7 +58,7 @@ import hestia.web.base.HestiaPageInitializer;
 import spark.Spark;
 
 public class HestiaWebapp extends RouteDefinitions {
-    public static final String VERSION = "0.3.5";
+    public static final String VERSION = "0.4.0";
     public static HestiaConfig config;
     public static OtcProcess otcProcess;
     
@@ -127,6 +128,7 @@ public class HestiaWebapp extends RouteDefinitions {
     }
 
     private void alerts() {
+        get("/:branch/alert/:env/apply-templates", ApplyTemplatesAction.class);
         get("/:branch/alert/:env", AlertsPage.class); // Alle Gruppen und Rules zu einer Umgebung
         form("/:branch/alert-group/:env/add", AddAlertGroupPage.class);
         form("/:branch/alert-group/:env/:id/edit", EditAlertGroupPage.class);
