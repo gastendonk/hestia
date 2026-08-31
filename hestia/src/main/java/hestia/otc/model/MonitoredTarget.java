@@ -22,8 +22,19 @@ public interface MonitoredTarget extends Identifiable {
     
     List<Class<? extends MonitoredTarget>> CLASSES = List.of(Database.class, Server.class, Site.class,
             Definition.class);
+
+    List<String> MTTYPES = List.of("SERVER/LINUX", "DATABASE/ORACLE", "DATABASE/POSTGRES", "SITE");
+    
+    default boolean equalMTTYPE(String mttype) {
+        return getType2().equals(mttype);
+    }
     
     MonitoredTarget copy();
     
+    /**
+     * Replace variables
+     * @param text any field content of a MonitoredTarget
+     * @return text with inserted variable contents
+     */
     String replace(String text);
 }

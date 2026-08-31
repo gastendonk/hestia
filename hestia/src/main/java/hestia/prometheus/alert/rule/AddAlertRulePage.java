@@ -1,14 +1,13 @@
 package hestia.prometheus.alert.rule;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import github.soltaufintel.amalia.base.IdGenerator;
 import hestia.HestiaWebapp;
+import hestia.otc.model.MonitoredTarget;
 import hestia.web.base.HPage;
 
 public class AddAlertRulePage extends HPage {
-    public static final List<String> MTTYPES = List.of("SERVER/LINUX", "DATABASE/ORACLE", "DATABASE/POSTGRES", "SITE");
 
     @Override
     protected void execute() {
@@ -41,7 +40,7 @@ public class AddAlertRulePage extends HPage {
         } else {
             put("env", esc(env));
             put("alertHint", "camelCase oder snake_case, keine Leerzeichen");
-            combobox("mttypes", MTTYPES, MTTYPES.get(0), false);
+            combobox("mttypes", MonitoredTarget.MTTYPES, MonitoredTarget.MTTYPES.get(0), false);
             var channels = new ArrayList<>(HestiaWebapp.config.getChannels());
             if ("templates".equals(env)) {
                 header(n("AddRule") + " Template");

@@ -38,10 +38,10 @@ public class AlertRuleTemplateService {
                 t.setId(IdGenerator.createId25());
                 t.setName(name);
                 copyRules(s, t, environmentId);
-                dao.insert(environmentId, t);
+// XXX                dao.insert(environmentId, t);
             } else {
                 copyRules(s, t, environmentId);
-                dao.update(environmentId, t);
+// XXX               dao.update(environmentId, t);
             }
         }
         Logger.info("created rules: " + created + ", updated rules: " + updated);
@@ -59,17 +59,21 @@ public class AlertRuleTemplateService {
     private void copyRules(AlertGroup s, AlertGroup t, String environmentId) {
         for (AlertRule sr : s.getRules()) {
             for (MonitoredTarget mt : mtDAO.load(environmentId)) {
-                String id = mt.replace(sr.getAlert());
-                AlertRule x = findRule(t.getRules(), id);
-                if (x == null) {
-                    AlertRule tr = sr.copy();
-                    updateFields(mt, tr, tr);
-                    tr.setAlert(id);
-                    t.getRules().add(tr);
-                    created++;
-                } else {
-                    updateFields(mt, sr, x);
-                    updated++;
+                if (mt.equalMTTYPE(sr.getMttype())) {
+                    String id = mt.replace(sr.getAlert());
+                    AlertRule x = findRule(t.getRules(), id);
+                    if (x == null) {
+                        AlertRule tr = sr.copy();
+                        updateFields(mt, tr, tr);
+                        tr.setAlert(id);
+                        t.getRules().add(tr);
+                        created++;
+Logger.info("created: " + id + " " + tr.getSummary() + " | " + mt.getType2());
+                    } else {
+                        updateFields(mt, sr, x);
+                        updated++;
+Logger.info("updated: " + id + " " + x.getSummary() + " | " + mt.getType2());
+                    }
                 }
             }
         }
