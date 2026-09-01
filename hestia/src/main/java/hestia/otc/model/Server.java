@@ -58,4 +58,9 @@ public class Server extends AbstractMonitoredTarget {
     public String replace(String text) {
         return text.replace("{name}", getName()).replace("{host}", host).replace("{path}", path);
     }
+    
+    @Override
+    public boolean equalMTTYPE(String mttype) {
+        return super.equalMTTYPE(mttype) && (host.contains(":9100") || host.contains(":9182"));
+    }
 }
