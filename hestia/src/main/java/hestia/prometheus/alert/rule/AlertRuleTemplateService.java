@@ -31,12 +31,12 @@ public class AlertRuleTemplateService {
         List<MonitoredTarget> mtlist = mtDAO.load(environmentId);
         
         for (AlertGroup s : sources) {
-            String name = r(s.getName()).replace(" ", "_");
-            AlertGroup t = findGroup(targets, name);
+            String groupName = r(s.getName());
+            AlertGroup t = findGroup(targets, groupName);
             if (t == null) {
                 t = new AlertGroup();
                 t.setId(IdGenerator.createId25());
-                t.setName(name);
+                t.setName(groupName);
                 targets.add(t);
             }
             copyRules(s, t, mtlist);
@@ -58,12 +58,16 @@ public class AlertRuleTemplateService {
         for (AlertRule sr : s.getRules()) {
             for (MonitoredTarget mt : mtlist) {
                 if (mt.equalMTTYPE(sr.getMttype())) {
-                    String id = mt.replace(sr.getAlert());
+                    String id = mt.replace(sr.getAlert()); // TODO Space nach _
                     AlertRule x = findRule(t.getRules(), id);
+AlertRule y = findRule(t.getRules(), id.replace(" ", "_"));
+                    if (x==null && y !=null) {
+                        x=y;
+                    }
                     if (x == null) {
                         AlertRule tr = sr.copy();
                         updateFields(mt, tr, tr);
-                        tr.setAlert(id);
+                        tr.setAlert(id.replace(" ", "_"));
                         t.getRules().add(tr);
                         created++;
                     } else {
