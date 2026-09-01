@@ -1,5 +1,6 @@
 package hestia.prometheus.alert.rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pmw.tinylog.Logger;
@@ -26,7 +27,7 @@ public class AlertRuleTemplateService {
 
         env = envDAO.loadOne(environmentId);
         List<AlertGroup> sources = dao.load("templates");
-        List<AlertGroup> targets = dao.load(environmentId);
+        List<AlertGroup> targets = new ArrayList<>(dao.load(environmentId));
         List<MonitoredTarget> mtlist = mtDAO.load(environmentId);
         
         for (AlertGroup s : sources) {
