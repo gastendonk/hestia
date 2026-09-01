@@ -94,3 +94,4 @@ debugLabel=debug logging
 Placeholders=placeholders
 andAlso=and also
 ApplyTemplates=Apply templates
+AARTSure=Apply alert rule templates?

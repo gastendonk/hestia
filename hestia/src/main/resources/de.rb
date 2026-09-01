@@ -94,3 +94,4 @@ debugLabel=debug Protokollierung
 Placeholders=Platzhalter
 andAlso=und außerdem
 ApplyTemplates=Templates anwenden
+AARTSure=Alert Rule Templates anwenden?

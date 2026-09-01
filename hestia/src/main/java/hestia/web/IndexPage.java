@@ -98,7 +98,8 @@ public class IndexPage extends HPage {
                         "<a href=\"/{{branch}}/environment/{{i.id}}\" class=\"btn btn-xs btn-default\" title=\"{{N.Edit}}\"><i"
                                 + " class=\"fa fa-pencil\"></i></a>"
                         + " <a href=\"/{{branch}}/alert/{{i.id}}/apply-templates\" class=\"btn btn-xs btn-default\""
-                                + " title=\"{{N.ApplyTemplates}}...\"><i class=\"fa fa-exclamation\"></i></a>"
+                                + " title=\"{{N.ApplyTemplates}}...\" onclick=\"return confirm('{{N.AARTSure}}');\">"
+                                + "<i class=\"fa fa-exclamation\"></i></a>"
                         + delete
                         + " <a href=\"/{{branch}}/mt/{{i.id}}\" class=\"btn btn-xs btn-default mw1\">" + n("MonitoredTargets") + " ({{i.nr1}})</a>"
                         + " <a href=\"/{{branch}}/alert/{{i.id}}\" class=\"btn btn-xs btn-default mw2\">" + n("Alerts") + " ({{i.nr2}})</a>"

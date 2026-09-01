@@ -55,24 +55,19 @@ public class AlertRuleTemplateService {
     }
     
     private void copyRules(AlertGroup s, AlertGroup t, List<MonitoredTarget> mtlist) {
-        for (AlertRule sr : s.getRules()) {
+        for (AlertRule muster : s.getRules()) {
             for (MonitoredTarget mt : mtlist) {
-                if (mt.equalMTTYPE(sr.getMttype())) {
-                    String id = mt.replace(sr.getAlert()); // TODO Space nach _
-                    AlertRule x = findRule(t.getRules(), id);
-AlertRule y = findRule(t.getRules(), id.replace(" ", "_"));
-                    if (x==null && y !=null) {
-                        x=y;
-                    }
+                if (mt.equalMTTYPE(muster.getMttype())) {
+                    String alert = mt.replace(muster.getAlert()).replace(" ", "_"); // ID
+                    AlertRule x = findRule(t.getRules(), alert);
                     if (x == null) {
-                        AlertRule tr = sr.copy();
-                        updateFields(mt, tr, tr);
-                        tr.setAlert(id.replace(" ", "_"));
-                        t.getRules().add(tr);
+                        AlertRule targetRule = muster.copy();
+                        updateFields(mt, targetRule, targetRule);
+                        targetRule.setAlert(alert);
+                        t.getRules().add(targetRule);
                         created++;
                     } else {
-x.setAlert(x.getAlert().replace(" ", "_"));
-                        updateFields(mt, sr, x);
+                        updateFields(mt, muster, x);
                         updated++;
                     }
                 }
