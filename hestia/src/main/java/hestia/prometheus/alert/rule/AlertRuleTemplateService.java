@@ -71,6 +71,7 @@ AlertRule y = findRule(t.getRules(), id.replace(" ", "_"));
                         t.getRules().add(tr);
                         created++;
                     } else {
+x.setAlert(x.getAlert().replace(" ", "_"));
                         updateFields(mt, sr, x);
                         updated++;
                     }
