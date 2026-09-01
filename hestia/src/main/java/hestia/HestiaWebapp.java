@@ -33,8 +33,6 @@ import hestia.otc.mt.DeleteMTAction;
 import hestia.otc.mt.DuplicateMTAction;
 import hestia.otc.mt.EditMTPage;
 import hestia.otc.mt.MonitoredTargetsPage;
-import hestia.otc.mt.OracleAlertsAction;
-import hestia.otc.mt.SiteAlertsAction;
 import hestia.otc.opts.EditOtcOptsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
@@ -119,8 +117,6 @@ public class HestiaWebapp extends RouteDefinitions {
 
     private void monitoredTargets() {
         form("/:branch/mt/:id/add", AddMTPage.class);
-        get("/:branch/mt/:id/site-alerts", SiteAlertsAction.class);
-        get("/:branch/mt/:id/oracle-alerts", OracleAlertsAction.class);
         form("/:branch/mt/:id/:id2/edit", EditMTPage.class);
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id/:id2/duplicate", DuplicateMTAction.class);
