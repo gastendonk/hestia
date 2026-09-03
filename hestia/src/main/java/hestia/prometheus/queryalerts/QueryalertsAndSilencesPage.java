@@ -2,6 +2,7 @@ package hestia.prometheus.queryalerts;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,7 +24,7 @@ import hestia.web.base.HPage;
 
 // TODO extend silence
 public class QueryalertsAndSilencesPage extends HPage {
-    private Map<String, List<AlertGroup>> groups;
+    private final Map<String, List<AlertGroup>> groups = new HashMap<>();
     private final IBranch b = () -> "master";
     
     @Override
