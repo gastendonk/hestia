@@ -12,6 +12,7 @@ import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.config.HestiaConfig;
 import hestia.environment.Environment;
 import hestia.prometheus.alert.AlertGroup;
@@ -20,9 +21,10 @@ import hestia.prometheus.silences.PrometheusSilencesService;
 import hestia.prometheus.silences.Silence;
 import hestia.web.base.HPage;
 
+// TODO extend silence
 public class QueryalertsAndSilencesPage extends HPage {
-    // TODO extend silence
     private Map<String, List<AlertGroup>> groups;
+    private final IBranch b = () -> "master";
     
     @Override
     protected void execute() {
@@ -42,8 +44,8 @@ public class QueryalertsAndSilencesPage extends HPage {
             silences = new ArrayList<>();
         }
         // load all alert groups
-        var groupDAO = c.alertGroupDAO(b());
-        for (Environment env : c.environmentDAO(b()).load()) {
+        var groupDAO = c.alertGroupDAO(b);
+        for (Environment env : c.environmentDAO(b).load()) {
             groups.put(env.getId(), groupDAO.load(env.getId()));
         }
         
@@ -78,7 +80,7 @@ public class QueryalertsAndSilencesPage extends HPage {
         String ret = ""; // Alarmregel nicht gefunden
         if (!HestiaWebapp.config.isCustomer()) {
             for (Entry<String, List<AlertGroup>> e : groups.entrySet()) {
-                var pre = "/" + b().getBranch() + "/alert-rule/" + e.getKey() + "/";
+                var pre = "/" + b.getBranch() + "/alert-rule/" + e.getKey() + "/";
                 for (AlertGroup group : e.getValue()) {
                     for (AlertRule rule : group.getRules()) {
                         if (rule.getAlert().equalsIgnoreCase(alert)) {
@@ -105,7 +107,6 @@ public class QueryalertsAndSilencesPage extends HPage {
             m.put("m", esc(s.getMatchersString()));
             m.put("s", esc(s.getStatus() == null ? "" : s.getStatus().getState()));
             m.put("end", esc(s.getEndsAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"))));
-// TODO Zeitzone!
         }
         Cols cols = Cols.of(
                 Col.si("Created by", "c"),
