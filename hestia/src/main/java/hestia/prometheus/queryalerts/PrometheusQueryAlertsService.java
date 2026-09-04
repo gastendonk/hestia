@@ -37,7 +37,7 @@ public class PrometheusQueryAlertsService {
     public void whatAlertsAreSilenced(List<QasAlert> alerts, List<Silence> silences) {
         for (QasAlert alert : alerts) {
             if ("firing".equals(alert.getAlertState())) {
-                String x = "alert=" + alert.getAlertName();
+                String x = "alertname=" + alert.getAlertName();
                 for (Silence silence : silences) {
                     if (silence.getMatchersString().equals(x)) {
                         alert.setAlertState("firing/silenced");
