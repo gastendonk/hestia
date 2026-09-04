@@ -4,6 +4,7 @@ import java.util.List;
 
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
+import hestia.prometheus.silences.Silence;
 
 /**
  * Service for loading active alerts
@@ -31,5 +32,19 @@ public class PrometheusQueryAlertsService {
             return List.of();
         }
         return response.data().alerts();
+    }
+
+    public void whatAlertsAreSilenced(List<QasAlert> alerts, List<Silence> silences) {
+        for (QasAlert alert : alerts) {
+            if ("firing".equals(alert.getAlertState())) {
+                String x = "alert=" + alert.getAlertName();
+                for (Silence silence : silences) {
+                    if (silence.getMatchersString().equals(x)) {
+                        alert.setAlertState("firing/silenced");
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

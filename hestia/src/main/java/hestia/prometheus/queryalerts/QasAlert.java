@@ -5,14 +5,13 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-public record QasAlert(
-        Map<String, String> labels,
-        Map<String, String> annotations,
-        String state,
-        String activeAt,
-        String value) {
-
+public class QasAlert {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private Map<String, String> labels;
+    //private Map<String, String> annotations;
+    private String state;
+    private String activeAt;
+    private String value;
 
     public String getAlertName() {
         return labels != null ? labels.get("alertname") : null;
@@ -20,6 +19,10 @@ public record QasAlert(
 
     public String getAlertState() {
         return state;
+    }
+    
+    public void setAlertState(String v) {
+        state = v;
     }
 
     public String getAlertValue() {

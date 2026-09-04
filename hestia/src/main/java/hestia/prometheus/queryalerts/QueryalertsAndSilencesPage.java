@@ -32,8 +32,9 @@ public class QueryalertsAndSilencesPage extends HPage {
         HestiaConfig c = HestiaWebapp.config;
         List<QasAlert> queryalerts;
         List<Silence> silences;
+        var sv = new PrometheusQueryAlertsService(c.getPrometheusHost());
         try {
-            queryalerts = new PrometheusQueryAlertsService(c.getPrometheusHost()).queryAlerts();
+            queryalerts = sv.queryAlerts();
         } catch (Exception e) {
             Logger.error(e.getMessage());
             queryalerts = new ArrayList<>();
@@ -44,6 +45,7 @@ public class QueryalertsAndSilencesPage extends HPage {
             Logger.error(e.getMessage());
             silences = new ArrayList<>();
         }
+        sv.whatAlertsAreSilenced(queryalerts, silences);
         // load all alert groups
         var groupDAO = c.alertGroupDAO(b);
         for (Environment env : c.environmentDAO(b).load()) {
