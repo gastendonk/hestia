@@ -29,6 +29,10 @@ public class AlertRuleTemplateService {
         List<AlertGroup> sources = dao.load("templates");
         List<AlertGroup> targets = new ArrayList<>(dao.load(environmentId));
         List<MonitoredTarget> mtlist = mtDAO.load(environmentId);
+        if (mtlist.isEmpty()) {
+            Logger.info("[applyAlertRuleTemplates] Don't create alerts because there are no monitored targets.");
+            return;
+        }
         
         for (AlertGroup s : sources) {
             String groupName = r(s.getName());
