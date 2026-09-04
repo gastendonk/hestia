@@ -93,3 +93,6 @@ Placeholders=Platzhalter
 andAlso=und außerdem
 ApplyTemplates=Templates anwenden
 AARTSure=Alert Rule Templates anwenden?
+Seit=Seit
+State=Status
+Instance=Instanz

@@ -3,17 +3,18 @@
 <div class="row"> 
     <div class="col-lg-12">
         <h1 class="page-header">{{header}}</h1>
+        <p>{{appTitle}}</p>
         
-        <h2>{{N.QueryAlerts}}</h2>
+        <h2>{{N.QueryAlerts}} <span class="badge">{{n1}}</span></h2>
         {{if queryalerts}}
             {{table1}}
-        {{else}} {{N.none}}
+        {{else}} - {{N.none}} -
         {{/if}}
         
-        <hr><h2>{{N.Silences}}</h2>
+        <hr><h2>{{N.Silences}} <span class="badge">{{n2}}</span></h2>
         {{if silences}}
             {{table2}}
-        {{else}} {{N.none}}
+        {{else}} - {{N.none}} -
         {{/if}}
     </div>
 </div>

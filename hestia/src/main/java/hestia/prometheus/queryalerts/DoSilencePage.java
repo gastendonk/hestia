@@ -14,8 +14,8 @@ public class DoSilencePage extends HPage {
     @Override
     protected void execute() {
         String alertname = ctx.pathParam("alertname");
-        
-        List<PrometheusResult> queryalerts = new PrometheusQueryAlertsService(HestiaWebapp.config.getPrometheusHost()).queryAlerts();
+
+        List<QasAlert> queryalerts = new PrometheusQueryAlertsService(HestiaWebapp.config.getPrometheusHost()).queryAlerts();
         var ao = queryalerts.stream().filter(i -> i.getAlertName().equals(alertname)).findFirst();
         if (ao.isEmpty()) {
             throw new RuntimeException("Alert does not exist");

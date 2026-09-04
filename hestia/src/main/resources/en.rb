@@ -93,3 +93,6 @@ Placeholders=placeholders
 andAlso=and also
 ApplyTemplates=Apply templates
 AARTSure=Apply alert rule templates?
+Seit=Since
+State=State
+Instance=Instance

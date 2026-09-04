@@ -30,7 +30,7 @@ public class QueryalertsAndSilencesPage extends HPage {
     @Override
     protected void execute() {
         HestiaConfig c = HestiaWebapp.config;
-        List<PrometheusResult> queryalerts;
+        List<QasAlert> queryalerts;
         List<Silence> silences;
         try {
             queryalerts = new PrometheusQueryAlertsService(c.getPrometheusHost()).queryAlerts();
@@ -51,30 +51,30 @@ public class QueryalertsAndSilencesPage extends HPage {
         }
         
         header(n("QueryAlertsandSilences"));
+        put("appTitle", esc(HestiaWebapp.config.getTitle()));
         queryalerts(queryalerts);
         silences(silences);
     }
-    
-    private void queryalerts(List<PrometheusResult> queryalerts) {
+
+    private void queryalerts(List<QasAlert> queryalerts) {
         var list = list("queryalerts");
-        for (PrometheusResult r : queryalerts) {
+        for (QasAlert r : queryalerts) {
             var m = list.add();
             m.put("name", esc(r.getAlertName()));
             m.put("link", esc(link(r.getAlertName())));
             m.put("state", esc(r.getAlertState()));
-            m.put("value", esc(r.getAlertValue()));
             m.put("ts", esc(r.getFormattedTimestamp()));
             m.put("instance", esc(r.getInstance()));
         }
         Cols cols = Cols.of(
-                new Col("Name", "{{if i.link}}<a href=\"{{i.link}}\">{{i.name}}</a>{{else}}{{i.name}}{{/if}}"),
-                Col.si("State", "state"),
-                Col.si("Value", "value"),
-                Col.si("Datum", "ts"),
-                Col.si("Instance", "instance"),
+                new Col("Name", "{{if i.link}}<a href=\"{{i.link}}\">{{i.name}}</a>{{else}}{{i.name}}{{/if}}").sortable("name"),
+                Col.si(n("Instance"), "instance"),
+                Col.si(n("State"), "state"),
+                Col.si(n("Seit"), "ts"),
                 new Col("", "<a href=\"/qas/silence/{{i.name}}\" class=\"btn btn-xs btn-default\">" + n("DoSilence") + "</a>")
                 );
         put("table1", new TableComponent("wauto", cols, model, "queryalerts"));
+        putSize("n1", list);
     }
 
     private String link(String alert) {
@@ -119,5 +119,6 @@ public class QueryalertsAndSilencesPage extends HPage {
                         + " title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>")
                 );
         put("table2", new TableComponent("wauto", cols, model, "silences"));
+        putSize("n2", list);
     }
 }

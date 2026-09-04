@@ -9,7 +9,7 @@ import github.soltaufintel.amalia.rest.REST;
  * Service for loading active alerts
  */
 public class PrometheusQueryAlertsService {
-    private static final String ENDPOINT3 = "/api/v1/query";
+    private static final String ENDPOINT = "/api/v1/alerts";
     private final String prometheusHost;
 
     /**
@@ -19,14 +19,17 @@ public class PrometheusQueryAlertsService {
         this.prometheusHost = prometheusHost;
     }
 
-    public List<PrometheusResult> queryAlerts() {
+    public List<QasAlert> queryAlerts() {
         if (StringService.isNullOrEmpty(prometheusHost)) {
             return List.of();
         }
-        return new REST(prometheusHost + ENDPOINT3 + "?query=ALERTS")
+        var response = new REST(prometheusHost + ENDPOINT)
                 .get()
-                .fromJson(PrometheusResponse.class)
-                .data()
-                .result();
+                .fromJson(PrometheusAlertsResponse.class);
+        
+        if (response == null || response.data() == null || response.data().alerts() == null) {
+            return List.of();
+        }
+        return response.data().alerts();
     }
 }
