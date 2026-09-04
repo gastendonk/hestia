@@ -84,7 +84,6 @@ public class OtcConfigBuilderTest {
                           - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
                           - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
                           - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
-                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
@@ -189,7 +188,6 @@ public class OtcConfigBuilderTest {
                           - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
                           - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
                           - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
-                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
@@ -267,7 +265,6 @@ public class OtcConfigBuilderTest {
                           - set(attributes["database"], resource.attributes["postgresql.database.name"]) where resource.attributes["postgresql.database.name"] != nil
                           - set(attributes["server"], resource.attributes["server.address"]) where resource.attributes["server.address"] != nil
                           - set(attributes["port"], resource.attributes["server.port"]) where resource.attributes["server.port"] != nil
-                          - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
                           - set(attributes["deployment.environment"], resource.attributes["deployment.environment"]) where resource.attributes["deployment.environment"] != nil
 
                 exporters:
