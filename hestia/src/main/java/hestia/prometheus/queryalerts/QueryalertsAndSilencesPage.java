@@ -67,12 +67,18 @@ public class QueryalertsAndSilencesPage extends HPage {
             m.put("state", esc(r.getAlertState()));
             m.put("ts", esc(r.getFormattedTimestamp()));
             m.put("instance", esc(r.getInstance()));
+            m.put("channel", esc(r.getChannel()));
+            m.put("url", esc(r.getUrl()));
+            m.put("labels", esc(r.getLabels()));
         }
         Cols cols = Cols.of(
-                new Col("Name", "{{if i.link}}<a href=\"{{i.link}}\">{{i.name}}</a>{{else}}{{i.name}}{{/if}}").sortable("name"),
+                new Col("Name", "{{if i.link}}<a href=\"{{i.link}}\" title=\"{{i.labels}}\">{{i.name}}</a>"
+                        + "{{else}}<span title=\"{{i.labels}}\">{{i.name}}</span>{{/if}}").sortable("name"),
                 Col.si(n("Instance"), "instance"),
+                Col.si("URL", "url"),
                 Col.si(n("State"), "state"),
                 Col.si(n("Seit"), "ts"),
+                Col.si(n("Channel"), "channel"),
                 new Col("", "<a href=\"/qas/silence/{{i.name}}\" class=\"btn btn-xs btn-default\">" + n("DoSilence") + "</a>")
                 );
         put("table1", new TableComponent("wauto", cols, model, "queryalerts"));

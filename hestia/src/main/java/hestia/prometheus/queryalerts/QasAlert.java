@@ -30,7 +30,23 @@ public class QasAlert {
     }
 
     public String getInstance() {
-        return labels != null ? labels.get("instance") : null;
+        return label("instance");
+    }
+
+    public String getChannel() {
+        return label("channel");
+    }
+
+    public String getUrl() {
+        return label("http_url");
+    }
+
+    private String label(String key) {
+        return labels != null ? labels.get(key) : null;
+    }
+    
+    public String getLabels() {
+        return labels == null ? "null" : labels.toString();
     }
 
     public String getFormattedTimestamp() {
