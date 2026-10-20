@@ -16,6 +16,6 @@ public class DuplicateMTAction extends HAction {
         }
         var idNeu = new OtcService().duplicate(b(), id, id2);
         
-        ctx.redirect("/" + ctx.pathParam("branch") + "/mt/" + id + "/" + idNeu + "/edit");
+        ctx.redirect("/" + ctx.pathParam("branch") + "/mt/" + id + "/" + idNeu + "/edit?m=dup");
     }
 }

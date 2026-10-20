@@ -18,14 +18,20 @@ public class EditMTPage extends HPage {
     protected void execute() {
         String id = ctx.pathParam("id"); // environment
         String id2 = ctx.pathParam("id2"); // MonitoredTarget
+        String m = ctx.queryParam("m");
 
         var dao = mtDAO();
         MonitoredTarget mt = dao.loadOne(id, id2);
         
         if (isPOST()) {
             save(id, mt, dao);
+        } else if ("cdup".equals(m)) { // duplicate->cancel
+            dao.delete(id, id2);
+            render = false;
+            ctx.redirect("/" + b().getBranch() + "/mt/" + id);
         } else {
             display(id, mt);
+            put("duplicate", "dup".equals(m) && !HestiaWebapp.config.isCustomer());
         }
     }
 
