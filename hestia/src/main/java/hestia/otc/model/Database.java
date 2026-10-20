@@ -53,6 +53,7 @@ public class Database extends AbstractMonitoredTarget {
     @Override
     public MonitoredTarget copy() {
         var n = new Database();
+        n.setType(getType());
         n.setHost(getHost());
         n.setName(getName());
         n.setUser(getUser());
