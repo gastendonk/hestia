@@ -96,3 +96,7 @@ AARTSure=Apply alert rule templates?
 Seit=Since
 State=State
 Instance=Instance
+Secret=Secret
+Secrets=Secrets
+AddSecret=Add Secret
+DeleteSecret=Delete Secret

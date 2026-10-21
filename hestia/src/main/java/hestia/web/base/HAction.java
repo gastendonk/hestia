@@ -5,6 +5,7 @@ import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.environment.EnvironmentDAO;
 import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.SecretDAO;
 import hestia.prometheus.alert.AlertGroupDAO;
 import hestia.prometheus.alert.rule.AlertRuleDAO;
 
@@ -21,7 +22,11 @@ public abstract class HAction extends Action {
     protected final MonitoredTargetDAO mtDAO() {
         return HestiaWebapp.config.mtDAO(b());
     }
-    
+
+    protected final SecretDAO secretDAO() {
+        return HestiaWebapp.config.secretDAO(b());
+    }
+
     protected final AlertGroupDAO alertGroupDAO() {
         return HestiaWebapp.config.alertGroupDAO(b());
     }

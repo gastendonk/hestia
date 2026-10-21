@@ -6,6 +6,7 @@ public class Database extends AbstractMonitoredTarget {
     private DatabaseType type = DatabaseType.POSTGRES;
     private String host;
     private String user;
+    /** Name of secret */
     private String password;
 
     public DatabaseType getType() {

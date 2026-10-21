@@ -96,3 +96,7 @@ AARTSure=Alert Rule Templates anwenden?
 Seit=Seit
 State=Status
 Instance=Instanz
+Secret=Secret
+Secrets=Secrets
+AddSecret=Neues Secret eingeben
+DeleteSecret=Secret löschen

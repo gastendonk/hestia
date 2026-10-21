@@ -15,6 +15,7 @@ import hestia.base.IConfig;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
 import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.SecretDAO;
 import hestia.persist.FileRepository;
 import hestia.persist.IRepository;
 import hestia.prometheus.alert.AlertGroupDAO;
@@ -189,6 +190,10 @@ public class HestiaConfig {
 
     public MonitoredTargetDAO mtDAO(IBranch branch) {
         return new MonitoredTargetDAO(getRepository(branch));
+    }
+    
+    public SecretDAO secretDAO(IBranch branch) {
+        return new SecretDAO(getRepository(branch));
     }
 
     public AlertGroupDAO alertGroupDAO(IBranch branch) {

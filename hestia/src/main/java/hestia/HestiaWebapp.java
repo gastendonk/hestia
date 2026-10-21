@@ -34,6 +34,9 @@ import hestia.otc.mt.DuplicateMTAction;
 import hestia.otc.mt.EditMTPage;
 import hestia.otc.mt.MonitoredTargetsPage;
 import hestia.otc.opts.EditOtcOptsPage;
+import hestia.otc.secret.AddSecretPage;
+import hestia.otc.secret.DeleteSecretAction;
+import hestia.otc.secret.SecretsPage;
 import hestia.prometheus.alert.AddAlertGroupPage;
 import hestia.prometheus.alert.AlertsPage;
 import hestia.prometheus.alert.ApplyTemplatesAction;
@@ -121,6 +124,10 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/mt/:id/:id2/delete", DeleteMTAction.class);
         get("/:branch/mt/:id/:id2/duplicate", DuplicateMTAction.class);
         get("/:branch/mt/:id", MonitoredTargetsPage.class);
+
+        form("/:branch/secret/:id/add", AddSecretPage.class);
+        get("/:branch/secret/:id/:id2/delete", DeleteSecretAction.class);
+        get("/:branch/secret/:id", SecretsPage.class);
     }
 
     private void alerts() {
