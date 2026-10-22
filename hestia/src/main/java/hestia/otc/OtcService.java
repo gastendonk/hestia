@@ -38,8 +38,9 @@ public class OtcService {
         synchronized (LOCK) {
             MonitoredTargetDAO dao = HestiaWebapp.config.mtDAO(branch);
             List<MonitoredTarget> list = dao.loadAll(environments);
-            var secrets = HestiaWebapp.config.secretDAO(branch).loadAllAsMap(environments);
             Logger.debug("[OtcService.deploy] " + environments + " => monitored targets: " + list.size());
+            var secrets = HestiaWebapp.config.secretDAO(branch).loadAllAsMap(environments);
+            Logger.debug("[OtcService.deploy] secrets: " + secrets.keySet());
             var yaml = new ConfigYamlBuilder(list, OtcOptsDAO.load()).build();
             Logger.debug("(1) config.yaml: " + yaml);
             validate(yaml, secrets); // (2)
