@@ -10,6 +10,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
@@ -52,14 +54,16 @@ public class OtcService {
         }
     }
 
-    private void validate(String yaml) {
+    private void validate(String yaml, Map<String, String> secrets) {
         File configFile = HestiaWebapp.config.getConfigYamlForValidate(); // TODO Wieso nicht ein tempfile? vgl. PrometheusService
         FileService.savePlainTextFile(configFile, yaml);
         try {
             Logger.debug("(2) config.yaml: " + FileService.loadPlainTextFile(configFile));
             var sc = new ShellScriptExecutor();
             var exe = HestiaWebapp.config.getOtelcolContrib();
-            var cmd = (ShellScriptExecutor.isWindows() ? "@" : "") + exe.getAbsolutePath() + " validate" //
+            var win = ShellScriptExecutor.isWindows();
+            var cmd = envvars(secrets, win) //
+                    + (win ? "@" : "") + exe.getAbsolutePath() + " validate" //
                     + " --config=" + configFile.getAbsolutePath();
             String out = sc.executeAndGetLog(cmd, exe.getParentFile());
             if (sc.getExitValue() != 0) {
@@ -70,6 +74,23 @@ public class OtcService {
                 configFile.delete();
             }
         }
+    }
+    
+    private String envvars(Map<String, String> secrets, boolean win) {
+        var lf = win ? "\r\n" : "\n";
+        return secrets.entrySet().stream()
+                .map(entry -> {
+                    String ret;
+                    String name = entry.getKey();
+                    String secret = entry.getValue();
+                    if (win) {
+                        ret = "SET " + name + "=" + secret;
+                    } else {
+                        ret = "export " + name + "='" + secret.replace("'", "'\\''") + "'";
+                    }
+                    return ret + lf;
+                })
+                .collect(Collectors.joining());
     }
     
     public boolean installOtelcolContrib() {
