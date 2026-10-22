@@ -14,10 +14,10 @@ public class AddSecretPage extends HPage {
             var name = ctx.formParam("name");
             if (StringService.isNullOrEmpty(name)) {
                 throw new RuntimeException("Bitte Name eingeben!");
-            } else if (!name.matches("^[A-Z][A-Z0-9]*$")) {
-                throw new RuntimeException("Name muss aus Groﬂbuchstaben und Ziffern bestehen!");
+            } else if (!name.matches("^[A-Z][A-Z0-9_]*$")) {
+                throw new RuntimeException("Name muss aus Groﬂbuchstaben, Ziffern und Unterstrichen bestehen!");
             }
-
+            
             Secret secret = new Secret();
             secret.setName(name);
             secret.setSecret(Secret.encode(ctx.formParam("secret")));
