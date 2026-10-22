@@ -100,3 +100,4 @@ Secret=Secret
 Secrets=Secrets
 AddSecret=Add Secret
 DeleteSecret=Delete Secret
+EnterSecrets=Please enter secrets!

@@ -17,10 +17,11 @@ public class SecretsPage extends HPage {
         String id = ctx.pathParam("id");
         
         Environment env = environmentDAO().loadOne(id);
+        cenv(env);
         List<Secret> secrets = new ArrayList<>(secretDAO().load(id));
         secrets.sort((a, b) -> a.getName().compareTo(b.getName()));
-        
-        header(n("Secrets") + " (" + env.getCustomer() + " " + env.getName() + ")");
+
+        header(n("Secrets"));
         put("id", esc(id));
         var list = list("list");
         var p = "/" + b().getBranch() + "/secrets/" + id + "/";
@@ -31,7 +32,7 @@ public class SecretsPage extends HPage {
         }
         Cols cols = Cols.of(Col.i(n("Name"), "name"),
                 new Col("", "<a onclick=\"return confirm('{{N.Delete}}?');\" href=\"/{{branch}}/secret/{{id}}/{{i.name}}/delete\""
-                        + " class=\"btn btn-xs btn-danger\"><i class=\"fa fa-trash-o\"></i></a>"));
+                        + " class=\"btn btn-xs btn-danger\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>"));
         put("table", new TableComponent("wauto", cols, model, "list"));
     }
 }

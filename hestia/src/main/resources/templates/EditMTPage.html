@@ -35,7 +35,11 @@
                     <div class="form-group">
                         <label for="f4" class="col-lg-1 control-label">{{f4label}}</label>
                         <div class="col-lg-3">
-                            <input type="password" class="form-control" id="f4" name="f4" value="{{f4}}"{{if customer}} disabled{{/if}}>
+	                        <select class="form-control" id="f4" name="f4"{{if customer}} disabled{{/if}}>
+	                            {{each a in secrets}}
+	                                <option{{if a.selected}} selected{{/if}}>{{a.text}}</option>
+	                            {{/each}}
+	                        </select>
                         </div>
                     </div>
                 {{/if}}

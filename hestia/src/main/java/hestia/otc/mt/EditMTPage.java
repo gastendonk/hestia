@@ -1,5 +1,7 @@
 package hestia.otc.mt;
 
+import java.util.List;
+
 import github.soltaufintel.amalia.base.StringService;
 import hestia.HestiaWebapp;
 import hestia.otc.model.AbstractMonitoredTarget;
@@ -8,6 +10,7 @@ import hestia.otc.model.DatabaseType;
 import hestia.otc.model.Definition;
 import hestia.otc.model.MonitoredTarget;
 import hestia.otc.model.MonitoredTargetDAO;
+import hestia.otc.model.Secret;
 import hestia.otc.model.Server;
 import hestia.otc.model.Site;
 import hestia.web.base.HPage;
@@ -22,6 +25,7 @@ public class EditMTPage extends HPage {
 
         var dao = mtDAO();
         MonitoredTarget mt = dao.loadOne(id, id2);
+        var secrets = mt instanceof Database ? secretDAO().load(id) : null;
         
         if (isPOST()) {
             save(id, mt, dao);
@@ -30,16 +34,17 @@ public class EditMTPage extends HPage {
             render = false;
             ctx.redirect("/" + b().getBranch() + "/mt/" + id);
         } else {
-            display(id, mt);
+            display(id, mt, secrets);
             put("duplicate", "dup".equals(m) && !HestiaWebapp.config.isCustomer());
         }
     }
 
-    private void display(String id, MonitoredTarget mt) {
+    private void display(String id, MonitoredTarget mt, List<Secret> secrets) {
         put("id", esc(id));
         put("id2", esc(mt.getId()));
         put("f1", esc(mt.getName()));
         put("f2textarea", false);
+        var secretsList = list("secrets");
         String h;
         if (mt instanceof Server s) {
             h = "MTLinuxServer";
@@ -61,7 +66,10 @@ public class EditMTPage extends HPage {
             put("f4label", n("Password"));
             put("f2", esc(s.getHost()));
             put("f3", esc(s.getUser()));
-            put("f4", esc(s.getPassword()));
+            secretsList.add().put("selected", false).put("text", "");
+            secrets.forEach(i -> secretsList.add()
+                    .put("selected", i.getName().equals(s.getPassword()))
+                    .put("text", esc(i.getName())));
         } else if (mt instanceof Definition s) {
             h = "MTDefinition";
             put("f2label", "Definition");

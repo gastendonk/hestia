@@ -34,6 +34,7 @@ public class AddMTPage extends HPage {
         put("m", esc(m));
         put("f3value", "");
         put("f2textarea", false);
+        var secretsList = list("secrets");
         if ("linux".equals(m)) {
             header(n("AddMTLinuxServer"));
             put("f2label", n("Host"));
@@ -51,6 +52,15 @@ public class AddMTPage extends HPage {
             put("f3label", "");
             put("f4label", "");
         } else { // DB
+            var secrets = secretDAO().load(id);
+            if (secrets.isEmpty()) {
+                throw new RuntimeException(n("EnterSecrets"));
+            }
+            for (int i = 0; i < secrets.size(); i++) {
+                secretsList.add()
+                    .put("text", esc(secrets.get(i).getName()))
+                    .put("selected", i == 0);
+            }
             if ("oracle".equals(m)) {
                 header(n("AddMTOracleDB"));
                 put("f3value", "METRICS"); // Eingabeerleichterung
