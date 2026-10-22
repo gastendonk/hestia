@@ -6,6 +6,7 @@ import java.util.Base64;
 import hestia.persist.Identifiable;
 
 public class Secret implements Identifiable {
+    /** Name must be unique for all environments! */
     private String name;
     /** At this moment it is always the Database password. */
     private String secret;

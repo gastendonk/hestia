@@ -34,6 +34,7 @@ public class OtcStatusPage extends HPage {
         put("cp3", otc != null && checkHealth == 200);
         put("downloadUrl", esc(HestiaWebapp.config.getOtelcolContribDownloadUrl()));
         put("lastDeployed", esc(DeployAction.lastDeployed));
+        put("branch", esc(b().getBranch()));
     }
 
     private void waitForGreen() {

@@ -80,7 +80,7 @@ public class ConfigYamlBuilder {
                         "    endpoint: \"" + db.getHost() + "\"\n" + //
                         "    service: \"" + db.getName() + "\"\n" + //
                         "    username: \"" + db.getUser() + "\"\n" + //
-                        "    password: \"" + db.getPassword() + "\"\n" + //
+                        "    password: \"${" + db.getPassword() + "}\"\n" + //
                         "    collection_interval: 60s\n";
                 if (first) {
                     ret += "    metrics: &oracle_metrics\n" //
@@ -108,7 +108,7 @@ public class ConfigYamlBuilder {
                         + "    databases: [" + db.getName() + "]\n" //
                         + "    endpoint: " + db.getHost() + "\n" //
                         + "    username: " + db.getUser() + "\n" //
-                        + "    password: " + db.getPassword() + "\n" //
+                        + "    password: ${" + db.getPassword() + "}\n" //
                         + "    tls: { insecure: true }\n" //
                         + "    resource_attributes:\n" //
                         + "      postgresql.database.name: { enabled: true }\n\n";

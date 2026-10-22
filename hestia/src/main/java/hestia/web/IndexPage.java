@@ -37,7 +37,7 @@ public class IndexPage extends HPage {
         displayEnvironments(envs);
         put("alive", otcAlive);
         put("tag", esc(tag));
-        put("DeployBtn", "Deploy" + (DeployAction.isBURG() ? " (BURG)" : ""));
+        put("DeployBtn", "Deploy" + (HestiaWebapp.config.isBURG() ? " (BURG)" : ""));
         put("dor", HestiaWebapp.config.isDeployOnReceive());
         put("pam", !StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())
                 || !StringService.isNullOrEmpty(HestiaWebapp.config.getAlertmanagerHost()));

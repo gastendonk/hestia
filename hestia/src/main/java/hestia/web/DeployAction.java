@@ -21,7 +21,7 @@ public class DeployAction extends HAction {
         deploy(b(), environmentDAO());
         
         if ("o".equals(ctx.queryParam("r"))) {
-            ctx.redirect("/otc/status");
+            ctx.redirect("/otc/" + esc(b().getBranch()) + "/status");
         } else {
             backToStartpage();
         }
@@ -29,26 +29,18 @@ public class DeployAction extends HAction {
     
     public static void deploy(IBranch b, EnvironmentDAO envDAO) {
         synchronized (LOCK) {
-            var rawEnvs = envDAO.load();
-            List<String> envs;
-            if (isBURG()) {
-                envs = rawEnvs.stream().filter(i -> i.isActive() && i.getCustomer().equals("BURG")).map(i -> i.getId()).toList();
-                Logger.info("BURG deploy: " + envs);
-            } else {
-                envs = rawEnvs.stream().filter(i -> i.isActive()).map(i -> i.getId()).toList();
-                Logger.info("deploy: " + envs);
-            }
+            List<String> envs = OtcService.envs(b);
             if (envs.isEmpty()) {
                 Logger.info("Can't deploy because there are no environments.");
                 return;
+            } else if (HestiaWebapp.config.isBURG()) {
+                Logger.info("BURG deploy: " + envs);
+            } else {
+                Logger.info("deploy: " + envs);
             }
             new OtcService().deploy(envs, b);
             new PrometheusService().deploy(envs, b);
             lastDeployed = StringService.now();
         }
-    }
-    
-    public static boolean isBURG() {
-        return HestiaWebapp.config.getCustomers().contains("BURG");
     }
 }

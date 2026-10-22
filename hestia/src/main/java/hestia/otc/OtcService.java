@@ -48,7 +48,7 @@ public class OtcService {
             if (HestiaWebapp.otcProcess != null) {
                 HestiaWebapp.otcProcess.kill();
             }
-            HestiaWebapp.otcProcess = new OtcProcess();
+            HestiaWebapp.otcProcess = new OtcProcess(branch);
         }
     }
 
@@ -148,5 +148,14 @@ public class OtcService {
         var neu = mt.copy();
         dao.insert(environmentId, neu);
         return neu.getId();
+    }
+
+    public static List<String> envs(IBranch branch) {
+        var rawEnvs = HestiaWebapp.config.environmentDAO(branch).load();
+        if (HestiaWebapp.config.isBURG()) {
+            return rawEnvs.stream().filter(i -> i.isActive() && i.getCustomer().equals("BURG")).map(i -> i.getId()).toList();
+        } else {
+            return rawEnvs.stream().filter(i -> i.isActive()).map(i -> i.getId()).toList();
+        }
     }
 }

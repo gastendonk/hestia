@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.pmw.tinylog.Logger;
@@ -16,6 +18,7 @@ import org.pmw.tinylog.Logger;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
 import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.web.DeployAction;
 
 /**
@@ -29,7 +32,7 @@ public class OtcProcess {
     private Thread logReader;
     private String log = "";
     
-    public OtcProcess() {
+    public OtcProcess(IBranch branch) {
         synchronized (LOCK) {
             if (!HestiaWebapp.config.isRun()) {
                 Logger.info("!!  otc process not started because env var RUN is not 1");
@@ -40,6 +43,9 @@ public class OtcProcess {
                 Logger.error("OTC can't be started! Program file not found: " + program.getAbsolutePath());
                 return;
             }
+            var envs = OtcService.envs(branch);
+            Map<String, String> secrets = HestiaWebapp.config.secretDAO(branch).loadAllAsMap(envs);
+            Logger.info("loaded secrets: " + secrets.size());
             var configYaml = HestiaWebapp.config.getConfigYaml();
             if (!configYaml.isFile()) {
                 Logger.error("OTC can't be started! Config file not found: " + configYaml.getAbsolutePath());
@@ -51,19 +57,24 @@ public class OtcProcess {
             try {
                 ProcessBuilder pb = new ProcessBuilder(program.getAbsolutePath(), c);
                 pb.redirectErrorStream(true);
+                pb.environment().putAll(secrets);
                 p = pb.start();
                 Logger.info("OTC process has pid " + p.pid() + ".");
                 logs();
                 if (StringService.isNullOrEmpty(DeployAction.lastDeployed)) {
-                    FileTime fileTime = Files.getLastModifiedTime(configYaml.toPath());
-                    LocalDateTime dateTime = LocalDateTime.ofInstant(fileTime.toInstant(), ZoneId.systemDefault());
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-                    DeployAction.lastDeployed = dateTime.format(formatter);
+                    DeployAction.lastDeployed = dateTime(configYaml.toPath());
                 }
             } catch (IOException e) {
                 Logger.error(e);
             }
         }
+    }
+    
+    private static String dateTime(Path file) throws IOException {
+        FileTime fileTime = Files.getLastModifiedTime(file);
+        LocalDateTime dateTime = LocalDateTime.ofInstant(fileTime.toInstant(), ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        return dateTime.format(formatter);
     }
     
     private void logs() {

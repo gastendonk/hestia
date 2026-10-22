@@ -14,7 +14,7 @@ public class KillAction extends HAction {
 
         if ("s".equals(m)) {
             Logger.info("KillAction -> restart");
-            HestiaWebapp.otcProcess = new OtcProcess();
+            HestiaWebapp.otcProcess = new OtcProcess(b());
         } else if ("hard".equals(m)) {
             Logger.info("KillAction -> check & hard kill");
             ProcessHandle.allProcesses() //
@@ -33,6 +33,6 @@ public class KillAction extends HAction {
             }
         }
 
-        ctx.redirect("/otc/status");
+        ctx.redirect("/otc/" + esc(b().getBranch()) + "/status");
     }
 }

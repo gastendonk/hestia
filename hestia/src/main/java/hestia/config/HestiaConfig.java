@@ -156,6 +156,10 @@ public class HestiaConfig {
         return customers;
     }
 
+    public boolean isBURG() {
+        return customers.contains("BURG");
+    }
+
     public File getAlertRulesFile() {
         return alertRulesFile;
     }

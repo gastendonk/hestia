@@ -9,7 +9,7 @@
         <hr>
         <p>{{N.otcDownloadUrl}}: {{downloadUrl}}</p>
         <p>
-            <a href="/otc/install-otelcol-contrib" class="btn btn-primary br">{{N.InstallOTC}}</a>
+            <a href="/otc/{{branch}}/install-otelcol-contrib" class="btn btn-primary br">{{N.InstallOTC}}</a>
         </p>
         <p><i class="fa fa-circle {{if cp0}}sgreen{{else}}sred{{/if}}"></i> {{otcFileInfo}}</p>
 
@@ -28,8 +28,8 @@
             {{status}}
         </p>
         <p>
-            <a href="/otc/kill?m=s" class="btn btn-success br">{{N.startOTC}}</a>
-            <a href="/otc/kill" class="btn btn-danger br">{{N.killOTC}}</a>
+            <a href="/otc/{{branch}}/kill?m=s" class="btn btn-success br">{{N.startOTC}}</a>
+            <a href="/otc/{{branch}}/kill" class="btn btn-danger br">{{N.killOTC}}</a>
             {{if customer}}
                 <a href="/master/deploy?r=o" class="btn btn-default br">Deploy</a>
             {{/if}}

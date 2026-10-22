@@ -92,11 +92,11 @@ public class HestiaWebapp extends RouteDefinitions {
             form("/x/push/:branch", DeliverPage.class);
         }
 
-        get("/otc/status", OtcStatusPage.class);
+        get("/otc/:branch/kill", KillAction.class); // kill or restart OTC
+        get("/otc/:branch/status", OtcStatusPage.class);
+        get("/otc/:branch/install-otelcol-contrib", InstallOtelcolContribAction.class);
         get("/otc/log", OtcLogPage.class);
         form("/otc/options", EditOtcOptsPage.class);
-        get("/otc/install-otelcol-contrib", InstallOtelcolContribAction.class);
-        get("/otc/kill", KillAction.class); // kill or restart OTC
         
         get("/qas", QueryalertsAndSilencesPage.class);
         form("/qas/silence/:alertname", DoSilencePage.class);
@@ -181,7 +181,7 @@ public class HestiaWebapp extends RouteDefinitions {
                 new OtcService().installOtelcolContrib(); // auto-install
             }
             if (config.getOtelcolContrib().isFile()) {
-                otcProcess = new OtcProcess();
+                otcProcess = new OtcProcess(() -> "master");
             } else {
                 Logger.warn("File \"" + config.getOtelcolContrib().getAbsolutePath()
                         + "\" does not exist. Do not start otcProcess at startup.");
