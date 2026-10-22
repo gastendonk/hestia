@@ -101,3 +101,4 @@ Secrets=Secrets
 AddSecret=Add Secret
 DeleteSecret=Delete Secret
 EnterSecrets=Please enter secrets!
+SecretNameLetters=Uppercase letters, digits, and underscores
