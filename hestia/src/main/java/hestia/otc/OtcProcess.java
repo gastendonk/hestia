@@ -73,7 +73,7 @@ public class OtcProcess {
     private static String dateTime(Path file) throws IOException {
         FileTime fileTime = Files.getLastModifiedTime(file);
         LocalDateTime dateTime = LocalDateTime.ofInstant(fileTime.toInstant(), ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return dateTime.format(formatter);
     }
     
