@@ -107,8 +107,8 @@ public class ConfigYamlBuilder {
                 ret += "  postgresql/" + db.getName() + ":\n" //
                         + "    databases: [" + db.getName() + "]\n" //
                         + "    endpoint: " + db.getHost() + "\n" //
-                        + "    username: " + db.getUser() + "\n" //
-                        + "    password: ${" + db.getPassword() + "}\n" //
+                        + "    username: \"" + db.getUser() + "\"\n" //
+                        + "    password: \"${" + db.getPassword() + "}\"\n" //
                         + "    tls: { insecure: true }\n" //
                         + "    resource_attributes:\n" //
                         + "      postgresql.database.name: { enabled: true }\n\n";

@@ -42,7 +42,7 @@ public class OtcConfigBuilderTest {
                     endpoint: "db03:1521"
                     service: "DLHTEST"
                     username: "metrics"
-                    password: "secret"
+                    password: "${secret}"
                     collection_interval: 60s
                     metrics: &oracle_metrics
                       oracledb.logons: { enabled: true }
