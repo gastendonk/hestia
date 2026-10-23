@@ -90,3 +90,11 @@ small {
 .not-active {
     text-decoration: line-through;
 }
+
+.tfRed {
+    color: #f00;
+}
+
+.greenbook {
+    color: #090;
+}

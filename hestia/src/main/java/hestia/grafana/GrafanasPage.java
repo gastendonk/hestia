@@ -28,7 +28,7 @@ public class GrafanasPage extends HPage {
         }
         Cols cols = Cols.of(
                 Col.si("Name", "name", "/{{branch}}/grafana/{{i.id}}/edit"),
-                Col.si("Host", "host"),
+                Col.si("Host", "host"), // TODO Link um Grafana aufzurufen
                 new Col("", "<a href=\"/{{branch}}/grafana/{{i.id}}/delete\" class=\"btn btn-xs btn-danger\""
                         + " onclick=\"return confirm('{{N.Delete}}?');\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>"));
         put("table", new TableComponent("wauto", cols, model, "list"));
