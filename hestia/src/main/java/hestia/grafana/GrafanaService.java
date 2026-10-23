@@ -133,13 +133,14 @@ public class GrafanaService {
     public static List<Grafana> loadWithDashboardNames(IBranch branch) {
         List<Grafana> grafanas = HestiaWebapp.config.grafanaDAO(branch).load();
         for (Grafana g : grafanas) {
-            try {
-                g.setDashboardNames(new GrafanaService(g).loadDashboardNames());
-                g.setError(null);
-            } catch (Exception e) {
-                g.setDashboardNames(null);
-                g.setError(e.getMessage());
-            }
+//            try {
+//                g.setDashboardNames(new GrafanaService(g).loadDashboardNames());
+g.setError("Laden der Dashboard-Namen derzeit deaktiviert. (Baustelle)");
+//                g.setError(null);
+//            } catch (Exception e) {
+//                g.setDashboardNames(null);
+//                g.setError(e.getMessage());
+//            }
         }
         return grafanas;
     }
