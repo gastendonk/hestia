@@ -11,7 +11,7 @@ public class AddEnvironmentPage extends HPage {
         if (isPOST()) {
             String name = ctx.formParam("name").toLowerCase().replace(" ", "");
             if (name.isBlank()) {
-                throw new RuntimeException("Please enter name");
+                throw new RuntimeException(n("PleaseEnterName"));
             }
             
             Environment env = new Environment();

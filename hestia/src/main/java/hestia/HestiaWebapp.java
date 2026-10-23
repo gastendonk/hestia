@@ -23,6 +23,12 @@ import hestia.exchange.ServeAction;
 import hestia.git.GitPullAction;
 import hestia.git.GitPushAction;
 import hestia.git.GitTagAction;
+import hestia.grafana.AddGrafanaPage;
+import hestia.grafana.BackupDashboardAction;
+import hestia.grafana.DeleteGrafanaAction;
+import hestia.grafana.EditGrafanaPage;
+import hestia.grafana.GrafanasPage;
+import hestia.grafana.TransferDashboardPage;
 import hestia.otc.InstallOtelcolContribAction;
 import hestia.otc.OtcLogPage;
 import hestia.otc.OtcProcess;
@@ -79,6 +85,7 @@ public class HestiaWebapp extends RouteDefinitions {
         environments();
         monitoredTargets();
         alerts();
+        grafana();
 
         get("/:branch/deploy", DeployAction.class);
 
@@ -141,6 +148,15 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/alert-rule/:env/:g/:id/duplicate", DuplicateAlertRuleAction.class);
         get("/:branch/alert-rule/:env/:g/:id/delete", DeleteAlertRuleAction.class);
         get("/alert-rules-file", ShowAlertRulesFilePage.class);
+    }
+    
+    private void grafana() {
+        get("/:branch/grafana", GrafanasPage.class);
+        form("/:branch/grafana/add", AddGrafanaPage.class);
+        form("/:branch/grafana/:id/edit", EditGrafanaPage.class);
+        get("/:branch/grafana/:id/delete", DeleteGrafanaAction.class);
+        get("/:branch/grafana/:id/backup", BackupDashboardAction.class);
+        get("/:branch/grafana/:id/transfer", TransferDashboardPage.class);
     }
 
     public static void main(String[] args) {

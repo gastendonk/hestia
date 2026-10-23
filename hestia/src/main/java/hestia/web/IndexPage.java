@@ -42,6 +42,7 @@ public class IndexPage extends HPage {
         put("pam", !StringService.isNullOrEmpty(HestiaWebapp.config.getPrometheusHost())
                 || !StringService.isNullOrEmpty(HestiaWebapp.config.getAlertmanagerHost()));
         put("prgname", esc(HestiaWebapp.config.getTitle()));
+        put("grafanaAllowed", HestiaWebapp.config.isGrafanaAllowed());
     }
     
     private void displayGit(IRepository repo, IBranch b) {

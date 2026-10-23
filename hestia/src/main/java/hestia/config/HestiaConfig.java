@@ -265,4 +265,8 @@ public class HestiaConfig {
     public String getPromtool() {
         return promtool;
     }
+    
+    public boolean isGrafanaAllowed() {
+        return true; // TODO
+    }
 }

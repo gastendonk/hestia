@@ -102,3 +102,7 @@ AddSecret=Add Secret
 DeleteSecret=Delete Secret
 EnterSecrets=Please enter secrets!
 SecretNameLetters=Uppercase letters, digits, and underscores
+TransferDashboard=Transfer dashboard
+PleaseEnterName=Please enter name!
+AddGrafana=Create new Grafana instance
+EditGrafana=Edit Grafana instance
