@@ -16,9 +16,17 @@ public class EditGrafanaPage extends HPage {
             if (StringService.isNullOrEmpty(name)) {
                 throw new RuntimeException(n("PleaseEnterName"));
             }
+            String host = ctx.formParam("host");
+            if (host != null) {
+                host = host.trim();
+                if (!host.isEmpty() && !host.endsWith("/")) {
+// TODO kein "/" am Ende!                    
+//                    host += "/";
+                }
+            }
 
             g.setName(name);
-            g.setHost(ctx.formParam("host"));
+            g.setHost(host);
             g.setToken(ctx.formParam("token"));
             dao.update(g);
             

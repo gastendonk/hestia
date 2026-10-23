@@ -1,5 +1,8 @@
 package hestia.grafana;
 
+import java.util.List;
+
+import hestia.grafana.GrafanaData.DashboardName;
 import hestia.persist.Identifiable;
 
 public class Grafana implements Identifiable {
@@ -7,6 +10,8 @@ public class Grafana implements Identifiable {
     private String name;
     private String host;
     private String token;
+    private transient List<DashboardName> dashboardNames;
+    private transient String error;
 
     @Override
     public String getId() {
@@ -39,5 +44,21 @@ public class Grafana implements Identifiable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<DashboardName> getDashboardNames() {
+        return dashboardNames;
+    }
+
+    public void setDashboardNames(List<DashboardName> dashboardNames) {
+        this.dashboardNames = dashboardNames;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

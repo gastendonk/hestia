@@ -91,10 +91,12 @@ small {
     text-decoration: line-through;
 }
 
+.red,
 .tfRed {
-    color: #f00;
+    color: #c00;
 }
 
+.green,
 .greenbook {
     color: #090;
 }

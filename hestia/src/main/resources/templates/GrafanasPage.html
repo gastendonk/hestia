@@ -8,6 +8,23 @@
         
         {{if list}}
             {{table}}
+
+            <hr>
+	        {{each g in list}}
+	            <h2>{{g.name}}</h2>
+	            {{if g.reason}}
+	                <p class="tfRed">{{N.grafanaNotAccessible}}. ({{g.reason}})</p>
+	            {{/if}}
+	            {{if g.dashboards}}
+	                {{g.dtable}}
+	            {{/if}}
+	        {{/each}}
         {{/if}}
     </div>
 </div>
+
+<style>
+.mt0 {
+    margin-top: 0 !important;
+}
+</style>

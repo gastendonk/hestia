@@ -2,13 +2,12 @@ package hestia.grafana;
 
 import org.pmw.tinylog.Logger;
 
-import github.soltaufintel.amalia.web.action.Escaper;
 import hestia.HestiaWebapp;
 import hestia.web.base.HAction;
 
 // HTMX
 public class BackupDashboardAction extends HAction {
-    private String html = "<span class=\"tfRed\">?</span>";
+    private String error = "?";
     
     @Override
     protected void execute() {
@@ -19,16 +18,16 @@ public class BackupDashboardAction extends HAction {
             GrafanaService sv = HestiaWebapp.config.byGrafanaId(b(), grafanaId);
             var gitRepo = HestiaWebapp.config.getRepository(b());
             sv.backup(dashboardId, gitRepo);
-            html = "<i class=\"fa fa-check greenbook\"></i>";
+            error = null;
         } catch (Exception e) {
             Logger.error("BackupDashboardAction Grafana: " + grafanaId + ", Dashboard: " + dashboardId);
             Logger.error(e);
-            html = "<span class=\"tfRed\">" + Escaper.esc(e.getMessage()) + "</span>";
+            error = e.getMessage();
         }
     }
 
     @Override
     protected String render() {
-        return html;
+        return error == null ? "<i class=\"fa fa-check green\"></i>" : ("<span class=\"red\">" + esc(error) + "</span>");
     }
 }

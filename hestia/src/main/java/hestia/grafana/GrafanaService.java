@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken;
 import github.soltaufintel.amalia.base.FileService;
 import github.soltaufintel.amalia.base.StringService;
 import github.soltaufintel.amalia.rest.REST;
+import hestia.HestiaWebapp;
+import hestia.base.IBranch;
 import hestia.grafana.GrafanaData.Dashboard;
 import hestia.grafana.GrafanaData.DashboardList;
 import hestia.grafana.GrafanaData.DashboardName;
@@ -30,35 +32,36 @@ public class GrafanaService {
         host = config.getHost();
         token = config.getToken();
     }
-    
+
     public List<DashboardName> loadDashboardNames() {
         var list = loadDashboardList();
         if (list.getItems() == null) {
             return List.of();
         }
-        return list.getItems().stream()
-                .map(i -> {
-                    DashboardName n = new DashboardName();
-                    n.setId(i.getMetadata().getName());
-                    n.setName(i.getDashboardTitle());
-                    return n;
-                })
-                .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName()))
-                .toList();
+        return list.getItems().stream().map(i -> {
+            DashboardName n = new DashboardName();
+            n.setId(i.getMetadata().getName());
+            n.setName(i.getDashboardTitle());
+            return n;
+        }).sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName())).toList();
     }
-    
+
     public DashboardList loadDashboardList() {
         // Streng genommen fehlt hier das Paging.
-        var json = get("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards");
+        var json = get("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards?limit=50");
+        if (json != null && json.contains("continue")) {
+            Logger.warn("\"continue\" im dashboards JSON gefunden!");
+        }
         return new Gson().fromJson(json, DashboardList.class);
     }
-    
+
     public List<Datasource> loadDatasources() {
         var json = get("/api/datasources");
-        Type listType = new TypeToken<List<Datasource>>() {}.getType();
+        Type listType = new TypeToken<List<Datasource>>() {
+        }.getType();
         return new Gson().fromJson(json, listType);
     }
-    
+
     public Dashboard loadDashboard(String id) {
         var list = loadDashboardList();
         if (list.getItems() == null) {
@@ -68,7 +71,7 @@ public class GrafanaService {
                 .filter(i -> i.getMetadata().getName().equals(id)) //
                 .findFirst().orElse(null);
     }
-    
+
     public void backup(String id, IRepository repo) {
         Dashboard d = loadDashboard(id);
         String title = d.getDashboardTitle();
@@ -79,23 +82,14 @@ public class GrafanaService {
         filename = "grafana-dashboards/" + safeName(name) + "/" + safeName(filename) + ".json";
         Logger.info("backup dashboard into file: " + filename);
         
-/* TODO Umstellen auf repo
-         * 
-        if (!withUser(getRepoDef(), user).commitAndPushFile_ifChanged( //
-                filename, //
-                FileService.prettyJSON(d.getSpec()), //
-                user.getRealName(), //
-                user.getMailAddress(), //
-                "backup dashboard: " + title)) {
-            Logger.info("  " + filename + " has no changes");
-        }
-         */
+        repo.save(filename, FileService.prettyJSON(d.getSpec()), "backup dashboard: " + title);
+        // TODO if changed, else -> logger.info "no changes"
     }
-    
+
     public static String safeName(String filename) {
         return FileService.getSafeName(filename.replace(" ", "_").toLowerCase());
     }
-    
+
     public void saveDashboard(Dashboard d) {
         boolean found = false;
         List<DashboardName> ex = loadDashboardNames();
@@ -120,8 +114,7 @@ public class GrafanaService {
     public void updateDashboard(Dashboard d) {
         String uid = d.getMetadata().getName();
         Logger.info("update dashboard: uid=" + uid);
-        put("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards/" + uid,
-                new Gson().toJson(d));
+        put("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards/" + uid, new Gson().toJson(d));
         Logger.info("updateDashboard ok");
     }
 
@@ -135,5 +128,19 @@ public class GrafanaService {
 
     private String put(String path, String body) {
         return REST.utf8_put(host + path, token, body);
+    }
+
+    public static List<Grafana> loadWithDashboardNames(IBranch branch) {
+        List<Grafana> grafanas = HestiaWebapp.config.grafanaDAO(branch).load();
+        for (Grafana g : grafanas) {
+            try {
+                g.setDashboardNames(new GrafanaService(g).loadDashboardNames());
+                g.setError(null);
+            } catch (Exception e) {
+                g.setDashboardNames(null);
+                g.setError(e.getMessage());
+            }
+        }
+        return grafanas;
     }
 }

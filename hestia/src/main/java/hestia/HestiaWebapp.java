@@ -155,8 +155,8 @@ public class HestiaWebapp extends RouteDefinitions {
         form("/:branch/grafana/add", AddGrafanaPage.class);
         form("/:branch/grafana/:id/edit", EditGrafanaPage.class);
         get("/:branch/grafana/:id/delete", DeleteGrafanaAction.class);
-        get("/:branch/grafana/:id/backup", BackupDashboardAction.class);
-        get("/:branch/grafana/:id/transfer", TransferDashboardPage.class);
+        get("/:branch/grafana/:g/dashboard/:d/backup", BackupDashboardAction.class);
+        form("/:branch/grafana/:g/dashboard/:d/transfer", TransferDashboardPage.class);
     }
 
     public static void main(String[] args) {

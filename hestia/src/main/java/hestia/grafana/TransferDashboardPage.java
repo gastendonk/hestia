@@ -23,7 +23,7 @@ public class TransferDashboardPage extends HPage {
         String dashboardId = ctx.pathParam("d");
         String target = ctx.queryParam("target");
 
-        base = "/" + esc(b().getBranch() + "grafana/" + ctx.pathParam("g") + "/dashboard/" + ctx.pathParam("d")) + "/transfer";
+        base = "/" + esc(b().getBranch() + "/grafana/" + ctx.pathParam("g") + "/dashboard/" + ctx.pathParam("d")) + "/transfer";
         configs = grafanaDAO().load();
         var gc = get(grafanaId);
         GrafanaService sv = new GrafanaService(gc);
@@ -53,7 +53,12 @@ public class TransferDashboardPage extends HPage {
     private void selectTargetGrafana(Grafana gc, Dashboard d) {
         var list = list("grafanaList");
         for (Grafana c : configs) {
-            list.add().put("name", esc(c.getName())).put("link", base + "?target=" + u(c.getId()));
+            if (!c.getHost().equals(gc.getHost())) {
+                list.add().put("name", esc(c.getName())).put("link", base + "?target=" + u(c.getId()));
+            }
+        }
+        if (list.isEmpty()) {
+            throw new RuntimeException("At least 2 Grafana instances must be defined!");
         }
         put("modus1", true);
     }
@@ -100,7 +105,7 @@ public class TransferDashboardPage extends HPage {
         // Dashboard ins Ziel Grafana speichern
         new GrafanaService(target).saveDashboard(d);
         
-        ctx.redirect("/samira/grafana/" + ctx.pathParam("g"));
+        ctx.redirect("/" + esc(b().getBranch()) + "/grafana");
     }
 
     private Map<String, String> getChangeMap(Dashboard d) {

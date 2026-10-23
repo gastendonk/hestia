@@ -43,6 +43,7 @@ public class GitRepository implements IRepository {
         File file = getFile(filename);
         FileService.savePlainTextFile(file, content);
         repo.commit(commitMessage, rd.getUser(), mail);
+        // Es wird später per Push Button gepusht.
     }
 
     public Repository getRepo() {

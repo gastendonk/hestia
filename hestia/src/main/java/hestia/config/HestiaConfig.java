@@ -52,6 +52,7 @@ public class HestiaConfig {
     private final String promtool;
     private final boolean deployOnReceive;
     private final List<String> channels = new ArrayList<>();
+    private final boolean grafanaAllowed;
     
     public HestiaConfig(IConfig appConfig) {
         this.config = appConfig;
@@ -82,6 +83,7 @@ public class HestiaConfig {
         alertRulesFile = new File(config.get("ALERTRULESFILE", "/work/rules/alert-rules.yml"));
         configYaml = new File(config.get("CONFIGYAML", "/work/config.yaml"));
         configYamlForValidate = new File(config.get("CONFIGYAML_VALIDATE", "/work/validate-config.yaml"));
+        grafanaAllowed = "1".equals(config.get("GRAFANA"));
     }
     
     public String readOtelcolContribDownloadUrl() {
@@ -273,6 +275,6 @@ public class HestiaConfig {
     }
     
     public boolean isGrafanaAllowed() {
-        return true; // TODO
+        return grafanaAllowed;
     }
 }

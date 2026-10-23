@@ -13,12 +13,20 @@ public class AddGrafanaPage extends HPage {
             if (StringService.isNullOrEmpty(name)) {
                 throw new RuntimeException(n("PleaseEnterName"));
             }
+            String host = ctx.formParam("host");
+            if (host != null) {
+                host = host.trim();
+                if (!host.isEmpty() && !host.endsWith("/")) {
+//                    host += "/";
+                }
+            }
 
             Grafana g = new Grafana();
             g.setId(IdGenerator.createId25());
             g.setName(name);
-            g.setHost(ctx.formParam("host"));
+            g.setHost(host);
             g.setToken(ctx.formParam("token"));
+            grafanaDAO().insert(g);
 
             ctx.redirect("/" + esc(b().getBranch()) + "/grafana");
         } else {

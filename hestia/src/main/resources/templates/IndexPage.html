@@ -58,11 +58,11 @@
             {{if pam}}
                 <a href="/qas" class="btn btn-default br">{{N.QueryAlertsandSilences}}</a>
             {{/if}}
+            {{if not customer}}{{if grafanaAllowed}}
+	            <a href="/{{branch}}/grafana" class="btn btn-default br">Grafana</a>
+	        {{/if}}{{/if}}
         </p>
         
-        {{if grafanaAllowed}}
-            <p><a href="/{{branch}}/grafana" class="btn btn-default">Grafana</a></p>
-        {{/if}}
 
         <p class="mt4"><small>{{prgname}} Version {{VERSION}}{{if dor}} / dor{{/if}}</small></p>
     </div>
