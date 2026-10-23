@@ -14,6 +14,7 @@ import hestia.base.IBranch;
 import hestia.base.IConfig;
 import hestia.environment.EnvironmentDAO;
 import hestia.git.GitRepository;
+import hestia.grafana.GrafanaDAO;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.SecretDAO;
 import hestia.persist.FileRepository;
@@ -206,6 +207,10 @@ public class HestiaConfig {
 
     public AlertRuleDAO alertRuleDAO(IBranch branch) {
         return new AlertRuleDAO(alertGroupDAO(branch));
+    }
+
+    public GrafanaDAO grafanaDAO(IBranch branch) {
+        return new GrafanaDAO(getRepository(branch));
     }
 
     public IRepository getRepository(IBranch branch) {

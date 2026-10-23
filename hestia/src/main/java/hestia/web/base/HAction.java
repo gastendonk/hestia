@@ -4,6 +4,7 @@ import github.soltaufintel.amalia.web.action.Action;
 import hestia.HestiaWebapp;
 import hestia.base.IBranch;
 import hestia.environment.EnvironmentDAO;
+import hestia.grafana.GrafanaDAO;
 import hestia.otc.model.MonitoredTargetDAO;
 import hestia.otc.model.SecretDAO;
 import hestia.prometheus.alert.AlertGroupDAO;
@@ -34,7 +35,11 @@ public abstract class HAction extends Action {
     protected final AlertRuleDAO alertRuleDAO() {
         return HestiaWebapp.config.alertRuleDAO(b());
     }
-    
+
+    protected final GrafanaDAO grafanaDAO() {
+        return HestiaWebapp.config.grafanaDAO(b());
+    }
+
     protected IBranch b() {
         return () -> ctx.pathParam("branch");
     }
