@@ -19,9 +19,8 @@ public class EditGrafanaPage extends HPage {
             String host = ctx.formParam("host");
             if (host != null) {
                 host = host.trim();
-                if (!host.isEmpty() && !host.endsWith("/")) {
-// TODO kein "/" am Ende!                    
-//                    host += "/";
+                while (host.endsWith("/")) {
+                    host = host.substring(0, host.length() - 1).trim();
                 }
             }
 
