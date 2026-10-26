@@ -27,6 +27,7 @@ import hestia.grafana.AddGrafanaPage;
 import hestia.grafana.BackupDashboardAction;
 import hestia.grafana.DeleteGrafanaAction;
 import hestia.grafana.EditGrafanaPage;
+import hestia.grafana.GrafanaDashboardsPage;
 import hestia.grafana.GrafanasPage;
 import hestia.grafana.TransferDashboardPage;
 import hestia.otc.InstallOtelcolContribAction;
@@ -152,6 +153,7 @@ public class HestiaWebapp extends RouteDefinitions {
     
     private void grafana() {
         get("/:branch/grafana", GrafanasPage.class);
+        get("/:branch/grafana-dashboards/:id", GrafanaDashboardsPage.class);
         form("/:branch/grafana/add", AddGrafanaPage.class);
         form("/:branch/grafana/:id/edit", EditGrafanaPage.class);
         get("/:branch/grafana/:id/delete", DeleteGrafanaAction.class);

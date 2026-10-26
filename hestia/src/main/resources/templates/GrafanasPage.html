@@ -12,12 +12,9 @@
             <hr>
 	        {{each g in list}}
 	            <h2>{{g.name}}</h2>
-	            {{if g.reason}}
-	                <p class="tfRed">{{N.grafanaNotAccessible}}. ({{g.reason}})</p>
-	            {{/if}}
-	            {{if g.dashboards}}
-	                {{g.dtable}}
-	            {{/if}}
+	            <div hx-get="/{{branch}}/grafana-dashboards/{{g.id}}" hx-trigger="load" hx-indicator="#spinner-{{g.id}}">
+	               <i id="spinner-{{g.id}}" class="fa fa-delicious fa-spin htmx-indicator"></i>
+                </div>
 	        {{/each}}
         {{/if}}
     </div>

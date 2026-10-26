@@ -2,13 +2,10 @@ package hestia.grafana;
 
 import java.util.List;
 
-import com.github.template72.data.DataMap;
-
 import github.soltaufintel.amalia.web.table.Col;
 import github.soltaufintel.amalia.web.table.Cols;
 import github.soltaufintel.amalia.web.table.TableComponent;
 import hestia.HestiaWebapp;
-import hestia.grafana.GrafanaData.DashboardName;
 import hestia.web.base.HPage;
 
 public class GrafanasPage extends HPage {
@@ -18,7 +15,7 @@ public class GrafanasPage extends HPage {
         if (!HestiaWebapp.config.isGrafanaAllowed()) {
             throw new RuntimeException("Not allowed");
         }
-        List<Grafana> grafanas = GrafanaService.loadWithDashboardNames(b());
+        List<Grafana> grafanas = HestiaWebapp.config.grafanaDAO(b()).load();
 
         header("Grafana");
         put("branch", esc(b().getBranch()));
@@ -32,7 +29,6 @@ public class GrafanasPage extends HPage {
             m.put("id", esc(g.getId()));
             m.put("name", esc(g.getName()));
             m.put("host", esc(g.getHost()));
-            displayDashboards(g, m, grafanas.size() >= 2);
         }
         String link = "/{{branch}}/grafana/{{i.id}}/";
         Cols cols = Cols.of(
@@ -44,23 +40,4 @@ public class GrafanasPage extends HPage {
         put("table", new TableComponent("wauto", cols, model, "list"));
     }
     
-    private void displayDashboards(Grafana grafana, DataMap parent, boolean atLeastTwo) {
-        parent.put("reason", esc(grafana.getError()));
-        var list = parent.list("dashboards");
-        if (grafana.getDashboardNames() != null) {
-            for (DashboardName d : grafana.getDashboardNames()) {
-                var m = list.add();
-                m.put("id", esc(d.getId()));
-                m.put("name", esc(d.getName()));
-            }
-            String link = "/" + esc(b().getBranch()) + "/grafana/" + grafana.getId() + "/dashboard/{{i.id}}/";
-            Cols cols = Cols.of(Col.si("Dashboard", "name"),
-                    new Col("", "<a hx-get=\"" + link + "backup\" hx-swap=\"outerHTML\" hx-target=\"#res_{{i.id}}\" " + //
-                            "class=\"btn btn-xs btn-default\">" + n("Backup") + "</a> <span id=\"res_{{i.id}}\"></span>" //
-                            + " <a href=\"" + link + "transfer\" class=\"btn btn-xs btn-default\">" + n("Transfer") + "...</a>"));
-            var table = new TableComponent("wauto mt0", cols, parent, "dashboards");
-            table.init(ctx);
-            parent.put("dtable", table.run());
-        }
-    }
 }

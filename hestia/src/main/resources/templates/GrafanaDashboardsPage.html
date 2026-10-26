@@ -1,0 +1,6 @@
+{{if error}}
+    <p class="red">{{N.grafanaNotAccessible}}. ({{error}})</p>
+{{/if}}
+{{if dashboards}}
+    {{table}}
+{{/if}}

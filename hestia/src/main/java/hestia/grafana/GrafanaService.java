@@ -1,8 +1,13 @@
 package hestia.grafana;
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.pmw.tinylog.Logger;
 
 import com.google.gson.Gson;
@@ -48,10 +53,7 @@ public class GrafanaService {
 
     public DashboardList loadDashboardList() {
         // Streng genommen fehlt hier das Paging.
-        var json = get("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards?limit=50");
-        if (json != null && json.contains("continue")) {
-            Logger.warn("\"continue\" im dashboards JSON gefunden!");
-        }
+        var json = get_withTimeout("/apis/dashboard.grafana.app/v1beta1/namespaces/default/dashboards", 2000);
         return new Gson().fromJson(json, DashboardList.class);
     }
 
@@ -130,6 +132,37 @@ public class GrafanaService {
         return REST.utf8_put(host + path, token, body);
     }
 
+    /**
+     * Alternative mit Timeouts zu return REST.utf8_get(host + path, token);
+     * @param path -
+     * @param timeoutMillis e.g. 2000
+     * @return JSON
+     */
+    private String get_withTimeout(String path, int timeoutMillis) {
+        REST restWithTimeout = new REST(host + path) {
+            @Override
+            protected void initRequest(HttpRequestBase request) {
+                if (token != null) {
+                    request.addHeader("Authorization", "Bearer " + token);
+                }
+                request.addHeader("Accept", "application/json");
+            };
+    
+            @Override
+            protected CloseableHttpClient createClient() {
+                RequestConfig config = RequestConfig.custom()
+                    .setConnectTimeout(timeoutMillis)
+                    .setConnectionRequestTimeout(timeoutMillis)
+                    .setSocketTimeout(timeoutMillis)
+                    .build();
+                return HttpClients.custom()
+                    .setDefaultRequestConfig(config)
+                    .build();
+            }
+        };
+        return restWithTimeout.get().response(StandardCharsets.UTF_8);
+    }
+
     public static List<Grafana> loadWithDashboardNames(IBranch branch) {
         List<Grafana> grafanas = HestiaWebapp.config.grafanaDAO(branch).load();
         for (Grafana g : grafanas) {
@@ -144,4 +177,5 @@ g.setError("Laden der Dashboard-Namen derzeit deaktiviert. (Baustelle)");
         }
         return grafanas;
     }
+
 }

@@ -16,6 +16,7 @@ encoding//src/main/resources/templates/EditEnvironmentPage.html=UTF-8
 encoding//src/main/resources/templates/EditGrafanaPage.html=UTF-8
 encoding//src/main/resources/templates/EditMTPage.html=UTF-8
 encoding//src/main/resources/templates/EnvironmentsPage.html=UTF-8
+encoding//src/main/resources/templates/GrafanaDashboardsPage.html=UTF-8
 encoding//src/main/resources/templates/GrafanasPage.html=UTF-8
 encoding//src/main/resources/templates/HestiaErrorPage.html=UTF-8
 encoding//src/main/resources/templates/IndexPage.html=UTF-8
