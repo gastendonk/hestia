@@ -20,6 +20,7 @@ public class GrafanasPage extends HPage {
         header("Grafana");
         put("branch", esc(b().getBranch()));
         displayConfig(grafanas);
+        // see also htmx page GrafanaDashboardsPage
     }
     
     private void displayConfig(List<Grafana> grafanas) {
@@ -33,11 +34,10 @@ public class GrafanasPage extends HPage {
         String link = "/{{branch}}/grafana/{{i.id}}/";
         Cols cols = Cols.of(
                 Col.si("Name", "name"),
-                Col.si("Host", "host", "{{i.host}}"),
+                new Col("Host", "<a href=\"{{i.host}}\" target=\"_blank\">{{i.host}}</a>").sortable("host"),
                 new Col("", "<a href=\"" + link + "edit\" class=\"btn btn-xs btn-default\"><i class=\"fa fa-pencil\"></i> {{N.Edit}}</a>"
                         + " <a href=\"/" + link + "delete\" class=\"btn btn-xs btn-danger\""
                         + " onclick=\"return confirm('{{N.Delete}}?');\" title=\"{{N.Delete}}\"><i class=\"fa fa-trash-o\"></i></a>"));
         put("table", new TableComponent("wauto", cols, model, "list"));
     }
-    
 }
