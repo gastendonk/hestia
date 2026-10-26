@@ -35,7 +35,8 @@ public class GrafanaDashboardsPage extends HPage {
         String link = "/" + esc(b().getBranch()) + "/grafana/" + grafana.getId() + "/dashboard/{{i.id}}/";
         Cols cols = Cols.of( //
                 Col.si("Dashboard", "name"),
-                new Col("", "<a hx-get=\"" + link + "backup\" hx-swap=\"outerHTML\" hx-target=\"#res_{{i.id}}\" " + //
+                new Col("", "<a href=\"" + link + "json\" class=\"btn btn-xs btn-default\">JSON</a>" // 
+                        + " <a hx-get=\"" + link + "backup\" hx-swap=\"outerHTML\" hx-target=\"#res_{{i.id}}\" " + //
                         "class=\"btn btn-xs btn-default\">" + n("Backup") + "</a> <span id=\"res_{{i.id}}\"></span>" //
                         + " <a href=\"" + link + "transfer\" class=\"btn btn-xs btn-default\">" + n("Transfer") + "...</a>"));
         put("table", new TableComponent("wauto mt0", cols, model, "dashboards"));

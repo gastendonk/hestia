@@ -27,6 +27,7 @@ import hestia.grafana.AddGrafanaPage;
 import hestia.grafana.BackupDashboardAction;
 import hestia.grafana.DeleteGrafanaAction;
 import hestia.grafana.EditGrafanaPage;
+import hestia.grafana.GrafanaDashboardJsonPage;
 import hestia.grafana.GrafanaDashboardsPage;
 import hestia.grafana.GrafanasPage;
 import hestia.grafana.TransferDashboardPage;
@@ -159,6 +160,7 @@ public class HestiaWebapp extends RouteDefinitions {
         get("/:branch/grafana/:id/delete", DeleteGrafanaAction.class);
         get("/:branch/grafana/:g/dashboard/:d/backup", BackupDashboardAction.class);
         form("/:branch/grafana/:g/dashboard/:d/transfer", TransferDashboardPage.class);
+        get("/:branch/grafana/:g/dashboard/:d/json", GrafanaDashboardJsonPage.class);
     }
 
     public static void main(String[] args) {
