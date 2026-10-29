@@ -3,6 +3,7 @@ package hestia;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
+import github.soltaufintel.amalia.timer.Timer;
 import github.soltaufintel.amalia.web.action.Escaper;
 import github.soltaufintel.amalia.web.builder.LoggingInitializer;
 import github.soltaufintel.amalia.web.builder.WebAppBuilder;
@@ -58,6 +59,8 @@ import hestia.prometheus.alert.rule.EditAlertRulePage;
 import hestia.prometheus.queryalerts.DoSilencePage;
 import hestia.prometheus.queryalerts.QueryalertsAndSilencesPage;
 import hestia.prometheus.silences.DeleteSilenceAction;
+import hestia.special.jenkins.JenkinsTelemetry;
+import hestia.special.jenkins.JenkinsTelemetry.JenkinsTelemetryTimer;
 import hestia.web.DeployAction;
 import hestia.web.IndexPage;
 import hestia.web.KillAction;
@@ -171,6 +174,7 @@ public class HestiaWebapp extends RouteDefinitions {
                 .withErrorPage(HestiaErrorPage.class, HestiaError404Page.class)
                 .withPageInitializer(new HestiaPageInitializer())
                 .withInitializer(c -> config = new HestiaConfig((IConfig) c))
+                .withInitializer(c -> Timer.create(c))
                 .withRoutes(new HestiaWebapp())
                 .build()
                 .boot();
@@ -179,6 +183,12 @@ public class HestiaWebapp extends RouteDefinitions {
             deployOnReceipt();
         } else if (!config.isCloud()) {
             startOTC();
+        }
+        if (config.getSpecial().contains(",JENKINS,")) {
+            JenkinsTelemetry.init("hestia", "http://localhost:4317");
+            JenkinsTelemetryTimer.jenkinsUrl = "https://jenkins.intern.x-map.de";
+            Timer.INSTANCE.createTimer(JenkinsTelemetryTimer.class, "0 * * * * ?"); // alle 60 Sekunden
+            Logger.info("Jenkins metrics activated");
         }
     }
 

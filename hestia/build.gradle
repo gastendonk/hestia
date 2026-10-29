@@ -25,6 +25,11 @@ dependencies {
     implementation 'org.slf4j:slf4j-nop:2.0.17'
     implementation 'org.apache.commons:commons-compress:1.28.0' // .tar.gz
 
+    implementation platform('io.opentelemetry:opentelemetry-bom:1.67.0')
+    implementation 'io.opentelemetry:opentelemetry-api'
+    implementation 'io.opentelemetry:opentelemetry-sdk'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+    
     testImplementation 'junit:junit:4.13.2'
 }
 

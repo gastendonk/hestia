@@ -53,6 +53,7 @@ public class HestiaConfig {
     private final boolean deployOnReceive;
     private final List<String> channels = new ArrayList<>();
     private final boolean grafanaAllowed;
+    private final String special;
     
     public HestiaConfig(IConfig appConfig) {
         this.config = appConfig;
@@ -72,6 +73,7 @@ public class HestiaConfig {
         customerKey = config.get("CUSTOMERKEY");
         promtool = config.get("PROMTOOL");
         deployOnReceive = "1".equals(config.get("DEPLOY_ON_RECEIPT"));
+        special = config.get("SPECIAL") == null ? "" : ("," + config.get("SPECIAL").toUpperCase() + ",");
         for (String ch : config.get("CHANNELS", "").split(",")) {
             channels.add(ch.trim());
         }
@@ -276,5 +278,9 @@ public class HestiaConfig {
     
     public boolean isGrafanaAllowed() {
         return grafanaAllowed;
+    }
+    
+    public String getSpecial() {
+        return special;
     }
 }
