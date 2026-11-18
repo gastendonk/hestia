@@ -70,11 +70,9 @@ import hestia.web.base.HestiaPageInitializer;
 import spark.Spark;
 
 public class HestiaWebapp extends RouteDefinitions {
-    public static final String VERSION = "0.6.0";
+    public static final String VERSION = "0.6.1";
     public static HestiaConfig config;
     public static OtcProcess otcProcess;
-    
-    // TODO Grafana Dashboards sichern / transferieren
     
     @Override
     public void routes() {
